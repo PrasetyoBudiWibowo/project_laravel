@@ -20,5 +20,8 @@ use App\Http\Controllers\HomeController;
 // });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'auth_login']);
 
 Route::get('/', [HomeController::class, 'index'])->middleware('guest.redirect');
+
+Route::get('/welcome', [HomeController::class, 'index'])->name('welcome')->middleware('guest.redirect');

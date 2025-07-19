@@ -1,0 +1,37 @@
+[2025-07-19T05:50:59.621728+00:00] test.INFO: Ini log test untuk cek file log  
+[2025-07-19T05:50:59.639298+00:00] LOGIN.ERROR: Validasi gagal untuk user {"invalid_input":"USER","expected_format":"USER TIDAK DITEMUKAN"} 
+[2025-07-19T05:51:26.176602+00:00] test.INFO: Ini log test untuk cek file log  
+[2025-07-19T05:54:31.145730+00:00] test.INFO: Ini log test untuk cek file log  
+[2025-07-19T05:57:44.936539+00:00] test.INFO: Ini log test untuk cek file log  
+[2025-07-19T05:57:49.007292+00:00] test.INFO: Ini log test untuk cek file log  
+[2025-07-19T06:01:55.272866+00:00] test.INFO: Ini log test untuk cek file log  
+[2025-07-19T06:01:55.719371+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T06:01:55.720358+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T06:01:55.721452+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T06:04:15.217485+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T06:04:15.217896+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T06:04:15.218840+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T06:06:55.799960+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T06:06:55.800270+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T06:06:55.801147+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T06:09:01.031875+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T06:09:01.032190+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T06:09:01.033016+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T07:06:55.585555+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T07:06:55.585961+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T07:06:55.587026+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T07:07:38.310547+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T07:07:38.310822+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T07:07:38.311510+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T07:07:48.454127+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T07:07:48.454409+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T07:07:48.455150+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T07:14:09.279572+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T07:14:09.279893+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T07:14:09.280739+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T07:14:37.186016+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T07:14:37.186308+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T07:14:37.186990+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
+[2025-07-19T07:20:22.335047+00:00] BUAT-HISTORY-LOGIN.INFO: <================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>  
+[2025-07-19T07:20:22.335365+00:00] BUAT-HISTORY-LOGIN.INFO: Data dari controller: {"kd_user":"USR-202411-000"}  
+[2025-07-19T07:20:22.336198+00:00] BUAT-HISTORY-LOGIN.INFO: berhasil buat code PK HistoryLoginUser  
