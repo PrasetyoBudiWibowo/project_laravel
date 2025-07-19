@@ -25,3 +25,4 @@ Route::post('/login', [AuthController::class, 'auth_login']);
 Route::get('/', [HomeController::class, 'index'])->middleware('guest.redirect');
 
 Route::get('/welcome', [HomeController::class, 'index'])->name('welcome')->middleware('guest.redirect');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

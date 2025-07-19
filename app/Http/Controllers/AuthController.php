@@ -26,6 +26,13 @@ class AuthController extends Controller
     public function auth_login(Request $request)
     {
         try {
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di auth_login"
+                ]);
+            }
+
             $validator = Validator::make($request->all(), [
                 'nama_user' => 'required|alpha_num',
                 'password' => 'required'
@@ -78,5 +85,17 @@ class AuthController extends Controller
                 'message' => $th->getMessage()
             ]);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Anda Akan Segera Logout',
+            'redirect' => route('login')
+        ]);
     }
 }
