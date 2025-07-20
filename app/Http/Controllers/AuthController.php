@@ -6,16 +6,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\Services\AuthService;
+use App\Services\HrdService;
 
 use App\Helper\AppLogger;
 
 class AuthController extends Controller
 {
     protected $authService;
+    protected $hrdService;
 
-    public function __construct(AuthService $authService)
+    public function __construct(
+        AuthService $authService,
+        HrdService $hrdService
+        )
     {
         $this->authService = $authService;
+        $this->hrdService = $hrdService;
     }
 
     public function showLoginForm()
@@ -87,6 +93,20 @@ class AuthController extends Controller
         }
     }
 
+    public function checkSession(Request $request)
+    {
+        if (session('user_logged_in')) {
+            return response()->json([
+                'status' => 'success',
+                'user' => session('user')
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'unauthenticated'
+        ], 401);
+    }
+
     public function register()
     {
         return view('auth.register');
@@ -102,5 +122,73 @@ class AuthController extends Controller
             'message' => 'Anda Akan Segera Logout',
             'redirect' => route('login')
         ]);
+    }
+
+    public function auth_register(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-REGISTRASI');
+
+            $log->info("PROSES PENGECEKAN DATA REGISTRASI");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di auth_login"
+                ]);
+            }
+
+            $log->info('Data Request:', $request->all());
+
+            $validator = Validator::make($request->all(), [
+                'nama_user' => 'required|alpha_num',
+                'password' => 'required'
+            ], [
+                'nama_user.required' => 'User name tidak boleh kosong',
+                'nama_user.alpha_num' => 'User name hanya boleh mengandung huruf dan angka',
+                'password.required' => 'Password tidak boleh kosong'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+            
+
+            if ($request['is_karyawan'] === true) {
+                $cekKaryawan = $this->hrdService->cekKaryawanByPk($request['kd_karyawan']);
+
+                if (!$cekKaryawan) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => "karyawan Tidak di temukan"
+                    ]);
+                }
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA REGISTRASI");
+
+            $register = $this->authService->registrasi($request->all());
+
+            if(!$register) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Registrasi'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Registrasi',
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
     }
 }

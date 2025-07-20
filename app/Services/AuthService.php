@@ -13,9 +13,30 @@ use Carbon\Carbon;
 use App\Helper\DeviceHelper;
 use App\Helper\GeoDetector;
 use App\Helper\AppLogger;
+use GuzzleHttp\Promise\Create;
 
 class AuthService
 {
+    private function generateUserKd()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'USR-' . $currentMonth . '-';
+
+        $lastUser = TblUser::where('kd_asli_user', 'LIKE', $prefix . '%')
+            ->orderBy('kd_asli_user', 'DESC')
+            ->first();
+
+        if (!$lastUser) {
+            return $prefix . '000';
+        }
+
+        $lastId = $lastUser->kd_asli_user;
+        $lastNumber = substr($lastId, -3);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 3, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
     private function buatKodeHistoryLogin()
     {
         $currentMonth = Carbon::now()->format('Ym');
@@ -78,8 +99,7 @@ class AuthService
             return $historyLogin;
         } catch (\Throwable $th) {
             DB::rollBack();
-            header('Content-Type: application/json');
-            echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
             throw $th;
         }
     }
@@ -135,5 +155,61 @@ class AuthService
         }
 
         throw new \Exception("Password salah");
+    }
+
+    public function registrasi($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('BUAT-REGISTRASI');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA KE DATABASE TblUser =================>");
+            $log->info("Data dari controller: " . json_encode($data));
+
+            $kd_asli_user = $this->generateUserKd();
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $password = Hash::make($data['password']);
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $user = new TblUser();
+            $user->kd_asli_user = $kd_asli_user;
+            $user->nama_user = $data['nama_user'];
+            $user->id_usr_level = $data['id_usr_level'];
+            $user->password = $password;
+            $user->password_tampil = $data['password'];
+            $user->status_user = "ACTIVE";
+            $user->blokir = "TIDAK";
+            $user->tgl_input = $tgl_input;
+            $user->waktu_input = $waktu_input;
+            $user->bln_input = $bln_input;
+            $user->thn_input = $thn_input;
+            $user->device = $device;
+            $user->type_device = $deviceType;
+            $user->nama_device = $ipDevice;
+            $user->user_input = $data['user_input'] ?? null;
+
+            $user->save();
+            $log->info("BERHASIL SIMPAN DATA");
+
+            DB::commit();
+
+            $log->info("PROSES REGISTRASI SELESAI");
+            return $user;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
     }
 }

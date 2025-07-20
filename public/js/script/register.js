@@ -22757,42 +22757,154 @@ var register = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
   data: function data() {
     return {
       levels: [],
+      karyawan: [],
       selectedLevel: "",
       username: "",
-      password: ""
+      password: "",
+      showInputKaryawan: false,
+      kdKaryawan: "",
+      userLogin: "",
+      loggedInUser: null
     };
   },
   mounted: function mounted() {
     var token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-    console.log('dsdasdafasf', token);
     (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults).headers.common["X-CSRF-TOKEN"] = token;
+    this.checkSessionLogin();
     this.fetchLevels();
+    this.fetchkaryawan();
+  },
+  watch: {
+    showInputKaryawan: function showInputKaryawan(val) {
+      var _this = this;
+      if (val) {
+        this.$nextTick(function () {
+          defaultSelect2("#kd_karyawan", "-- Pilih Karyawan --");
+          $("#kd_karyawan").on("change", function (e) {
+            _this.kdKaryawan = e.target.value;
+          });
+        });
+      } else {
+        if ($('#kd_karyawan').hasClass("select2-hidden-accessible")) {
+          $('#kd_karyawan').select2('destroy');
+        }
+        this.kdKaryawan = '';
+      }
+    }
   },
   methods: {
-    fetchLevels: function fetchLevels() {
-      var _this = this;
+    togglePilihkaryawan: function togglePilihkaryawan() {
+      this.showInputKaryawan = !this.showInputKaryawan;
+      if (!this.showInputKaryawan) {
+        this.kdKaryawan = '';
+      }
+    },
+    checkSessionLogin: function checkSessionLogin() {
+      var _this2 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var response, _t;
         return _regenerator().w(function (_context) {
-          while (1) switch (_context.n) {
+          while (1) switch (_context.p = _context.n) {
             case 0:
+              _context.p = 0;
               _context.n = 1;
+              return checkSession();
+            case 1:
+              response = _context.v;
+              // console.log('User session:', response.data.user);
+
+              _this2.loggedInUser = response.data.user;
+              _context.n = 3;
+              break;
+            case 2:
+              _context.p = 2;
+              _t = _context.v;
+              console.error('Belum login:', _t);
+              Swal.fire({
+                icon: 'warning',
+                title: 'Session Habis',
+                text: 'Silakan login terlebih dahulu.'
+              }).then(function () {
+                window.location.href = '/login';
+              });
+            case 3:
+              return _context.a(2);
+          }
+        }, _callee, null, [[0, 2]]);
+      }))();
+    },
+    fetchLevels: function fetchLevels() {
+      var _this3 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+        var data, _t2;
+        return _regenerator().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
+            case 0:
+              _context2.p = 0;
+              _context2.n = 1;
               return getLevelUser();
             case 1:
-              _this.levels = _context.v;
-              _this.$nextTick(function () {
+              data = _context2.v;
+              _this3.levels = data || [];
+              _this3.$nextTick(function () {
                 defaultSelect2("#id_usr_level", "-- Pilih Level --");
               });
               $("#id_usr_level").on("change", function (e) {
-                _this.selectedLevel = e.target.value;
+                _this3.selectedLevel = e.target.value;
               });
+              _context2.n = 3;
+              break;
             case 2:
-              return _context.a(2);
+              _context2.p = 2;
+              _t2 = _context2.v;
+              Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: "Terjadi kesalahan fetchLevels: ".concat(err.statusText || err)
+              });
+            case 3:
+              return _context2.a(2);
           }
-        }, _callee);
+        }, _callee2, null, [[0, 2]]);
+      }))();
+    },
+    fetchkaryawan: function fetchkaryawan() {
+      var _this4 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+        var data, _t3;
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.p = _context3.n) {
+            case 0:
+              _context3.p = 0;
+              _context3.n = 1;
+              return getAllDataKaryawan();
+            case 1:
+              data = _context3.v;
+              _this4.karyawan = data || [];
+              _this4.$nextTick(function () {
+                defaultSelect2("#kd_karyawan", "-- Pilih Karyawan --");
+              });
+              $("#kd_karyawan").on("change", function (e) {
+                _this4.kdKaryawan = e.target.value;
+              });
+              _context3.n = 3;
+              break;
+            case 2:
+              _context3.p = 2;
+              _t3 = _context3.v;
+              Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: "Terjadi kesalahan fetchkaryawan: ".concat(_t3.statusText || _t3)
+              });
+            case 3:
+              return _context3.a(2);
+          }
+        }, _callee3, null, [[0, 2]]);
       }))();
     },
     confirmRegister: function confirmRegister() {
-      var _this2 = this;
+      var _this5 = this;
       Swal.fire({
         title: "Konfirmasi",
         text: "Pastikan Username dan Password Sudah Benar",
@@ -22803,30 +22915,104 @@ var register = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this2.register();
+          _this5.register();
         }
       });
     },
     register: function register() {
-      var namaUser = this.username;
-      var password = this.password;
-      var selectedLevel = this.selectedLevel;
-      var requireValue = [{
-        value: namaUser,
-        message: "user name tidak boleh kosong"
-      }, {
-        value: password,
-        message: "password tidak boleh kosong"
-      }, {
-        value: selectedLevel,
-        message: "Level user harus di isi"
-      }];
-      if (!validasiBanyakInputan(requireValue)) return;
-      var dataToSave = {
-        id_usr_level: selectedLevel,
-        nama_user: namaUser,
-        password: password
-      };
+      var _this6 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+        var requireValue, namaUser, password, selectedLevel, nilaiSwitch, kdKaryaawan, user_input, user_login, dataToSave, response, result, _error$response, _t4;
+        return _regenerator().w(function (_context4) {
+          while (1) switch (_context4.p = _context4.n) {
+            case 0:
+              requireValue = [];
+              namaUser = _this6.username;
+              password = _this6.password;
+              selectedLevel = _this6.selectedLevel;
+              nilaiSwitch = _this6.showInputKaryawan;
+              kdKaryaawan = _this6.kdKaryawan;
+              user_input = _this6.loggedInUser.kd_asli_user;
+              user_login = _this6.loggedInUser.nama_user;
+              requireValue.push({
+                value: namaUser,
+                message: 'User Name Tidak Boleh Kosong'
+              });
+              requireValue.push({
+                value: password,
+                message: 'Password Tidak Boleh Kosong'
+              });
+              requireValue.push({
+                value: selectedLevel,
+                message: 'Level User harus dipilih'
+              });
+              if (nilaiSwitch === true) {
+                requireValue.push({
+                  value: kdKaryaawan,
+                  message: 'Karyawan Tidak Boleh Kosong'
+                });
+              }
+              if (validasiBanyakInputan(requireValue)) {
+                _context4.n = 1;
+                break;
+              }
+              return _context4.a(2);
+            case 1:
+              dataToSave = {
+                id_usr_level: selectedLevel,
+                nama_user: namaUser,
+                password: password,
+                is_karyawan: nilaiSwitch,
+                kd_karyawan: kdKaryaawan,
+                user_input: user_input,
+                user_login: user_login
+              };
+              _context4.p = 2;
+              Swal.fire({
+                title: 'Sedang Registrasi',
+                text: 'Mohon tunggu.',
+                allowOutsideClick: false,
+                didOpen: function didOpen() {
+                  Swal.showLoading();
+                }
+              });
+              _context4.n = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_1___default().post('/register', dataToSave);
+            case 3:
+              response = _context4.v;
+              result = response.data;
+              Swal.close();
+              if (result.status === "success") {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Berhasil',
+                  text: result.message || 'Data berhasil Disimpan!'
+                }).then(function () {
+                  window.location.reload();
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Gagal',
+                  text: result.message
+                });
+              }
+              _context4.n = 5;
+              break;
+            case 4:
+              _context4.p = 4;
+              _t4 = _context4.v;
+              Swal.close();
+              Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: "Terjadi kesalahan: ".concat(((_error$response = _t4.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || _t4.message)
+              });
+            case 5:
+              return _context4.a(2);
+          }
+        }, _callee4, null, [[2, 4]]);
+      }))();
     }
   }
 });

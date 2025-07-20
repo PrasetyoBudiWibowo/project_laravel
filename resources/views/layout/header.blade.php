@@ -7,18 +7,15 @@
     <link href="{{ asset('css/bootstrap/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet" />
-    <!-- <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" /> -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('fontawesome-6.7.2/css/all.min.css') }}" rel="stylesheet" />
 
-    <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{{ asset('js/axios.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-    <!-- <script src="{{ asset('js/select2/dist/js/select2.min.js') }}"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+    <script src="{{ asset('js/select2.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/helper.js') }}"></script>
     <script src="{{ asset('js/API.js') }}"></script>
 </head>

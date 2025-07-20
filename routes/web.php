@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HrdController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,16 +21,28 @@ use App\Http\Controllers\UserController;
 //     return view('welcome');
 // });
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'auth_login']);
-Route::get('/register', [AuthController::class, 'register'])->name('register');
+// AUTH
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showLoginForm')->name('login');
+    Route::post('/login', 'auth_login');
+    Route::get('/register', 'register')->name('register');
+    Route::post('/logout', 'logout')->name('logout');
+    Route::get('/check-session', 'checkSession')->name('check.session');
+    Route::post('/register', 'auth_register');
+});
 
-Route::get('/', [HomeController::class, 'index'])->middleware('guest.redirect');
+// HOME
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->middleware('guest.redirect');
+    Route::get('/welcome', 'index')->name('welcome')->middleware('guest.redirect');
+});
 
-Route::get('/welcome', [HomeController::class, 'index'])->name('welcome')->middleware('guest.redirect');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// LEVEL USER DATA
+Route::prefix('user')->controller(UserController::class)->group(function () {
+    Route::get('/level', 'getDataLevelUser');
+});
 
-
-// GET DATA
-// level user
-Route::get('/get-level-user', [UserController::class,'getDataLevelUser']);
+// DATA KARYAWAN
+Route::prefix('hrd')->controller(HrdController::class)->group(function () {
+    Route::get('/karyawan', 'allDataKaryawan');
+});
