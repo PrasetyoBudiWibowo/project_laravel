@@ -37,11 +37,6 @@
             const result = await response.json();
             Swal.close();
             if (result.status === "success") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: result.message || 'Login berhasil!',
-                })
                 window.location.href = result.redirect;
             } else {
                 Swal.fire({
@@ -71,7 +66,7 @@
                 text: 'Pastikan Username dan Password Sudah Benar',
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Ya, Simpan!',
+                confirmButtonText: 'Ya',
                 cancelButtonText: 'Batal',
                 reverseButtons: true,
             }).then((result) => {
