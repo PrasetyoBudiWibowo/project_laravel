@@ -1,38 +1,38 @@
-<div id="layoutSidenav_nav">
-    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-        <div class="sb-sidenav-menu">
-            <div class="nav">
-                <div class="sb-sidenav-menu-heading">Core</div>
-                <a class="nav-link" href="{{ route('welcome') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Dashboard
-                </a>
-                <div class="sb-sidenav-menu-heading">Interface</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                    Pages
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                            Authentication
+<div id="layoutSidenav_nav" class="vh-100 d-flex flex-column">
+    <div id="sidebarApp" class="flex-fill overflow-auto">
+        <nav class="sb-sidenav accordion sb-sidenav-dark h-100" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <template v-for="(menu, index) in menus" :key="index">
+                        <div v-if="menu.heading" class="sb-sidenav-menu-heading">@{{ menu.heading }}</div>
+
+                        <a v-if="!menu.children" class="nav-link" :href="menu.route">
+                            <div class="sb-nav-link-icon"><i :class="menu.icon"></i></div>
+                            @{{ menu.label }}
+                        </a>
+
+                    <div v-else>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" aria-expanded="false" :aria-controls="'collapse' + index">
+                            <div class="sb-nav-link-icon"><i :class="menu.icon"></i></div>
+                            @{{ menu.label }}
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="{{ route('register') }}">
-                                    <i class="fas fa-user me-2"></i> Register
+                        <div class="collapse" :id="'collapse' + index" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav accordion" :id="'nested' + index">
+                                <a v-for="(child, cIndex) in menu.children" :key="cIndex" class="nav-link" :href="child.route">
+                                    <i class="fas fa-circle me-2" style="font-size: 0.6rem;"></i> @{{ child.label }}
                                 </a>
                             </nav>
                         </div>
-                    </nav>
+                    </template>
                 </div>
             </div>
-        </div>
-        <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            Start Bootstrap
-        </div>
-    </nav>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                Start Bootstrap
+            </div>
+        </nav>
+    </div>
+
 </div>
+<script src="{{ asset('js/layouts/sidebar.js') }}"></script>

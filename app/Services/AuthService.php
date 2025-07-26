@@ -212,4 +212,46 @@ class AuthService
             throw $th;
         }
     }
+
+    public function edit($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('EDIT-USER');
+        try {
+            $log->info("<================= MULAI PROSES UBAH DATA DI DATABASE TblUser =================>");
+            $log->info("Data dari controller: " . json_encode($data));
+
+            $user = TblUser::find($data['kd_asli_user']);
+            $password = $data['password'];
+            $hashedPassword = Hash::make($password);
+
+            if ($user) {
+                $updateData = [
+                    'nama_user' => $data['nama_user'],
+                    'password' => $hashedPassword,
+                    'password_tampil' => $password,
+                ];
+
+                if (isset($data['img_user'])) {
+                    $updateData['img_user'] = $data['img_user'];
+                }
+
+                if (isset($data['format_img_user'])) {
+                    $updateData['format_img_user'] = $data['format_img_user'];
+                }
+
+                $user->update($updateData);
+            }
+
+
+            DB::commit();
+
+            $log->info("PROSES REGISTRASI SELESAI");
+            return $user;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
 }

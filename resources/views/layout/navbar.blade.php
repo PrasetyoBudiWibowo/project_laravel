@@ -32,7 +32,6 @@
                 .then(response => response.json())
                 .then(result => {
                     if (result.status === 'success') {
-                        Swal.fire('Berhasil', result.message, 'success')
                         window.location.href = result.redirect;
                     } else {
                         Swal.fire('Gagal', result.message || 'Logout gagal', 'error');

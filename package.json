@@ -17,6 +17,13 @@
         "vue-loader": "^16.2.0"
     },
     "dependencies": {
+        "@fortawesome/vue-fontawesome": "^3.1.1",
+        "antd": "^5.26.6",
+        "bootstrap": "^5.3.7",
+        "datatable": "^2.0.2",
+        "dayjs": "^1.11.13",
+        "highcharts": "^12.3.0",
+        "moment": "^2.30.1",
         "vue": "^3.5.17"
     }
 }

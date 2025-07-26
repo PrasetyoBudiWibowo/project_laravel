@@ -19,9 +19,9 @@
             </div>
         </div>
 
-        <div id="app">
+        <!-- <div id="app">
             <h1>@{{ message }}</h1>
-        </div>
+        </div> -->
     </div>
 
 </div>

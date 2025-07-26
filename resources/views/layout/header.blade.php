@@ -18,4 +18,13 @@
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/helper.js') }}"></script>
     <script src="{{ asset('js/API.js') }}"></script>
+
+    <script>
+        // window.userRole = "{{ session('user.level_user') ?? 'guest' }}";
+        window.userData = {
+            nama_user: "{{ session('user.nama_user') }}",
+            level_user: "{{ session('user.level_user') }}"
+        }
+        window.encryptedUserId = "{{ Crypt::encryptString(session('user.kd_asli_user')) }}";
+    </script>
 </head>

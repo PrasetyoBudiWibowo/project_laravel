@@ -52,6 +52,31 @@ async function checkSession() {
   });
 }
 
+async function userByCode(encryptedId) {
+  try {
+    const response = await axios.get(`/user/detail/${encryptedId}`);
+
+    if (response.data.status === "success") {
+      return response.data.data;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: `Terjadi kesalahan pada server.`,
+      });
+      return [];
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan ${error.message}.`,
+    });
+    return [];
+  }
+}
+
 window.getLevelUser = getLevelUser;
 window.getAllDataKaryawan = getAllDataKaryawan;
 window.checkSession = checkSession;
+window.userByCode = userByCode;

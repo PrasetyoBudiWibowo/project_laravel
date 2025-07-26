@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Crypt;
 
 use App\Services\UserService;
 
@@ -15,8 +16,7 @@ class UserController extends Controller
 
     public function __construct(
         UserService $userService,
-    )
-    {
+    ) {
         $this->userService = $userService;
     }
 
@@ -35,5 +35,27 @@ class UserController extends Controller
             'status' => 'success',
             'data' => $data
         ]);
+    }
+
+    public function getUserByKode($encryptedId)
+    {
+        try {
+            $kdAsliUser = Crypt::decryptString($encryptedId);
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $user
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
     }
 }

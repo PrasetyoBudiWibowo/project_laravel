@@ -48,7 +48,7 @@ const register = createApp({
                 this.kdKaryawan = '';
             }
         },
-    async checkSessionLogin() {
+        async checkSessionLogin() {
             try {
                 const response = await checkSession();
                 // console.log('User session:', response.data.user);

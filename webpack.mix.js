@@ -14,6 +14,7 @@ const webpack = require('webpack');
 
 mix.js('resources/js/app.js', 'public/js')
    .js('resources/js/script/register.js', 'public/js/script')
+   .js('resources/js/layouts/sidebar.js', 'public/js/layouts')
    .vue()
    .postCss('resources/css/app.css', 'public/css', [
        //

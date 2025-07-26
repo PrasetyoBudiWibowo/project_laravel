@@ -29,6 +29,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logout')->name('logout');
     Route::get('/check-session', 'checkSession')->name('check.session');
     Route::post('/register', 'auth_register');
+    // Route::get('/edit-user/{kd_asli_user}', 'edit_user')->name('edit_user');
+    Route::get('/edit-user/{encryptedId}', 'edit_user')->name('edit_user');
+    Route::post('/valisdasi-ubah-user', 'valisdasi_ubah_user');
 });
 
 // HOME
@@ -40,6 +43,7 @@ Route::controller(HomeController::class)->group(function () {
 // LEVEL USER DATA
 Route::prefix('user')->controller(UserController::class)->group(function () {
     Route::get('/level', 'getDataLevelUser');
+    Route::get('/detail/{encryptedId}', 'getUserByKode');
 });
 
 // DATA KARYAWAN

@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/script/register.js": "/js/script/register.js",
+    "/js/layouts/sidebar.js": "/js/layouts/sidebar.js",
     "/css/app.css": "/css/app.css"
 }
