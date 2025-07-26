@@ -42,8 +42,11 @@ Route::controller(HomeController::class)->group(function () {
 
 // LEVEL USER DATA
 Route::prefix('user')->controller(UserController::class)->group(function () {
+    Route::get('/get-user', 'getDataUser');
     Route::get('/level', 'getDataLevelUser');
     Route::get('/detail/{encryptedId}', 'getUserByKode');
+
+    Route::get('/user-register', 'user_register')->name('user_register');
 });
 
 // DATA KARYAWAN

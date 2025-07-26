@@ -22,6 +22,31 @@ async function getLevelUser() {
   }
 }
 
+async function getDataUserRegister()
+{
+  try {
+    const response = await axios.get("/user/get-user");
+
+    if (response.data.status === "success") {
+      return response.data.data;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: `Terjadi kesalahan pada server.`,
+      });
+      return [];
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan ${error.message}.`,
+    });
+    return [];
+  }
+}
+
 async function getAllDataKaryawan() {
   try {
     const response = await axios.get("/hrd/karyawan");
@@ -77,6 +102,7 @@ async function userByCode(encryptedId) {
 }
 
 window.getLevelUser = getLevelUser;
+window.getDataUserRegister = getDataUserRegister;
 window.getAllDataKaryawan = getAllDataKaryawan;
 window.checkSession = checkSession;
 window.userByCode = userByCode;

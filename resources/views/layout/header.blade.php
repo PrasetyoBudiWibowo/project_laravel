@@ -4,6 +4,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard - SB Admin')</title>
 
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap/bootstrap.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet" />
@@ -20,11 +21,11 @@
     <script src="{{ asset('js/API.js') }}"></script>
 
     <script>
-        // window.userRole = "{{ session('user.level_user') ?? 'guest' }}";
-        window.userData = {
-            nama_user: "{{ session('user.nama_user') }}",
-            level_user: "{{ session('user.level_user') }}"
-        }
-        window.encryptedUserId = "{{ Crypt::encryptString(session('user.kd_asli_user')) }}";
+    // window.userRole = "{{ session('user.level_user') ?? 'guest' }}";
+    window.userData = {
+        nama_user: "{{ session('user.nama_user') }}",
+        level_user: "{{ session('user.level_user') }}"
+    }
+    window.encryptedUserId = "{{ Crypt::encryptString(session('user.kd_asli_user')) }}";
     </script>
 </head>

@@ -20395,6 +20395,9 @@ var sidebarApp = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
         children: [{
           label: "Register",
           route: "/register"
+        }, {
+          label: "User Register",
+          route: "/user/user-register"
         }],
         isSuperAdminOnly: true
       }, {

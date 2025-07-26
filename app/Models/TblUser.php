@@ -43,4 +43,9 @@ class TblUser extends Model
     {
         return $this->belongsTo(LevelUser::class, 'id_usr_level', 'id');
     }
+
+    public function karyawan()
+    {
+        return $this->belongsTo(Karyawan::class, 'kd_karyawan', 'kd_karyawan');
+    }
 }

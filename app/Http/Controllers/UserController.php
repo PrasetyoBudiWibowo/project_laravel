@@ -20,11 +20,33 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
+    public function user_register()
+    {
+        return view('Auth.user_register');
+    }
+
     public function getDataLevelUser()
     {
         $data = $this->userService->getLevelUser();
 
         if ($data->isEmpty()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]);
+    }
+
+    public function getDataUser()
+    {
+        $data = $this->userService->getAlluser();
+
+        if (empty($data)) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'Tidak ada data.'

@@ -23,6 +23,10 @@ const sidebarApp = createApp({
                             label: "Register",
                             route: "/register",
                         },
+                        {
+                            label: "User Register",
+                            route: "/user/user-register",
+                        },
                     ],
                     isSuperAdminOnly: true,
                 },

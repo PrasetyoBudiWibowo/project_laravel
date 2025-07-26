@@ -21,6 +21,33 @@ class UserService
         return $levelUser;
     }
 
+    public function getAlluser()
+    {
+        $users = TblUser::with('level')->get();
+
+        $result = $users->map(function ($user) {
+            return [
+                'kd_asli_user' => $user->kd_asli_user,
+                'kd_karyawan' => $user->kd_karyawan,
+                'nama_user' => $user->nama_user,
+                'id_usr_level' => $user->id_usr_level,
+                'password_tampil' => $user->password_tampil,
+                'status_user' => $user->status_user,
+                'blokir' => $user->blokir,
+                'img_user' => $user->img_user,
+                'format_img_user' => $user->format_img_user,
+                'level' => [
+                    'level_user' => $user->level->level_user ?? null
+                ],
+                'karyawan' => [
+                    'nama_karyawan' => $user->karayawan->nama_karyawan ?? null
+                ]
+            ];
+        });
+
+        return $result;
+    }
+
     public function getUserByKdAsli($data)
     {
         $user = TblUser::find($data);
