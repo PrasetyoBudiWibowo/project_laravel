@@ -67,6 +67,7 @@ export default {
                 password: "",
                 img_user: null,
                 foto: null,
+                format_file: null,
                 loggedInUser: null,
             },
             preview: null,
@@ -102,9 +103,12 @@ export default {
                 this.form.nama_user = data.nama_user;
                 this.form.img_user = data.img_user;
                 this.form.password = data.password_tampil;
+                this.form.format_file = data.format_img_user;
 
                 if (!data.img_user || data.img_user === "") {
                     this.preview = "/assets/img/default/Default-Profile.png";
+                } else {
+                    this.preview = `/assets/img/user/${data.img_user}.${data.format_img_user}`;
                 }
             } catch (error) {
                 Swal.fire({
@@ -132,7 +136,7 @@ export default {
 
                 this.form.foto = null;
                 this.preview = this.form.img_user
-                    ? `/assets/img/user/${this.form.img_user}`
+                    ? `/assets/img/user/${this.form.img_user}.${this.form.format_file}`
                     : "/assets/img/default/Default-Profile.png";
 
                 if (this.$refs.fileInput) {

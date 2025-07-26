@@ -22227,6 +22227,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         password: "",
         img_user: null,
         foto: null,
+        format_file: null,
         loggedInUser: null
       },
       preview: null
@@ -22287,8 +22288,11 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               _this2.form.nama_user = data.nama_user;
               _this2.form.img_user = data.img_user;
               _this2.form.password = data.password_tampil;
+              _this2.form.format_file = data.format_img_user;
               if (!data.img_user || data.img_user === "") {
                 _this2.preview = "/assets/img/default/Default-Profile.png";
+              } else {
+                _this2.preview = "/assets/img/user/".concat(data.img_user, ".").concat(data.format_img_user);
               }
               _context2.n = 3;
               break;
@@ -22317,7 +22321,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
           text: "Hanya file gambar (JPG, JPEG, PNG) yang diizinkan."
         });
         this.form.foto = null;
-        this.preview = this.form.img_user ? "/assets/img/user/".concat(this.form.img_user) : "/assets/img/default/Default-Profile.png";
+        this.preview = this.form.img_user ? "/assets/img/user/".concat(this.form.img_user, ".").concat(this.form.format_file) : "/assets/img/default/Default-Profile.png";
         if (this.$refs.fileInput) {
           this.$refs.fileInput.value = "";
         }
