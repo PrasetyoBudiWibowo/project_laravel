@@ -19,6 +19,44 @@
     </div>
     <!-- Panggil app.js hanya sekali di sini -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+    document.getElementById("logout").addEventListener("click", function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Yakin ingin logout?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Logout!',
+            cancelButtonText: 'Batal',
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("{{ route('logout') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.status === 'success') {
+                            window.location.href = result.redirect;
+                        } else {
+                            Swal.fire('Gagal', result.message || 'Logout gagal', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('Error', `Terjadi kesalahan: ${error.message}`, 'error');
+                    });
+            }
+        });
+    });
+    </script>
 </body>
 
 </html>

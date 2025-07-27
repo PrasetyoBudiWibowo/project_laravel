@@ -13,8 +13,15 @@
                         @click.prevent="toggleCollapse(index)"
                     >
                         <i :class="menu.icon"></i>
-                        {{ menu.label }}
-                        <i class="fas fa-chevron-down ms-auto"></i>
+                        <span class="ms-2">{{ menu.label }}</span>
+                        <i
+                            :class="[
+                                'ms-auto',
+                                openCollapseIndex === index
+                                    ? 'fas fa-chevron-down'
+                                    : 'fas fa-chevron-right',
+                            ]"
+                        ></i>
                     </a>
                     <ul
                         v-show="openCollapseIndex === index"
@@ -26,7 +33,7 @@
                             class="nav-item"
                         >
                             <a :href="child.route" class="nav-link">
-                                {{ child.label }}
+                                <span class="ms-2">{{ child.label }}</span>
                             </a>
                         </li>
                     </ul>
@@ -35,7 +42,7 @@
                 <li v-else class="nav-item">
                     <a :href="menu.route" class="nav-link">
                         <i :class="menu.icon"></i>
-                        {{ menu.label }}
+                        <span class="ms-2">{{ menu.label }}</span>
                     </a>
                 </li>
             </template>

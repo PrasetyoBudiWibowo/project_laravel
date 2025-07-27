@@ -287,6 +287,9 @@ class AuthController extends Controller
                 'user_input' => $request['user_input'],
                 'format_img_user' => $newFileName ? $fileExtension : null,
                 'kd_asli_user' => $request['kd_asli_user'],
+                'status_user' => $request['status_user'],
+                'id_usr_level' => $request['id_usr_level'],
+                'blokir' => $request['blokir'],
             ];
 
             $editUser = $this->authService->edit($data);

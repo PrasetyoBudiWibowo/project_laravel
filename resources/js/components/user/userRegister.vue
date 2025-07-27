@@ -41,6 +41,10 @@
                             class="form-control"
                             v-model="selectedUser.nama_user"
                             placeholder="Masukkan nama user"
+                            @input="
+                                selectedUser.nama_user =
+                                    selectedUser.nama_user.toUpperCase()
+                            "
                         />
                     </div>
 
@@ -112,18 +116,49 @@
                     >
                         Close
                     </button>
-                    <button type="button" class="btn btn-primary">
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        @click="btnSimpanEditUser"
+                    >
                         Save changes
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <div
+        v-if="loading"
+        class="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50"
+    >
+        <svg
+            class="animate-spin h-10 w-10 text-blue-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+        >
+            <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+            ></circle>
+            <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8z"
+            ></path>
+        </svg>
+    </div>
 </template>
 
 <script>
 import { h } from "vue";
 import { Modal } from "bootstrap";
+import axios from "axios";
 
 export default {
     data() {
@@ -244,9 +279,15 @@ export default {
                 blokir: "",
             },
             modalInstance: null,
+            loading: false,
         };
     },
     mounted() {
+        const token = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+        axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
+
         this.columns = this.generateColumns(this.rawColumns);
         this.dataUser();
         this.dataLevels();
@@ -272,6 +313,7 @@ export default {
     },
     methods: {
         async dataUser() {
+            this.loading = true;
             try {
                 const data = await getDataUserRegister();
                 this.users = (data || []).map((item, index) => ({
@@ -291,6 +333,8 @@ export default {
                     },
                     buttonsStyling: false,
                 });
+            } finally {
+                this.loading = false;
             }
         },
         async dataLevels() {
@@ -395,6 +439,115 @@ export default {
                 $("#blokir").val(this.selectedUser.blokir).trigger("change");
             });
             this.modalInstance.show();
+        },
+        btnSimpanEditUser() {
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batal",
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.editUser();
+                }
+            });
+        },
+        async editUser() {
+            let dataToSave = {
+                kd_asli_user: this.selectedUser.kd_asli_user,
+                nama_user: this.selectedUser.nama_user,
+                password: this.selectedUser.password_tampil,
+                status_user: this.selectedUser.status_user,
+                id_usr_level: this.selectedUser.id_usr_level,
+                blokir: this.selectedUser.blokir,
+            };
+
+            let requireValue = [];
+
+            requireValue.push({
+                value: dataToSave.nama_user,
+                message: "Nama Tidak Boleh Kosong",
+            });
+            requireValue.push({
+                value: dataToSave.password,
+                message: "Password Tidak Boleh Kosong",
+            });
+            requireValue.push({
+                value: dataToSave.id_usr_level,
+                message: "Level User Harus di pilih",
+            });
+            requireValue.push({
+                value: dataToSave.status_user,
+                message: "Status User Tidak Boleh Kosong",
+            });
+            requireValue.push({
+                value: dataToSave.blokir,
+                message: "Blokir Harus di pilih User Harus di pilih",
+            });
+
+            if (!validasiBanyakInputan(requireValue)) return;
+
+            try {
+                Swal.fire({
+                    title: "Sedang Proses Simpan Data",
+                    text: "Mohon tunggu.",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                const response = await axios.post(
+                    "/valisdasi-ubah-user",
+                    dataToSave
+                );
+                const result = response.data;
+
+                Swal.close();
+                if (result.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: result.message || "Data berhasil Disimpan!",
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                        },
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: result.message,
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                    });
+                }
+            } catch (error) {
+                Swal.close();
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan: ${
+                        error.response?.data?.message || error.message
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                    buttonsStyling: false,
+                });
+            }
         },
     },
 };
