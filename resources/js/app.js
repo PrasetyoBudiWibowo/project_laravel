@@ -9,12 +9,14 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import editUser from './components/user/editUser.vue';
 import userRegister from './components/user/userRegister.vue';
 import sidebarUtama from './components/layouts/sidebarUtama.vue';
+import provinsi from './components/wilayah/provinsi.vue';
 
 const app = createApp({});
 
 app.component('edit-user', editUser);
 app.component('user-register', userRegister);
 app.component('sidebar-utama', sidebarUtama);
+app.component('provinsi', provinsi);
 
 app.use(Antd)
 

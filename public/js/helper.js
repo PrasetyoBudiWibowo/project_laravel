@@ -47,6 +47,10 @@ function validasiBanyakInputan(inputs) {
       icon: "warning",
       title: "Inputan Ada yang Kurang",
       html: `<div style="text-align: left; line-height: 1.4;">${errors.map(msg => `• ${msg}`).join('<br>')}</div>`,
+      confirmButtonText: "Tutup",
+      customClass: {
+          confirmButton: "btn btn-danger",
+      },
     });
     return false;
   }

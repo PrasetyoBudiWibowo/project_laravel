@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HrdController;
+use App\Http\Controllers\WilayahController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,12 @@ Route::prefix('user')->controller(UserController::class)->group(function () {
 // DATA KARYAWAN
 Route::prefix('hrd')->controller(HrdController::class)->group(function () {
     Route::get('/karyawan', 'allDataKaryawan');
+});
+
+
+// WILAYAH
+Route::prefix('wilayah')->controller(WilayahController::class)->group(function () {
+    Route::get('/provinsi', 'provinsi')->name('provinsi');
+    Route::get('/get-provinsi', 'getDataProvinsi');
+    Route::post('/simpan-provinsi', 'validasi_simpan_provinsi');
 });

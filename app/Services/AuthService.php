@@ -230,9 +230,9 @@ class AuthService
                     'nama_user' => $data['nama_user'],
                     'password' => $hashedPassword,
                     'password_tampil' => $password,
-                    'id_usr_level' => $data['id_usr_level'],
-                    'status_user' => $data['status_user'],
-                    'blokir' => $data['blokir'],
+                    'id_usr_level' => $data['id_usr_level'] ?? $user['id_usr_level'],
+                    'status_user' => $data['status_user'] ?? "ACTIVE",
+                    'blokir' => $data['blokir'] ?? "TIDAK",
                 ];
 
                 if (isset($data['img_user'])) {

@@ -33,6 +33,7 @@
                             class="nav-item"
                         >
                             <a :href="child.route" class="nav-link">
+                                <i :class="child.icon"></i>
                                 <span class="ms-2">{{ child.label }}</span>
                             </a>
                         </li>
@@ -65,6 +66,12 @@ export default {
                 },
                 { heading: "Interface" },
                 {
+                    label: "Module Manager",
+                    icon: "fas fa-puzzle-piece",
+                    route: "/modules",
+                    isSuperAdminOnly: true,
+                },
+                {
                     label: "Pages",
                     icon: "fas fa-book-open",
                     children: [
@@ -77,10 +84,25 @@ export default {
                     isSuperAdminOnly: true,
                 },
                 {
-                    label: "Module Manager",
-                    icon: "fas fa-puzzle-piece",
-                    route: "/modules",
-                    isSuperAdminOnly: true,
+                    label: "Wilayah",
+                    icon: "fa-solid fa-location-dot",
+                    children: [
+                        {
+                            label: "Provinsi",
+                            icon: "fa-regular fa-circle",
+                            route: "/wilayah/provinsi",
+                        },
+                        {
+                            label: "Kota/Kabupten",
+                            icon: "fa-regular fa-circle",
+                            route: "",
+                        },
+                        {
+                            label: "Kecamatan",
+                            icon: "fa-regular fa-circle",
+                            route: "",
+                        },
+                    ],
                 },
                 {
                     label: "Ubah Setting",
