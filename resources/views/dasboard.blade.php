@@ -18,12 +18,7 @@
                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
             </div>
         </div>
-
-        <!-- <div id="app">
-            <h1>@{{ message }}</h1>
-        </div> -->
     </div>
 
 </div>
-<script src="{{ asset('js/app.js') }}"></script>
 @endsection

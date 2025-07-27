@@ -285,6 +285,11 @@ export default {
                     text: `Terjadi kesalahan dataUser: ${
                         err.statusText || err
                     }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                    buttonsStyling: false,
                 });
             }
         },
@@ -311,6 +316,11 @@ export default {
                     text: `Terjadi kesalahan dataLevels: ${
                         err.statusText || err
                     }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                    buttonsStyling: false,
                 });
             }
         },

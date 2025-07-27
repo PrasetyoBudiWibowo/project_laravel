@@ -60,6 +60,7 @@
 
 <script>
 export default {
+    name: "editUser",
     data() {
         return {
             form: {
@@ -77,6 +78,7 @@ export default {
         encryptedId: String,
     },
     mounted() {
+        console.log("encryptedId:", this.encryptedId);
         this.getUser();
         this.checkSessionLogin();
     },
@@ -166,6 +168,10 @@ export default {
                 showCancelButton: true,
                 confirmButtonText: "Ya",
                 cancelButtonText: "Batal",
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
                 reverseButtons: true,
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -214,6 +220,11 @@ export default {
                         icon: "success",
                         title: "Berhasil",
                         text: result.message || "Data berhasil Disimpan!",
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                        },
+                        buttonsStyling: false,
                     }).then(() => {
                         window.location.href = result.redirect;
                     });
@@ -222,6 +233,11 @@ export default {
                         icon: "error",
                         title: "Gagal",
                         text: result.message,
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                        buttonsStyling: false,
                     });
                 }
             } catch (error) {
@@ -232,6 +248,11 @@ export default {
                     text: `Terjadi kesalahan: ${
                         error.response?.data?.message || error.message
                     }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                    buttonsStyling: false,
                 });
             }
         },

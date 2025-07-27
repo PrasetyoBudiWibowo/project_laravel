@@ -3,9 +3,6 @@
 @section('title', 'User Register')
 
 @section('content')
-<div id="app">
-    <user-register></user-register>
-</div>
+<user-register></user-register>
 
-<script src="{{ mix('js/app.js') }}"></script>
 @endsection
