@@ -61,4 +61,5 @@ Route::prefix('wilayah')->controller(WilayahController::class)->group(function (
     Route::get('/provinsi', 'provinsi')->name('provinsi');
     Route::get('/get-provinsi', 'getDataProvinsi');
     Route::post('/simpan-provinsi', 'validasi_simpan_provinsi');
+    Route::post('/ubah-provinsi', 'validasi_ubah_provinsi');
 });

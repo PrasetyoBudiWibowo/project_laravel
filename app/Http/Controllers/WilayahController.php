@@ -98,4 +98,63 @@ class WilayahController extends Controller
             ]);
         }
     }
+
+    public function validasi_ubah_provinsi(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-UBHA DATA PROVINSI');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di valisdasi_ubah_user"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_provinsi' => ['required', 'regex:/^[A-Z\s]+$/i'],
+            ], [
+                'nama_provinsi.required' => 'Nama provinsi tidak boleh kosong',
+                'nama_provinsi.regex' => 'Nama provinsi hanya boleh mengandung huruf dan spasi',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $cekProvinsi = $this->wilyahService->cekProvinsiByKode($request['kd_provinsi']);
+
+            if (!$cekProvinsi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Nama provinsi '{$request['nama_provinsi']}' tidak ditemukan"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $provinsi = $this->wilyahService->ubahProvinsi($request->all());
+
+            if (!$provinsi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Ubah Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }

@@ -47,6 +47,12 @@ class WilayahService
         return $provinsi;
     }
 
+    public function cekProvinsiByKode($data)
+    {
+        $provinsi = Provinsi::where('kd_provinsi', $data)->exists();
+        return $provinsi;
+    }
+
     public function simpanProvinsi($data)
     {
         DB::beginTransaction();
@@ -79,7 +85,7 @@ class WilayahService
             $provinsi->bln_input = $bln_input;
             $provinsi->thn_input = $thn_input;
             $provinsi->waktu_input = $waktu_input;
-            $provinsi->user_input = $data['kd_user'];
+            $provinsi->user_input = $data['user_input'];
             $provinsi->alamat_device = $ipDevice;
             $provinsi->type_device = $deviceType;
             $provinsi->device = $device;
@@ -90,6 +96,35 @@ class WilayahService
             DB::commit();
 
             $log->info("PROSES SELESAI");
+            return $provinsi;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function ubahProvinsi($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('UBAH-PROVINSI');
+
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA KE DATABASE TblUser =================>");
+            $log->info("Data dari controller: " . json_encode($data));
+
+            $provinsi = Provinsi::find($data['kd_provinsi']);
+
+            if ($provinsi) {
+                $provinsi->update([
+                    'nama_provinsi' => $data['nama_provinsi'],
+                    'status_tampil' => $data['status_tampil'],
+                ]);
+            }
+
+            DB::commit();
+
+            $log->info("PROSES UBAH PROVNISI SELESAI");
             return $provinsi;
         } catch (\Throwable $th) {
             DB::rollBack();
