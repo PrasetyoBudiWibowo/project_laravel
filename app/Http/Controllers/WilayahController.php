@@ -295,4 +295,63 @@ class WilayahController extends Controller
             ]);
         }
     }
+
+    public function validasi_ubah_kota_kabupten(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-UBAH DATA KOTA KABUPATEN');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_ubah_kota_kabupten"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_kota_kabupaten' => ['required', 'regex:/^[A-Z\s]+$/i'],
+            ], [
+                'nama_kota_kabupaten.required' => 'Nama Kota/kabupaten tidak boleh kosong',
+                'nama_kota_kabupaten.regex' => 'Nama Kota/kabupaten hanya boleh mengandung huruf dan spasi',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $cekKotaKabupaten = $this->wilyahService->cekKotaKabupatenByKode($request['kd_kota_kabupaten']);
+
+            if (!$cekKotaKabupaten) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Nama Kota Kabupaten '{$request['nama_kota_kabupaten']}' tidak ditemukan"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $KotaKabupaten = $this->wilyahService->ubahKotaKabupaten($request->all());
+
+            if (!$KotaKabupaten) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Ubah Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }

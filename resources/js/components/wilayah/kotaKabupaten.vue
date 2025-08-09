@@ -153,7 +153,7 @@
                                 <label
                                     for="input_kd_provinsi"
                                     class="form-label"
-                                    >Level User</label
+                                    >Provinsi</label
                                 >
                                 <select
                                     id="input_kd_provinsi"
@@ -208,6 +208,103 @@
                     </div>
                 </div>
             </div>
+
+            <div
+                class="modal fade"
+                id="modalEditKotaKabupaten"
+                tabindex="-1"
+                aria-labelledby="modalEditKotaKabupatenLabel"
+                aria-hidden="true"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditProvinsiLabel">
+                                Edit Kota Kabupaten
+                            </h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="edit_kd_provinsi" class="form-label"
+                                    >Provinsi</label
+                                >
+                                <select
+                                    id="edit_kd_provinsi"
+                                    class="form-select"
+                                    v-model="editData.kd_provinsi"
+                                >
+                                    <option value="">
+                                        -- Semua Provinsi --
+                                    </option>
+                                    <option
+                                        v-for="prov in dataProvinsi"
+                                        :key="prov.kd_provinsi"
+                                        :value="prov.kd_provinsi"
+                                    >
+                                        {{ prov.nama_provinsi }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"
+                                    >Nama Kota Kabupten</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="editData.nama_kota_kabupaten"
+                                    placeholder="Masukkan Kota Kabupaten"
+                                    @input="
+                                        editData.nama_kota_kabupaten =
+                                            editData.nama_kota_kabupaten.toUpperCase()
+                                    "
+                                />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="status_tampil" class="form-label"
+                                    >Status Tampil</label
+                                >
+                                <select
+                                    id="status_tampil"
+                                    v-model="editData.status_tampil"
+                                    class="form-control"
+                                >
+                                    <option value="ACTIVE">ACTIVE</option>
+                                    <option value="NON ACTIVE">
+                                        NON ACTIVE
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                            >
+                                Close
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                @click="btnSimpanEditkotaKabupaten"
+                            >
+                                Simpan Perubahan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -240,6 +337,23 @@ export default {
                     dataIndex: "nama_kota_kabupaten",
                     key: "nama_kota_kabupaten",
                 },
+                {
+                    title: "Aksi",
+                    key: "aksi",
+                    width: 120,
+                    customRender: ({ record }) =>
+                        h(
+                            "button",
+                            {
+                                class: "btn btn-sm btn-warning",
+                                onClick: () => this.openEditModal(record),
+                            },
+                            [
+                                h("i", { class: "fas fa-edit" }), // Ikon Font Awesome
+                                "Edit",
+                            ]
+                        ),
+                },
             ],
             dataProvinsi: [],
             dataKotaKabupaten: [],
@@ -252,6 +366,13 @@ export default {
                 kd_provinsi: "",
                 nama_kota_kabupaten: "",
             },
+            editData: {
+                kd_kota_kabupaten: "",
+                kd_provinsi: "",
+                nama_kota_kabupaten: "",
+                status_tampil: "",
+            },
+            modalInstance: null,
         };
     },
     mounted() {
@@ -268,16 +389,39 @@ export default {
             this.resetFormTambah();
         });
 
+        defaultSelect2("#filter_provinsi", "-- PILIH PROVINSI --", null);
+        defaultSelect2(
+            "#input_kd_provinsi",
+            "-- PILIH PROVINSI --",
+            "#modalTambahKotaKabupaten"
+        );
+
+        $("#input_kd_provinsi").on("change", (e) => {
+            this.inputData.kd_provinsi = e.target.value;
+        });
+
         this.$nextTick(() => {
-            defaultSelect2("#filter_provinsi", "-- PILIH PROVINSI --", null);
+            const modalEl = $("#modalEditKotaKabupaten")[0];
+            this.modalInstance = new Modal(modalEl);
+
             defaultSelect2(
-                "#input_kd_provinsi",
+                "#edit_kd_provinsi",
                 "-- PILIH PROVINSI --",
-                "#modalTambahKotaKabupaten"
+                "#modalEditKotaKabupaten"
             );
 
-            $("#input_kd_provinsi").on("change", (e) => {
-                this.inputData.kd_provinsi = e.target.value;
+            defaultSelect2(
+                "#status_tampil",
+                "-- PILIH  --",
+                "#modalEditKotaKabupaten"
+            );
+
+            $("#edit_kd_provinsi").on("change", (e) => {
+                this.editData.kd_provinsi = e.target.value;
+            });
+
+            $("#status_tampil").on("change", (e) => {
+                this.editData.status_tampil = e.target.value;
             });
         });
 
@@ -304,6 +448,18 @@ export default {
             try {
                 const data = await getAllDataProvinsi();
                 this.dataProvinsi = data || [];
+
+                this.$nextTick(() => {
+                    defaultSelect2(
+                        "#edit_kd_provinsi",
+                        "-- PILIH PROVINSI --",
+                        "#modalEditKotaKabupaten"
+                    );
+
+                    $("#edit_kd_provinsi")
+                        .val(this.editData.kd_provinsi)
+                        .trigger("change");
+                });
             } catch (err) {
                 Swal.fire({
                     icon: "error",
@@ -493,16 +649,25 @@ export default {
             this.inputData.nama_kota_kabupaten = "";
             $("#input_kd_provinsi").val("").trigger("change");
         },
-        btnSimpanKotaKabupaten() {
-            const btnOpenModal = document.getElementById(
-                "btnOpenModalTambahKotaKabupaten"
-            );
-            if (btnOpenModal) {
-                btnOpenModal.focus();
-            } else {
-                document.body.focus();
-            }
+        openEditModal(record) {
+            this.editData = {
+                kd_kota_kabupaten: record.kd_kota_kabupaten,
+                kd_provinsi: record.kd_provinsi,
+                nama_kota_kabupaten: record.nama_kota_kabupaten,
+                status_tampil: record.status_tampil,
+            };
 
+            this.$nextTick(() => {
+                $("#edit_kd_provinsi")
+                    .val(this.editData.kd_provinsi)
+                    .trigger("change");
+                $("#status_tampil")
+                    .val(this.editData.status_tampil)
+                    .trigger("change");
+            });
+            this.modalInstance.show();
+        },
+        btnSimpanKotaKabupaten() {
             Swal.fire({
                 title: "Konfirmasi",
                 text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
@@ -554,6 +719,105 @@ export default {
 
                 const response = await axios.post(
                     "/wilayah/simpan-kabupaten-kota",
+                    dataToSave
+                );
+                const result = response.data;
+
+                Swal.close();
+
+                if (result.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: result.message || "Data berhasil Disimpan!",
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                        },
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: result.message,
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                    });
+                }
+            } catch (error) {
+                Swal.close();
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan: ${
+                        error.response?.data?.message || error.message
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                    buttonsStyling: false,
+                });
+            }
+        },
+        btnSimpanEditkotaKabupaten() {
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batal",
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.editKotaKabupaten();
+                }
+            });
+        },
+        async editKotaKabupaten() {
+            let dataToSave = {
+                ...this.editData,
+            };
+
+            let requireValue = [];
+
+            requireValue.push({
+                value: dataToSave.kd_provinsi,
+                message: "Provinsi Tidak Boleh Kosong",
+            });
+
+            requireValue.push({
+                value: dataToSave.nama_kota_kabupaten,
+                message: "Nama kota/kabupaten Tidak Boleh Kosong",
+            });
+
+            requireValue.push({
+                value: dataToSave.status_tampil,
+                message: "status tampil Tidak Boleh Kosong",
+            });
+
+            if (!validasiBanyakInputan(requireValue)) return;
+
+            try {
+                Swal.fire({
+                    title: "Sedang Proses Simpan Data",
+                    text: "Mohon tunggu.",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                const response = await axios.post(
+                    "/wilayah/ubah-kabupaten-kota",
                     dataToSave
                 );
                 const result = response.data;

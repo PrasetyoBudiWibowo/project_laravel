@@ -93,6 +93,12 @@ class WilayahService
         return $provinsi;
     }
 
+    public function cekKotaKabupatenByKode($data)
+    {
+        $KotaKabupaten = KotaKabupaten::where('kd_kota_kabupaten', $data)->exists();
+        return $KotaKabupaten;
+    }
+
     public function simpanProvinsi($data)
     {
         DB::beginTransaction();
@@ -150,7 +156,7 @@ class WilayahService
         $log = AppLogger::getLogger('UBAH-PROVINSI');
 
         try {
-            $log->info("<================= MULAI PROSES SIMPAN DATA KE DATABASE TblUser =================>");
+            $log->info("<================= MULAI PROSES SIMPAN DATA KE DATABASE Provinsi =================>");
             $log->info("Data dari controller: " . json_encode($data));
 
             $provinsi = Provinsi::find($data['kd_provinsi']);
@@ -179,7 +185,7 @@ class WilayahService
             DB::beginTransaction();
             $log = AppLogger::getLogger('SIMPAN-KABUPATEN-KOTA');
 
-            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE Provinsi =================>");
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE KotaKabupaten =================>");
             $log->info("Data dari controller: " . json_encode($data));
 
             $kd_kota_kabupaten = $this->generateKdKabupatenKota();
@@ -219,6 +225,35 @@ class WilayahService
 
             $log->info("PROSES SELESAI");
             return $kotaKabupaten;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function ubahKotaKabupaten($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('UBAH-KOTA-KABUPATEN');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA KE DATABASE KotaKabupaten =================>");
+            $log->info("Data dari controller: " . json_encode($data));
+
+            $KotaKabupaten = KotaKabupaten::find($data['kd_kota_kabupaten']);
+
+            if ($KotaKabupaten) {
+                $KotaKabupaten->update([
+                    'kd_provinsi' => $data['kd_provinsi'],
+                    'nama_kota_kabupaten' => $data['nama_kota_kabupaten'],
+                    'status_tampil' => $data['status_tampil'],
+                ]);
+            }
+
+            DB::commit();
+
+            $log->info("PROSES UBAH KOTA-KABUPATEN SELESAI");
+            return $KotaKabupaten;
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
