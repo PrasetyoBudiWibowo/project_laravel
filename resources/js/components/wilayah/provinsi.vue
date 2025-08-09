@@ -269,10 +269,13 @@ export default {
                         h(
                             "button",
                             {
-                                class: "btn btn-sm btn-primary",
+                                class: "btn btn-sm btn-warning",
                                 onClick: () => this.openEditModal(record),
                             },
-                            "Edit"
+                            [
+                                h("i", { class: "fas fa-edit" }), // Ikon Font Awesome
+                                "Edit",
+                            ]
                         ),
                 },
             ],
