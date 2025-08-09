@@ -21,6 +21,26 @@ class WilayahService
         return $allProvinsi;
     }
 
+    public function allKotaKabupaten()
+    {
+        $kotakabupaten = KotaKabupaten::with('provinsi')->get();
+
+        $result = $kotakabupaten->map(function ($data) {
+            return [
+                'kd_kota_kabupaten' => $data->kd_kota_kabupaten,
+                'nama_kota_kabupaten' => $data->nama_kota_kabupaten,
+                'status_tampil' => $data->status_tampil,
+                'kd_provinsi' => $data->kd_provinsi,
+                'provinsi' => [
+                    'kd_provinsi' => $data->provinsi->kd_provinsi,
+                    'nama_provinsi' => $data->provinsi->nama_provinsi,
+                ]
+            ];
+        });
+
+        return $result;
+    }
+
     private function generateKdProvinsi()
     {
         $currentMonth = Carbon::now()->format('Ym');
@@ -35,6 +55,26 @@ class WilayahService
         }
 
         $lastId = $lastProvinsi->kd_provinsi;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
+    private function generateKdKabupatenKota()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'KTK-' . $currentMonth . '-';
+
+        $kotaKabupaten = KotaKabupaten::where('kd_kota_kabupaten', 'LIKE', $prefix . '%')
+            ->orderBy('kd_kota_kabupaten', 'DESC')
+            ->first();
+
+        if (!$kotaKabupaten) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $kotaKabupaten->kd_kota_kabupaten;
         $lastNumber = substr($lastId, -4);
 
         $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
@@ -58,7 +98,7 @@ class WilayahService
         DB::beginTransaction();
         $log = AppLogger::getLogger('SIMPAN-PROVINSI');
         try {
-            $log->info("<================= MULAI PROSES UBAH DATA DI DATABASE Provinsi =================>");
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE Provinsi =================>");
             $log->info("Data dari controller: " . json_encode($data));
 
             $kd_provinsi = $this->generateKdProvinsi();
@@ -126,6 +166,59 @@ class WilayahService
 
             $log->info("PROSES UBAH PROVNISI SELESAI");
             return $provinsi;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function simpanKabupatenKota($data)
+    {
+        try {
+            DB::beginTransaction();
+            $log = AppLogger::getLogger('SIMPAN-KABUPATEN-KOTA');
+
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE Provinsi =================>");
+            $log->info("Data dari controller: " . json_encode($data));
+
+            $kd_kota_kabupaten = $this->generateKdKabupatenKota();
+            $log->info("<================= BERHASIL BUAT PK =================>");
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $kotaKabupaten = new KotaKabupaten();
+            $kotaKabupaten->kd_kota_kabupaten = $kd_kota_kabupaten;
+            $kotaKabupaten->kd_provinsi = $data['kd_provinsi'];
+            $kotaKabupaten->nama_kota_kabupaten = $data['nama_kota_kabupaten'];
+            $kotaKabupaten->status_tampil = "ACTIVE";
+            $kotaKabupaten->tgl_input = $tgl_input;
+            $kotaKabupaten->bln_input = $bln_input;
+            $kotaKabupaten->thn_input = $thn_input;
+            $kotaKabupaten->waktu_input = $waktu_input;
+            $kotaKabupaten->user_input = $data['user_input'];
+            $kotaKabupaten->alamat_device = $ipDevice;
+            $kotaKabupaten->type_device = $deviceType;
+            $kotaKabupaten->device = $device;
+
+            $kotaKabupaten->save();
+            $log->info("BERHASIL SIMPAN DATA");
+
+            DB::commit();
+
+            $log->info("PROSES SELESAI");
+            return $kotaKabupaten;
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);

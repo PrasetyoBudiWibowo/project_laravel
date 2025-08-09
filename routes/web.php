@@ -62,4 +62,9 @@ Route::prefix('wilayah')->controller(WilayahController::class)->group(function (
     Route::get('/get-provinsi', 'getDataProvinsi');
     Route::post('/simpan-provinsi', 'validasi_simpan_provinsi');
     Route::post('/ubah-provinsi', 'validasi_ubah_provinsi');
+
+    Route::get('/kota-kabupaten', 'kota_kabupten')->name('kota_kabupten');
+    Route::get('/get-kota-kabupaten', 'getDataKotaKabupaten');
+    Route::get('/print-kota-kabupaten', 'printKotaKabupaten');
+    Route::post('/simpan-kabupaten-kota', 'validasi_simpan_kota_kabupten');
 });

@@ -125,9 +125,34 @@ async function getAllDataProvinsi() {
   }
 }
 
+async function getAllDataKotaKabupaten() {
+    try {
+    const response = await axios.get(`/wilayah/get-kota-kabupaten`);
+
+    if (response.data.status === "success") {
+      return response.data.data;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: `Terjadi kesalahan pada server.`,
+      });
+      return [];
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan ${error.message}.`,
+    });
+    return [];
+  }
+}
+
 window.getLevelUser = getLevelUser;
 window.getDataUserRegister = getDataUserRegister;
 window.getAllDataKaryawan = getAllDataKaryawan;
 window.checkSession = checkSession;
 window.userByCode = userByCode;
 window.getAllDataProvinsi = getAllDataProvinsi;
+window.getAllDataKotaKabupaten = getAllDataKotaKabupaten;

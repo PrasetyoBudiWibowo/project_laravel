@@ -95,7 +95,7 @@ export default {
                         {
                             label: "Kota/Kabupten",
                             icon: "fa-regular fa-circle",
-                            route: "",
+                            route: "/wilayah/kota-kabupaten",
                         },
                         {
                             label: "Kecamatan",
