@@ -11,6 +11,11 @@
     <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('fontawesome-6.7.2/css/all.min.css') }}" rel="stylesheet" />
 
+    <!-- DataTables Lokal -->
+    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/fixedHeader.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/fixedColumns.dataTables.min.css') }}" rel="stylesheet">
+
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('js/axios.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert2.min.js') }}"></script>
@@ -20,12 +25,17 @@
     <script src="{{ asset('js/helper.js') }}"></script>
     <script src="{{ asset('js/API.js') }}"></script>
 
+    <!-- DataTables Lokal -->
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.fixedColumns.min.js') }}"></script>
+
     <script>
-    // window.userRole = "{{ session('user.level_user') ?? 'guest' }}";
-    window.userData = {
-        nama_user: "{{ session('user.nama_user') }}",
-        level_user: "{{ session('user.level_user') }}"
-    }
-    window.encryptedUserId = "{{ Crypt::encryptString(session('user.kd_asli_user')) }}";
+        // window.userRole = "{{ session('user.level_user') ?? 'guest' }}";
+        window.userData = {
+            nama_user: "{{ session('user.nama_user') }}",
+            level_user: "{{ session('user.level_user') }}"
+        }
+        window.encryptedUserId = "{{ Crypt::encryptString(session('user.kd_asli_user')) }}";
     </script>
 </head>

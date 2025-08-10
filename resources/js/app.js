@@ -11,6 +11,7 @@ import userRegister from './components/user/userRegister.vue';
 import sidebarUtama from './components/layouts/sidebarUtama.vue';
 import provinsi from './components/wilayah/provinsi.vue';
 import kotaKabupaten from './components/wilayah/kotaKabupaten.vue';
+import kecamatan from './components/wilayah/kecamatan.vue';
 
 const app = createApp({});
 
@@ -19,6 +20,7 @@ app.component('user-register', userRegister);
 app.component('sidebar-utama', sidebarUtama);
 app.component('provinsi', provinsi);
 app.component('kota-kabupaten', kotaKabupaten);
+app.component('kecamatan', kecamatan);
 
 app.use(Antd)
 

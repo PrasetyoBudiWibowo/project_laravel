@@ -68,4 +68,7 @@ Route::prefix('wilayah')->controller(WilayahController::class)->group(function (
     Route::get('/print-kota-kabupaten', 'printKotaKabupaten');
     Route::post('/simpan-kabupaten-kota', 'validasi_simpan_kota_kabupten');
     Route::post('/ubah-kabupaten-kota', 'validasi_ubah_kota_kabupten');
+
+    Route::get('/kecamatan', 'kecamatan')->name('kecamatan');
+    Route::get('/get-kecamatan', 'getDataKecamatan');
 });

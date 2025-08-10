@@ -100,7 +100,7 @@ export default {
                         {
                             label: "Kecamatan",
                             icon: "fa-regular fa-circle",
-                            route: "",
+                            route: "/wilayah/kecamatan",
                         },
                     ],
                 },

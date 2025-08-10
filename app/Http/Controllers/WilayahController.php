@@ -29,6 +29,11 @@ class WilayahController extends Controller
         return view('wilayah.kota_kabupaten');
     }
 
+    public function kecamatan()
+    {
+        return view('wilayah.kecamatan');
+    }
+
     public function getDataProvinsi()
     {
         $data = $this->wilyahService->allProvinsi();
@@ -63,6 +68,22 @@ class WilayahController extends Controller
         ]);
     }
 
+    public function getDataKecamatan()
+    {
+        $data = $this->wilyahService->allKecamatan();
+
+        if (empty($data)) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]);
+    }
 
     public function validasi_simpan_provinsi(Request $request)
     {

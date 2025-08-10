@@ -41,6 +41,29 @@ class WilayahService
         return $result;
     }
 
+    public function allKecamatan()
+    {
+        $kecamatan = Kecamatan::with('kota_kabupaten')->get();
+
+        $result = $kecamatan->map(function ($data) {
+            return [
+                'kd_kecamatan' => $data->kd_kecamatan,
+                'kd_kota_kabupaten' => $data->kd_kota_kabupaten,
+                'nama_kecamatan' => $data->nama_kecamatan,
+                'status_tampil' => $data->status_tampil,
+                'kota_kabupaten' => [
+                    'nama_kota_kabupaten' => $data->kota_kabupaten->nama_kota_kabupaten ?? null,
+                    'kd_provinsi' => $data->kota_kabupaten->kd_provinsi ?? null,
+                    'provinsi' => [
+                        'nama_provinsi' => $data->kota_kabupaten->provinsi->nama_provinsi ?? null,
+                    ]
+                ]
+            ];
+        });
+
+        return $result;
+    }
+
     private function generateKdProvinsi()
     {
         $currentMonth = Carbon::now()->format('Ym');

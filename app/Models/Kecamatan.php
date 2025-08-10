@@ -32,7 +32,7 @@ class Kecamatan extends Model
 
     public $timestamps = false;
 
-    public function kotaKabupaten()
+    public function kota_kabupaten()
     {
         return $this->belongsTo(KotaKabupaten::class, 'kd_kota_kabupaten', 'kd_kota_kabupaten');
     }
