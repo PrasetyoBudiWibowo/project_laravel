@@ -78,7 +78,7 @@ export default {
         encryptedId: String,
     },
     mounted() {
-        console.log("encryptedId:", this.encryptedId);
+        // console.log("encryptedId:", this.encryptedId);
         this.getUser();
         this.checkSessionLogin();
     },

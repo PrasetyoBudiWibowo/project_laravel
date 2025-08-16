@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Crypt;
 use Mpdf\Mpdf;
 
 use App\Services\WilayahService;
+use App\Services\UserService;
 
 use App\Helper\AppLogger;
 
 class WilayahController extends Controller
 {
     protected $wilyahService;
+    protected $userService;
 
-    public function __construct(WilayahService $wilyahService)
-    {
+    public function __construct(
+        WilayahService $wilyahService,
+        UserService $userService
+    ) {
         $this->wilyahService = $wilyahService;
+        $this->userService = $userService;
     }
 
     public function provinsi()
@@ -367,6 +373,106 @@ class WilayahController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Berhasil Ubah Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function validasi_simpan_kecamatan(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-SIMPAN DATA KECAMATAN');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_simpan_kota_kabupten"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_kecamatan' => ['required', 'regex:/^[A-Z\s]+$/i'],
+                'kd_provinsi' => 'required|string',
+                'kd_kota_kabupaten' => 'required|string'
+            ], [
+                'nama_kecamatan.required' => 'Nama Kecamatan tidak boleh kosong',
+                'nama_kecamatan.regex' => 'Nama Kecamatan hanya boleh mengandung huruf dan spasi',
+                'kd_provinsi.required' => 'Provinsi harus dipilih',
+                'kd_kota_kabupaten.required' => 'Kota/Kabupaten harus dipilih'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $cekProvinsi = $this->wilyahService->cekProvinsiByKode($request['kd_provinsi']);
+
+            if (!$cekProvinsi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Nama provinsi '{$request['nama_provinsi']}' tidak ditemukan"
+                ]);
+            }
+
+
+            $cekKotaKabupaten = $this->wilyahService->cekKotaKabupatenByKode($request['kd_kota_kabupaten']);
+
+            if (!$cekKotaKabupaten) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Nama Kota Kabupaten '{$request['nama_kota_kabupaten']}' tidak ditemukan"
+                ]);
+            }
+
+            $namaKecamatan = strip_tags($request->nama_kecamatan);
+
+            if (!$namaKecamatan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "NAMA KECAMATAN YANG DI INPUT TIDAK SESUAI DENGAN FORMAT"
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "User TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $data = [
+                'nama_kecamatan' => $namaKecamatan,
+                'kd_provinsi' => $request->kd_provinsi,
+                'kd_kota_kabupaten' => $request->kd_kota_kabupaten,
+                'user_input' => $kdAsliUser,
+            ];
+
+            $kecamatan = $this->wilyahService->simpanKecamatan($data);
+
+            if (!$kecamatan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
             ]);
         } catch (\Throwable $th) {
             return response()->json([

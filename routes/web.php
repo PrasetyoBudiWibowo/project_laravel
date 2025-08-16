@@ -22,53 +22,67 @@ use App\Http\Controllers\WilayahController;
 //     return view('welcome');
 // });
 
-// AUTH
-Route::controller(AuthController::class)->group(function () {
-    Route::get('/login', 'showLoginForm')->name('login');
-    Route::post('/login', 'auth_login');
-    Route::get('/register', 'register')->name('register');
-    Route::post('/logout', 'logout')->name('logout');
-    Route::get('/check-session', 'checkSession')->name('check.session');
-    Route::post('/register', 'auth_register');
-    // Route::get('/edit-user/{kd_asli_user}', 'edit_user')->name('edit_user');
-    Route::get('/edit-user/{encryptedId}', 'edit_user')->name('edit_user');
-    Route::post('/valisdasi-ubah-user', 'valisdasi_ubah_user');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'auth_login']);
+
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register', [AuthController::class, 'auth_register']);
 });
 
+// Logout harus tetap auth
+Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Edit user (gunakan encryptedId)
+Route::middleware('auth')->group(function () {
+    Route::get('/edit-user/{encryptedId}', [AuthController::class, 'edit_user'])->name('edit_user');
+    Route::post('/valisdasi-ubah-user', [AuthController::class, 'valisdasi_ubah_user']);
+});
+
+// -----------------------
 // HOME
-Route::controller(HomeController::class)->group(function () {
-    Route::get('/', 'index')->middleware('guest.redirect');
+// -----------------------
+Route::middleware(['auth'])->controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home')->middleware('guest.redirect'); // jika ingin redirect guest
     Route::get('/welcome', 'index')->name('welcome')->middleware('guest.redirect');
 });
 
+// -----------------------
 // LEVEL USER DATA
-Route::prefix('user')->controller(UserController::class)->group(function () {
+// -----------------------
+Route::middleware(['auth'])->prefix('user')->controller(UserController::class)->group(function () {
     Route::get('/get-user', 'getDataUser');
     Route::get('/level', 'getDataLevelUser');
     Route::get('/detail/{encryptedId}', 'getUserByKode');
-
     Route::get('/user-register', 'user_register')->name('user_register');
 });
 
+// -----------------------
 // DATA KARYAWAN
-Route::prefix('hrd')->controller(HrdController::class)->group(function () {
+// -----------------------
+Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->group(function () {
     Route::get('/karyawan', 'allDataKaryawan');
 });
 
-
+// -----------------------
 // WILAYAH
-Route::prefix('wilayah')->controller(WilayahController::class)->group(function () {
+// -----------------------
+Route::middleware(['auth'])->prefix('wilayah')->controller(WilayahController::class)->group(function () {
+    // Provinsi
     Route::get('/provinsi', 'provinsi')->name('provinsi');
     Route::get('/get-provinsi', 'getDataProvinsi');
     Route::post('/simpan-provinsi', 'validasi_simpan_provinsi');
     Route::post('/ubah-provinsi', 'validasi_ubah_provinsi');
 
-    Route::get('/kota-kabupaten', 'kota_kabupten')->name('kota_kabupten');
+    // Kota/Kabupaten
+    Route::get('/kota-kabupaten', 'kota_kabupten')->name('kota_kabupaten');
     Route::get('/get-kota-kabupaten', 'getDataKotaKabupaten');
     Route::get('/print-kota-kabupaten', 'printKotaKabupaten');
     Route::post('/simpan-kabupaten-kota', 'validasi_simpan_kota_kabupten');
     Route::post('/ubah-kabupaten-kota', 'validasi_ubah_kota_kabupten');
 
+    // Kecamatan
     Route::get('/kecamatan', 'kecamatan')->name('kecamatan');
     Route::get('/get-kecamatan', 'getDataKecamatan');
+    Route::post('/simpan-kecamatan', 'validasi_simpan_kecamatan');
 });

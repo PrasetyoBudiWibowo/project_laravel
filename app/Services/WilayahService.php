@@ -104,6 +104,26 @@ class WilayahService
         return $prefix . $newNumber;
     }
 
+    private function generateKdKecamatan()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'KEC-' . $currentMonth . '-';
+
+        $Kecamatan = Kecamatan::where('kd_kecamatan', 'LIKE', $prefix . '%')
+            ->orderBy('kd_kecamatan', 'DESC')
+            ->first();
+
+        if (!$Kecamatan) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $Kecamatan->kd_kecamatan;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
     public function cekNamaProvinsi($data)
     {
         $provinsi = Provinsi::where('nama_provinsi', $data)->exists();
@@ -277,6 +297,59 @@ class WilayahService
 
             $log->info("PROSES UBAH KOTA-KABUPATEN SELESAI");
             return $KotaKabupaten;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function simpanKecamatan($data)
+    {
+        try {
+            DB::beginTransaction();
+            $log = AppLogger::getLogger('SIMPAN-KECAMATAN');
+
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE Kecamatan =================>");
+            $log->info("Data dari controller: ADA");
+
+            $kd_kecamatan = $this->generateKdKecamatan();
+            $log->info("<================= BERHASIL BUAT PK =================>");
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $kecamatan = new Kecamatan();
+            $kecamatan->kd_kecamatan = $kd_kecamatan;
+            $kecamatan->kd_kota_kabupaten = $data['kd_kota_kabupaten'];
+            $kecamatan->nama_kecamatan = $data['nama_kecamatan'];
+            $kecamatan->status_tampil = "ACTIVE";
+            $kecamatan->tgl_input = $tgl_input;
+            $kecamatan->bln_input = $bln_input;
+            $kecamatan->thn_input = $thn_input;
+            $kecamatan->waktu_input = $waktu_input;
+            $kecamatan->user_input = $data['user_input'];
+            $kecamatan->alamat_device = $ipDevice;
+            $kecamatan->type_device = $deviceType;
+            $kecamatan->device = $device;
+
+            $kecamatan->save();
+            $log->info("BERHASIL SIMPAN DATA");
+
+            DB::commit();
+
+            $log->info("PROSES SELESAI");
+            return $kecamatan;
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
