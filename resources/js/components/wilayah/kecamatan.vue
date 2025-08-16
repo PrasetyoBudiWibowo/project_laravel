@@ -99,6 +99,7 @@
                             <th>Nama Kota/Kabupaten</th>
                             <th>Nama Kecamatan</th>
                             <th>Status tampil</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                 </table>
@@ -175,6 +176,9 @@
                                         name="select_provinsi"
                                         id="select_provinsi"
                                         :value="selectedProvinsi"
+                                        @change="
+                                            handleChangeOptionEditKecamatan
+                                        "
                                         disabled
                                     />
                                 </div>
@@ -229,6 +233,131 @@
                     </div>
                 </div>
             </div>
+
+            <div
+                class="modal fade"
+                id="modalEditKecamatan"
+                tabindex="-1"
+                aria-hidden="true"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Kecamatan</h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Tutup"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label
+                                    for="select_edit_pro_kota"
+                                    class="form-label"
+                                >
+                                    Pilih Provinsi dan Kota
+                                </label>
+                                <select
+                                    class="form-control"
+                                    name="select_edit_pro_kota"
+                                    id="select_edit_pro_kota"
+                                    v-model="selectedEditData"
+                                    @change="handleChangeOptionEditKecamatan"
+                                >
+                                    <option value="">
+                                        -- PILIH PROVINSI / KOTA --
+                                    </option>
+                                    <option
+                                        v-for="item in optionEditProvKota"
+                                        :key="item.kd_kecamatan"
+                                        :value="`${item.kota_kabupaten.kd_provinsi}|${item.kd_kota_kabupaten}`"
+                                    >
+                                        {{
+                                            item.kota_kabupaten.provinsi
+                                                .nama_provinsi
+                                        }}
+                                        -
+                                        {{
+                                            item.kota_kabupaten
+                                                .nama_kota_kabupaten
+                                        }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label
+                                        for="select_edit_provinsi"
+                                        class="form-label"
+                                        >Provinsi</label
+                                    >
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="select_edit_provinsi"
+                                        id="select_edit_provinsi"
+                                        :value="selectedEditProvinsi"
+                                        disabled
+                                    />
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label
+                                        for="select_edit_kota_kabupaten"
+                                        class="form-label"
+                                        >Kota/Kabupaten</label
+                                    >
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="select_edit_kota_kabupaten"
+                                        id="select_edit_kota_kabupaten"
+                                        :value="selectedEditKota"
+                                        disabled
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label"
+                                    >Nama Kota Kabupten</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    v-model="editData.nama_kecamatan"
+                                    placeholder="Masukkan Kota Kabupaten"
+                                    @input="
+                                        editData.nama_kecamatan =
+                                            editData.nama_kecamatan.toUpperCase()
+                                    "
+                                />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                @click="btnSimpanEditKecamatan"
+                            >
+                                Ubah Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -276,8 +405,20 @@ export default {
 
             optionsProvKota: [],
             selectedValue: "",
-            selectedProvinsi: "",
-            selectedKota: "",
+            selectedInputProvinsi: "",
+            selectedInputKota: "",
+
+            editData: {
+                nama_kecamatan: "",
+                kd_provinsi: "",
+                kd_kota_kabupaten: "",
+            },
+            optionEditProvKota: [],
+            selectedEditData: "",
+            selectedEditProvinsi: "",
+            selectedEditKota: "",
+
+            modalInstance: null,
         };
     },
     computed: {
@@ -301,6 +442,9 @@ export default {
         this.filteredDataKecamatan = this.dataKecamatan;
 
         this.$nextTick(() => {
+            const modalEl = $("#modalEditKecamatan")[0];
+            this.modalInstance = new Modal(modalEl);
+
             this.refreshTable();
 
             defaultSelect2("#filter_provinsi", "-- PILIH PROVINSI --", null);
@@ -314,6 +458,12 @@ export default {
                 "#select_pro_kota",
                 "-- PILIH PROVINSI / KOTA --",
                 "#modalTambahKecamatan"
+            );
+
+            defaultSelect2(
+                "#select_edit_pro_kota",
+                "-- PILIH PROVINSI / KOTA --",
+                "#modalEditKecamatan"
             );
 
             $("#modalTambahKecamatan").on("hide.bs.modal", () => {
@@ -332,6 +482,18 @@ export default {
                 this.selectedValue = $(e.target).val();
                 this.handleChangeOptionAddKecamatan();
             });
+
+            $("#tabelKecamatan").on("click", ".btn-edit", (e) => {
+                const rowData = this.dataTableInstance
+                    .row($(e.target).closest("tr"))
+                    .data();
+                this.openEditModal(rowData);
+            });
+
+            $("#select_edit_pro_kota").on("change", (e) => {
+                this.selectedEditData = $(e.target).val();
+                this.handleChangeOptionEditKecamatan(this.selectedEditData);
+            });
         });
 
         this.loading = false;
@@ -349,6 +511,23 @@ export default {
                 this.filterdDataKecamatan = data || [];
 
                 this.optionsProvKota = (data || [])
+                    .filter(
+                        (item) =>
+                            item.kota_kabupaten && item.kota_kabupaten.provinsi
+                    )
+                    .reduce(
+                        (acc, item) => {
+                            const key = `${item.kota_kabupaten.kd_provinsi}|${item.kd_kota_kabupaten}`;
+                            if (!acc.map.has(key)) {
+                                acc.map.set(key, true);
+                                acc.list.push(item);
+                            }
+                            return acc;
+                        },
+                        { map: new Map(), list: [] }
+                    ).list;
+
+                this.optionEditProvKota = (data || [])
                     .filter(
                         (item) =>
                             item.kota_kabupaten && item.kota_kabupaten.provinsi
@@ -446,6 +625,17 @@ export default {
                             return `<span class="badge ${badge}">${data}</span>`;
                         },
                     },
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return `
+                                <button class="btn btn-sm btn-warning btn-edit">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>`;
+                        },
+                    },
                 ],
                 initComplete: function () {
                     $("#tabelKecamatan tbody").on(
@@ -523,9 +713,9 @@ export default {
                 );
 
                 if (selectedItem) {
-                    this.selectedProvinsi =
+                    this.selectedInputProvinsi =
                         selectedItem.kota_kabupaten.provinsi.nama_provinsi;
-                    this.selectedKota =
+                    this.selectedInputKota =
                         selectedItem.kota_kabupaten.nama_kota_kabupaten;
 
                     this.inputData.kd_provinsi =
@@ -533,14 +723,14 @@ export default {
                     this.inputData.kd_kota_kabupaten =
                         selectedItem.kd_kota_kabupaten;
                 } else {
-                    this.selectedProvinsi = "";
-                    this.selectedKota = "";
+                    this.selectedInputProvinsi = "";
+                    this.selectedInputKota = "";
                     this.inputData.kd_provinsi = "";
                     this.inputData.kd_kota_kabupaten = "";
                 }
             } else {
-                this.selectedProvinsi = "";
-                this.selectedKota = "";
+                this.selectedInputProvinsi = "";
+                this.selectedInputKota = "";
                 this.inputData.kd_provinsi = "";
                 this.inputData.kd_kota_kabupaten = "";
             }
@@ -550,6 +740,72 @@ export default {
             this.inputData.kd_provinsi = "";
             this.inputData.kd_provinsi = "";
             $("#select_pro_kota").val("").trigger("change");
+        },
+        openEditModal(rowData) {
+            this.selectedEditData = `${rowData.kota_kabupaten.kd_provinsi}|${rowData.kd_kota_kabupaten}`;
+
+            if (this.selectedEditData) {
+                $("#select_edit_pro_kota")
+                    .val(this.selectedEditData)
+                    .trigger("change");
+
+                this.selectedValue.split("|");
+
+                const selectedItem = this.optionEditProvKota.find(
+                    (it) =>
+                        it.kota_kabupaten.kd_provinsi ===
+                            rowData.kota_kabupaten.kd_provinsi &&
+                        it.kd_kota_kabupaten === rowData.kd_kota_kabupaten
+                );
+
+                if (selectedItem) {
+                    this.selectedEditProvinsi =
+                        selectedItem.kota_kabupaten.provinsi.nama_provinsi;
+                    this.selectedEditKota =
+                        selectedItem.kota_kabupaten.nama_kota_kabupaten;
+
+                    this.editData.kd_provinsi =
+                        selectedItem.kota_kabupaten.kd_provinsi;
+                    this.editData.kd_kota_kabupaten =
+                        selectedItem.kd_kota_kabupaten;
+                    this.editData.nama_kecamatan = selectedItem.nama_kecamatan;
+                } else {
+                    this.selectedEditProvinsi = "";
+                    this.selectedEditKota = "";
+                    this.editData.kd_provinsi = "";
+                    this.editData.kd_kota_kabupaten = "";
+                }
+            }
+            this.modalInstance.show();
+        },
+        handleChangeOptionEditKecamatan(data) {
+            console.log("ad", data);
+
+            if (!data) {
+                this.selectedEditProvinsi = "";
+                this.selectedEditKota = "";
+                this.editData.kd_provinsi = "";
+                this.editData.kd_kota_kabupaten = "";
+                return;
+            }
+
+            const [kd_provinsi, kd_kota] = data.split("|");
+
+            const selectedItem = this.optionEditProvKota.find(
+                (it) =>
+                    it.kota_kabupaten.kd_provinsi === kd_provinsi &&
+                    it.kd_kota_kabupaten === kd_kota
+            );
+
+            if (selectedItem) {
+                this.selectedEditProvinsi =
+                    selectedItem.kota_kabupaten.provinsi.nama_provinsi;
+                this.selectedEditKota =
+                    selectedItem.kota_kabupaten.nama_kota_kabupaten;
+
+                this.editData.kd_provinsi = kd_provinsi;
+                this.editData.kd_kota_kabupaten = kd_kota;
+            }
         },
         btnSimpanKotaKecamatan() {
             Swal.fire({
@@ -575,8 +831,6 @@ export default {
                 ...this.inputData,
                 user_input: window.encryptedUserId,
             };
-
-            console.log("daata", dataToSave);
 
             let requireValue = [];
 
@@ -656,6 +910,52 @@ export default {
                     buttonsStyling: false,
                 });
             }
+        },
+        btnSimpanEditKecamatan() {
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batal",
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.ubahKecamatan();
+                }
+            });
+        },
+        async ubahKecamatan() {
+            let dataToSave = {
+                ...this.editData,
+                user_input: window.encryptedUserId,
+            };
+
+            let requireValue = [];
+
+            requireValue.push({
+                value: dataToSave.nama_kecamatan,
+                message: "Kecamatan Tidak Boleh Kosong",
+            });
+
+            const schema = yup.object({
+                nama_kecamatan: yup
+                    .string()
+                    .required("Nama Kecamatan wajib diisi")
+                    .matches(
+                        /^[a-zA-Z0-9\s]+$/,
+                        "Nama Kecamatan Hanya Boleh huruf & angka yang diperbolehkan"
+                    ),
+                kd_provinsi: yup.string().required("Provinsi harus dipilih"),
+                kd_kota_kabupaten: yup
+                    .string()
+                    .required("Kota/Kabupaten harus dipilih"),
+            });
         },
     },
 };

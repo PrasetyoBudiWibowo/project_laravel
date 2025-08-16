@@ -348,10 +348,7 @@ export default {
                                 class: "btn btn-sm btn-warning",
                                 onClick: () => this.openEditModal(record),
                             },
-                            [
-                                h("i", { class: "fas fa-edit" }), // Ikon Font Awesome
-                                "Edit",
-                            ]
+                            [h("i", { class: "fas fa-edit" }), "Edit"]
                         ),
                 },
             ],
