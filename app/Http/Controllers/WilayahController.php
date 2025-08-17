@@ -481,4 +481,95 @@ class WilayahController extends Controller
             ]);
         }
     }
+
+    public function validasi_ubah_kecamatan(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-UBAH DATA KECAMATAN');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_ubah_kecamatan"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_kecamatan' => ['required', 'regex:/^[A-Z\s]+$/i'],
+                'kd_provinsi' => 'required|string',
+                'kd_kota_kabupaten' => 'required|string'
+            ], [
+                'nama_kecamatan.required' => 'Nama Kecamatan tidak boleh kosong',
+                'nama_kecamatan.regex' => 'Nama Kecamatan hanya boleh mengandung huruf dan spasi',
+                'kd_provinsi.required' => 'Provinsi harus dipilih',
+                'kd_kota_kabupaten.required' => 'Kota/Kabupaten harus dipilih'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $cekKecamatan = $this->wilyahService->cekKecamatanByKode($request['kd_kecamatan']);
+
+            if (!$cekKecamatan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Nama Kecamatan '{$cekKecamatan->nama_kecamatan}' ditemukan",
+                ]);
+            }
+
+            $namaKecamatan = strip_tags($request->nama_kecamatan);
+
+            if (!$namaKecamatan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "NAMA KECAMATAN YANG DI INPUT TIDAK SESUAI DENGAN FORMAT"
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "User TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $data = [
+                'kd_kecamatan' => $request->kd_kecamatan,
+                'nama_kecamatan' => $namaKecamatan,
+                'kd_kota_kabupaten' => $request->kd_kota_kabupaten,
+                'status_tampil' => $request->status_tampil,
+                'user_input' => $kdAsliUser,
+            ];
+
+            $kecamatan = $this->wilyahService->ubahKecamatan($data);
+
+            if (!$kecamatan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }

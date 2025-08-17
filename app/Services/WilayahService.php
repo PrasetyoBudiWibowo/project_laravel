@@ -142,6 +142,13 @@ class WilayahService
         return $KotaKabupaten;
     }
 
+    public function cekKecamatanByKode($data)
+    {
+        // $kecamatan = Kecamatan::where('kd_kecamatan', $data)->exists();
+        $kecamatan = Kecamatan::where('kd_kecamatan', $data)->first();
+        return $kecamatan;
+    }
+
     public function simpanProvinsi($data)
     {
         DB::beginTransaction();
@@ -306,10 +313,9 @@ class WilayahService
 
     public function simpanKecamatan($data)
     {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('SIMPAN-KECAMATAN');
         try {
-            DB::beginTransaction();
-            $log = AppLogger::getLogger('SIMPAN-KECAMATAN');
-
             $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE Kecamatan =================>");
             $log->info("Data dari controller: ADA");
 
@@ -349,6 +355,35 @@ class WilayahService
             DB::commit();
 
             $log->info("PROSES SELESAI");
+            return $kecamatan;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function ubahKecamatan($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('UBAH-KECAMATAN');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA KE DATABASE KECAMATAN =================>");
+            $log->info("Data dari controller: ADA" . json_encode($data));
+
+            $kecamatan = Kecamatan::find($data['kd_kecamatan']);
+
+            if ($kecamatan) {
+                $kecamatan->update([
+                    'kd_kota_kabupaten' => $data['kd_kota_kabupaten'],
+                    'nama_kecamatan' => $data['nama_kecamatan'],
+                    'status_tampil' => $data['status_tampil'],
+                ]);
+            }
+
+            DB::commit();
+
+            $log->info("PROSES UBAH KOTA-KECAMATAN SELESAI");
             return $kecamatan;
         } catch (\Throwable $th) {
             DB::rollBack();

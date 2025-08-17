@@ -141041,13 +141041,15 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       inputData: {
         nama_kecamatan: "",
         kd_provinsi: "",
-        kd_kota_kabupaten: ""
+        kd_kota_kabupaten: "",
+        status_tampil: ""
       },
       optionsProvKota: [],
       selectedValue: "",
       selectedInputProvinsi: "",
       selectedInputKota: "",
       editData: {
+        kd_kecamatan: "",
         nama_kecamatan: "",
         kd_provinsi: "",
         kd_kota_kabupaten: ""
@@ -141094,7 +141096,6 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               defaultSelect2("#filter_provinsi", "-- PILIH PROVINSI --", null);
               defaultSelect2("#filter_kota_kabupaten", "-- PILIH KOTA/KABUPATEN --", null);
               defaultSelect2("#select_pro_kota", "-- PILIH PROVINSI / KOTA --", "#modalTambahKecamatan");
-              defaultSelect2("#select_edit_pro_kota", "-- PILIH PROVINSI / KOTA --", "#modalEditKecamatan");
               $("#modalTambahKecamatan").on("hide.bs.modal", function () {
                 _this2.resetFormTambah();
               });
@@ -141113,9 +141114,14 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 var rowData = _this2.dataTableInstance.row($(e.target).closest("tr")).data();
                 _this2.openEditModal(rowData);
               });
+              defaultSelect2("#select_edit_pro_kota", "-- PILIH PROVINSI / KOTA --", "#modalEditKecamatan");
+              defaultSelect2("#status_tampil", "-- PILIH  --", "#modalEditKecamatan");
               $("#select_edit_pro_kota").on("change", function (e) {
                 _this2.selectedEditData = $(e.target).val();
                 _this2.handleChangeOptionEditKecamatan(_this2.selectedEditData);
+              });
+              $("#status_tampil").on("change", function (e) {
+                _this2.editData.status_tampil = e.target.value;
               });
             });
             _this2.loading = false;
@@ -141376,35 +141382,40 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       $("#select_pro_kota").val("").trigger("change");
     },
     openEditModal: function openEditModal(rowData) {
-      this.selectedEditData = "".concat(rowData.kota_kabupaten.kd_provinsi, "|").concat(rowData.kd_kota_kabupaten);
-      if (this.selectedEditData) {
-        $("#select_edit_pro_kota").val(this.selectedEditData).trigger("change");
-        this.selectedValue.split("|");
-        var selectedItem = this.optionEditProvKota.find(function (it) {
-          return it.kota_kabupaten.kd_provinsi === rowData.kota_kabupaten.kd_provinsi && it.kd_kota_kabupaten === rowData.kd_kota_kabupaten;
-        });
-        if (selectedItem) {
-          this.selectedEditProvinsi = selectedItem.kota_kabupaten.provinsi.nama_provinsi;
-          this.selectedEditKota = selectedItem.kota_kabupaten.nama_kota_kabupaten;
-          this.editData.kd_provinsi = selectedItem.kota_kabupaten.kd_provinsi;
-          this.editData.kd_kota_kabupaten = selectedItem.kd_kota_kabupaten;
-          this.editData.nama_kecamatan = selectedItem.nama_kecamatan;
+      var _this7 = this;
+      this.$nextTick(function () {
+        _this7.selectedEditData = "".concat(rowData.kota_kabupaten.kd_provinsi, "|").concat(rowData.kd_kota_kabupaten);
+        $("#select_edit_pro_kota").val(_this7.selectedEditData).trigger("change");
+        $("#status_tampil").val(rowData.status_tampil).trigger("change");
+        if (rowData) {
+          _this7.selectedEditProvinsi = rowData.kota_kabupaten.provinsi.nama_provinsi;
+          _this7.selectedEditKota = rowData.kota_kabupaten.nama_kota_kabupaten;
+          _this7.editData.nama_kecamatan = rowData.nama_kecamatan;
+          _this7.editData.kd_kecamatan = rowData.kd_kecamatan;
+          _this7.editData.kd_provinsi = rowData.kota_kabupaten.kd_provinsi;
+          _this7.editData.kd_kota_kabupaten = rowData.kd_kota_kabupaten;
         } else {
-          this.selectedEditProvinsi = "";
-          this.selectedEditKota = "";
-          this.editData.kd_provinsi = "";
-          this.editData.kd_kota_kabupaten = "";
+          _this7.selectedEditProvinsi = "";
+          _this7.selectedEditKota = "";
+          _this7.editData = {
+            kd_provinsi: "",
+            kd_kota_kabupaten: "",
+            kd_kecamatan: "",
+            status_tampil: "",
+            nama_kecamatan: ""
+          };
         }
-      }
-      this.modalInstance.show();
+        _this7.modalInstance.show();
+      });
     },
     handleChangeOptionEditKecamatan: function handleChangeOptionEditKecamatan(data) {
-      console.log("ad", data);
       if (!data) {
         this.selectedEditProvinsi = "";
         this.selectedEditKota = "";
+        this.editData.kd_kecamatan = "";
         this.editData.kd_provinsi = "";
         this.editData.kd_kota_kabupaten = "";
+        this.editData.status_tampil = "";
         return;
       }
       var _data$split = data.split("|"),
@@ -141422,7 +141433,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }
     },
     btnSimpanKotaKecamatan: function btnSimpanKotaKecamatan() {
-      var _this7 = this;
+      var _this8 = this;
       Swal.fire({
         title: "Konfirmasi",
         text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
@@ -141437,18 +141448,18 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this7.simpanKecamatan();
+          _this8.simpanKecamatan();
         }
       });
     },
     simpanKecamatan: function simpanKecamatan() {
-      var _this8 = this;
+      var _this9 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
         var dataToSave, requireValue, schema, response, result, _error$response, _t4;
         return _regenerator().w(function (_context5) {
           while (1) switch (_context5.p = _context5.n) {
             case 0:
-              dataToSave = _objectSpread(_objectSpread({}, _this8.inputData), {}, {
+              dataToSave = _objectSpread(_objectSpread({}, _this9.inputData), {}, {
                 user_input: window.encryptedUserId
               });
               requireValue = [];
@@ -141526,7 +141537,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }))();
     },
     btnSimpanEditKecamatan: function btnSimpanEditKecamatan() {
-      var _this9 = this;
+      var _this0 = this;
       Swal.fire({
         title: "Konfirmasi",
         text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
@@ -141541,20 +141552,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this9.ubahKecamatan();
+          _this0.ubahKecamatan();
         }
       });
     },
     ubahKecamatan: function ubahKecamatan() {
-      var _this0 = this;
+      var _this1 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
-        var dataToSave, requireValue, schema;
+        var dataToSave, requireValue, schema, response, result, _error$response2, _t5;
         return _regenerator().w(function (_context6) {
-          while (1) switch (_context6.n) {
+          while (1) switch (_context6.p = _context6.n) {
             case 0:
-              dataToSave = _objectSpread(_objectSpread({}, _this0.editData), {}, {
+              dataToSave = _objectSpread(_objectSpread({}, _this1.editData), {}, {
                 user_input: window.encryptedUserId
               });
+              console.log("udsa", dataToSave);
               requireValue = [];
               requireValue.push({
                 value: dataToSave.nama_kecamatan,
@@ -141565,10 +141577,69 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 kd_provinsi: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Provinsi harus dipilih"),
                 kd_kota_kabupaten: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Kota/Kabupaten harus dipilih")
               });
-            case 1:
+              _context6.p = 1;
+              _context6.n = 2;
+              return schema.validate(dataToSave, {
+                abortEarly: false
+              });
+            case 2:
+              Swal.fire({
+                title: "Sedang Proses Simpan Data",
+                text: "Mohon tunggu.",
+                allowOutsideClick: false,
+                didOpen: function didOpen() {
+                  Swal.showLoading();
+                }
+              });
+              _context6.n = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_3___default().post("/wilayah/ubah-kecamatan", dataToSave);
+            case 3:
+              response = _context6.v;
+              result = response.data;
+              Swal.close();
+              if (result.status === "success") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: result.message || "Data berhasil Diubah!",
+                  customClass: {
+                    confirmButton: "btn btn-success"
+                  }
+                }).then(function () {
+                  _this1.modalInstance.hide();
+                  window.location.reload();
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: result.message,
+                  confirmButtonText: "Tutup",
+                  customClass: {
+                    confirmButton: "btn btn-danger"
+                  }
+                });
+              }
+              _context6.n = 5;
+              break;
+            case 4:
+              _context6.p = 4;
+              _t5 = _context6.v;
+              Swal.close();
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan: ".concat(((_error$response2 = _t5.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || _t5.message),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+              });
+            case 5:
               return _context6.a(2);
           }
-        }, _callee6);
+        }, _callee6, null, [[1, 4]]);
       }))();
     }
   }
@@ -143022,16 +143093,19 @@ var _hoisted_38 = {
   "class": "mb-3"
 };
 var _hoisted_39 = {
-  "class": "modal-footer"
+  "class": "mb-3"
 };
 var _hoisted_40 = {
+  "class": "modal-footer"
+};
+var _hoisted_41 = {
   key: 0,
   "class": "fixed inset-0 flex flex-col items-center justify-center bg-white/60 backdrop-blur-sm z-50 animate-fade-in"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[22] || (_cache[22] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "card-header"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Filter Data")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [_cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Filter Data")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "col-sm-2 col-form-label"
   }, "Cari Provinsi:", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
     id: "filter_provinsi",
@@ -143039,14 +143113,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.selectedProvinsi = $event;
     })
-  }, [_cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  }, [_cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
     value: ""
   }, "-- Semua Provinsi --", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataProvinsi, function (prov) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: prov.kd_provinsi,
       value: prov.kd_provinsi
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(prov.nama_provinsi), 9 /* TEXT, PROPS */, _hoisted_6);
-  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedProvinsi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[18] || (_cache[18] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedProvinsi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "col-sm-2 col-form-label"
   }, "Cari Kota / Kabupaten:", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
     id: "filter_kota_kabupaten",
@@ -143055,7 +143129,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.selectedkotaKabupaten = $event;
     }),
     disabled: !$data.selectedProvinsi
-  }, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  }, [_cache[18] || (_cache[18] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
     value: ""
   }, "-- Semua Provinsi --", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.filteredKotaKabupaten, function (prov) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
@@ -143070,7 +143144,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     style: {
       "white-space": "nowrap"
     }
-  }, _cache[19] || (_cache[19] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, _cache[20] || (_cache[20] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fa-solid fa-magnifying-glass me-1"
   }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Cari ")])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-danger",
@@ -143080,9 +143154,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     style: {
       "white-space": "nowrap"
     }
-  }, _cache[20] || (_cache[20] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, _cache[21] || (_cache[21] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fa fa-xmark me-1"
-  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Reset ")]))])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_cache[36] || (_cache[36] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header\"><div>Kecamatan</div></div><div class=\"card-body\"><div class=\"d-flex justify-start-end mb-3\"><button class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target=\"#modalTambahKecamatan\"><i class=\"fas fa-plus me-1\"></i> Tambah Kecamatan </button></div><table id=\"tabelKecamatan\" class=\"display nowrap\" style=\"width:100%;\"><thead><tr><th>No</th><th>Nama Provinsi</th><th>Nama Kota/Kabupaten</th><th>Nama Kecamatan</th><th>Status tampil</th><th>Aksi</th></tr></thead></table></div>", 2)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_cache[28] || (_cache[28] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Reset ")]))])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_cache[39] || (_cache[39] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header\"><div>Kecamatan</div></div><div class=\"card-body\"><div class=\"d-flex justify-start-end mb-3\"><button class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target=\"#modalTambahKecamatan\"><i class=\"fas fa-plus me-1\"></i> Tambah Kecamatan </button></div><table id=\"tabelKecamatan\" class=\"display nowrap\" style=\"width:100%;\"><thead><tr><th>No</th><th>Nama Provinsi</th><th>Nama Kota/Kabupaten</th><th>Nama Kecamatan</th><th>Status tampil</th><th>Aksi</th></tr></thead></table></div>", 2)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_cache[29] || (_cache[29] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "modal-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
     "class": "modal-title",
@@ -143092,7 +143166,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn-close",
     "data-bs-dismiss": "modal",
     "aria-label": "Close"
-  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_cache[23] || (_cache[23] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_cache[24] || (_cache[24] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "select_pro_kota",
     "class": "form-label"
   }, " Pilih Provinsi dan Kota ", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
@@ -143105,14 +143179,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onChange: _cache[5] || (_cache[5] = function () {
       return $options.handleChangeOptionAddKecamatan && $options.handleChangeOptionAddKecamatan.apply($options, arguments);
     })
-  }, [_cache[22] || (_cache[22] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  }, [_cache[23] || (_cache[23] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
     value: ""
   }, " -- PILIH PROVINSI / KOTA -- ", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.optionsProvKota, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: item.kd_kecamatan,
       value: "".concat(item.kota_kabupaten.kd_provinsi, "|").concat(item.kd_kota_kabupaten)
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.kota_kabupaten.provinsi.nama_provinsi) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.kota_kabupaten.nama_kota_kabupaten), 9 /* TEXT, PROPS */, _hoisted_19);
-  }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedValue]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [_cache[24] || (_cache[24] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedValue]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [_cache[25] || (_cache[25] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "select_provinsi",
     "class": "form-label"
   }, "Provinsi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -143125,7 +143199,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.handleChangeOptionEditKecamatan && $options.handleChangeOptionEditKecamatan.apply($options, arguments);
     }),
     disabled: ""
-  }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_22)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [_cache[25] || (_cache[25] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_22)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [_cache[26] || (_cache[26] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "select_kota_kabupaten",
     "class": "form-label"
   }, "Kota/Kabupaten", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -143135,7 +143209,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "select_kota_kabupaten",
     value: _ctx.selectedKota,
     disabled: ""
-  }, null, 8 /* PROPS */, _hoisted_24)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [_cache[26] || (_cache[26] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 8 /* PROPS */, _hoisted_24)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [_cache[27] || (_cache[27] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label"
   }, "Nama Kecamatan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
@@ -143147,7 +143221,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onInput: _cache[8] || (_cache[8] = function ($event) {
       return $data.inputData.nama_kecamatan = $data.inputData.nama_kecamatan.toUpperCase();
     })
-  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.nama_kecamatan]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [_cache[27] || (_cache[27] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.nama_kecamatan]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [_cache[28] || (_cache[28] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-secondary",
     "data-bs-dismiss": "modal"
@@ -143157,7 +143231,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[9] || (_cache[9] = function () {
       return $options.btnSimpanKotaKecamatan && $options.btnSimpanKotaKecamatan.apply($options, arguments);
     })
-  }, " Simpan ")])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [_cache[35] || (_cache[35] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, " Simpan ")])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [_cache[38] || (_cache[38] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "modal-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
     "class": "modal-title"
@@ -143166,7 +143240,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn-close",
     "data-bs-dismiss": "modal",
     "aria-label": "Tutup"
-  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [_cache[30] || (_cache[30] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [_cache[31] || (_cache[31] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "select_edit_pro_kota",
     "class": "form-label"
   }, " Pilih Provinsi dan Kota ", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
@@ -143179,14 +143253,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onChange: _cache[11] || (_cache[11] = function () {
       return $options.handleChangeOptionEditKecamatan && $options.handleChangeOptionEditKecamatan.apply($options, arguments);
     })
-  }, [_cache[29] || (_cache[29] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  }, [_cache[30] || (_cache[30] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
     value: ""
   }, " -- PILIH PROVINSI / KOTA -- ", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.optionEditProvKota, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: item.kd_kecamatan,
       value: "".concat(item.kota_kabupaten.kd_provinsi, "|").concat(item.kd_kota_kabupaten)
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.kota_kabupaten.provinsi.nama_provinsi) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.kota_kabupaten.nama_kota_kabupaten), 9 /* TEXT, PROPS */, _hoisted_32);
-  }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedEditData]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [_cache[31] || (_cache[31] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedEditData]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [_cache[32] || (_cache[32] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "select_edit_provinsi",
     "class": "form-label"
   }, "Provinsi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -143196,7 +143270,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "select_edit_provinsi",
     value: $data.selectedEditProvinsi,
     disabled: ""
-  }, null, 8 /* PROPS */, _hoisted_35)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [_cache[32] || (_cache[32] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 8 /* PROPS */, _hoisted_35)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [_cache[33] || (_cache[33] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "select_edit_kota_kabupaten",
     "class": "form-label"
   }, "Kota/Kabupaten", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -143206,29 +143280,42 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "select_edit_kota_kabupaten",
     value: $data.selectedEditKota,
     disabled: ""
-  }, null, 8 /* PROPS */, _hoisted_37)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [_cache[33] || (_cache[33] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 8 /* PROPS */, _hoisted_37)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [_cache[34] || (_cache[34] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label"
-  }, "Nama Kota Kabupten", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, "Nama Kecamatan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control",
     "onUpdate:modelValue": _cache[12] || (_cache[12] = function ($event) {
       return $data.editData.nama_kecamatan = $event;
     }),
-    placeholder: "Masukkan Kota Kabupaten",
+    placeholder: "Masukkan Kecamatan",
     onInput: _cache[13] || (_cache[13] = function ($event) {
       return $data.editData.nama_kecamatan = $data.editData.nama_kecamatan.toUpperCase();
     })
-  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editData.nama_kecamatan]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, [_cache[34] || (_cache[34] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editData.nama_kecamatan]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, [_cache[36] || (_cache[36] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    "for": "status_tampil",
+    "class": "form-label"
+  }, "Status Tampil", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    id: "status_tampil",
+    "onUpdate:modelValue": _cache[14] || (_cache[14] = function ($event) {
+      return $data.editData.status_tampil = $event;
+    }),
+    "class": "form-control"
+  }, _cache[35] || (_cache[35] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "ACTIVE"
+  }, "ACTIVE", -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: "NON ACTIVE"
+  }, " NON ACTIVE ", -1 /* CACHED */)]), 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.editData.status_tampil]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [_cache[37] || (_cache[37] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-secondary",
     "data-bs-dismiss": "modal"
   }, " Batal ", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-primary",
-    onClick: _cache[14] || (_cache[14] = function () {
+    onClick: _cache[15] || (_cache[15] = function () {
       return $options.btnSimpanEditKecamatan && $options.btnSimpanEditKecamatan.apply($options, arguments);
     })
-  }, " Ubah Data ")])])])])])]), $data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_40, _cache[37] || (_cache[37] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, " Ubah Data ")])])])])])]), $data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_41, _cache[40] || (_cache[40] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "relative"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "h-16 w-16 border-4 border-blue-300 rounded-full animate-spin border-t-transparent"

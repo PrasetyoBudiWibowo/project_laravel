@@ -85,4 +85,5 @@ Route::middleware(['auth'])->prefix('wilayah')->controller(WilayahController::cl
     Route::get('/kecamatan', 'kecamatan')->name('kecamatan');
     Route::get('/get-kecamatan', 'getDataKecamatan');
     Route::post('/simpan-kecamatan', 'validasi_simpan_kecamatan');
+    Route::post('/ubah-kecamatan', 'validasi_ubah_kecamatan');
 });
