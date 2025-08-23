@@ -107,7 +107,24 @@ export default {
             },
         };
     },
+    async mounted() {
+        const token = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+        axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
+
+        this.$nextTick(() => {
+            $("#modalTambahKecamatan").on("hide.bs.modal", () => {
+                this.resetFormTambah();
+            });
+        });
+    },
     methods: {
+        resetFormTambah() {
+            this.inputData.nama_module = "";
+            this.inputData.tampil_module = "";
+            this.inputData.url_module = "";
+        },
         btnSimpanKotaModule() {
             Swal.fire({
                 title: "Konfirmasi",
@@ -161,6 +178,34 @@ export default {
                         Swal.showLoading();
                     },
                 });
+
+                const response = await axios.post("/module", dataToSave);
+                const result = response.data;
+
+                Swal.close();
+
+                if (result.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: result.message || "Data berhasil Disimpan!",
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                        },
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: result.message,
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                    });
+                }
             } catch (error) {
                 Swal.close();
                 Swal.fire({

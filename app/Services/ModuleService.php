@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\MasterModule;
+use App\Models\Module;
 
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -18,7 +18,7 @@ class ModuleService
         $currentMonth = Carbon::now()->format('Ym');
         $prefix = 'MDL-' . $currentMonth . '-';
 
-        $module = MasterModule::where('kd_module', 'LIKE', $prefix . '%')
+        $module = Module::where('kd_module', 'LIKE', $prefix . '%')
             ->orderBy('kd_module', 'DESC')
             ->first();
 
@@ -39,7 +39,7 @@ class ModuleService
         $log = AppLogger::getLogger('SIMPAN-MODULE');
         try {
             $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE MODULE =================>");
-            $log->info("Data dari controller: ADA");
+            $log->info("Data dari controller: ADA" . json_encode($data));
 
             $kd_module = $this->generateKdModule();
             $log->info("<================= BERHASIL BUAT PK =================>");
@@ -50,12 +50,13 @@ class ModuleService
             $bln_input = $now->format('m');
             $thn_input = $now->year;
 
-            $module = new MasterModule();
+            $module = new Module();
             $module->kd_module = $kd_module;
             $module->nama_module = $data['nama_module'];
             $module->tampil_module = $data['tampil_module'];
-            $module->url = $data['url'];
+            $module->url_module = $data['url_module'];
             $module->status_module = $data['status_module'];
+            $module->user_input = $data['user_input'];
             $module->tgl_input = $tgl_input;
             $module->bln_input = $bln_input;
             $module->thn_input = $thn_input;

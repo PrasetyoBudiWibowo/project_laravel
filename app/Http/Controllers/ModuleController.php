@@ -49,7 +49,8 @@ class ModuleController extends Controller
             ], [
                 'nama_module.required' => 'Nama Module tidak boleh kosong',
                 'nama_module.regex' => 'Nama Module hanya boleh mengandung huruf dan spasi',
-                'nama_module.regex' => 'Nama Tampil Module hanya boleh mengandung huruf dan spasi',
+                'tampil_module.required' => 'Tampil Module tidak boleh kosong',
+                'tampil_module.regex' => 'Nama Tampil Module hanya boleh mengandung huruf dan spasi',
             ]);
 
             if ($validator->fails()) {
@@ -75,8 +76,9 @@ class ModuleController extends Controller
             $data = [
                 'nama_module' => $request->nama_module,
                 'tampil_module' => $request->tampil_module,
-                'url' => '/' . $request->nama_module,
+                'url_module'    => '/' . ltrim($request->url_module, '/'),
                 'status_module' => "ACTIVE",
+                'user_input' => $kdAsliUser,
             ];
 
             $module = $this->moduleService->simpanModule($data);
