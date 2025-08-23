@@ -105,6 +105,12 @@ export default {
                     ],
                 },
                 {
+                    label: "Module",
+                    icon: "fa-solid fa-book",
+                    route: `/module`,
+                    isSuperAdminOnly: true,
+                },
+                {
                     label: "Ubah Setting",
                     icon: "fas fa-user-edit",
                     route: `/edit-user/${window.encryptedUserId || ""}`,

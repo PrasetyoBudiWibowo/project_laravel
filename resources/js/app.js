@@ -12,6 +12,7 @@ import sidebarUtama from './components/layouts/sidebarUtama.vue';
 import provinsi from './components/wilayah/provinsi.vue';
 import kotaKabupaten from './components/wilayah/kotaKabupaten.vue';
 import kecamatan from './components/wilayah/kecamatan.vue';
+import module from './components/module/setting/module.vue'
 
 const app = createApp({});
 
@@ -21,6 +22,7 @@ app.component('sidebar-utama', sidebarUtama);
 app.component('provinsi', provinsi);
 app.component('kota-kabupaten', kotaKabupaten);
 app.component('kecamatan', kecamatan);
+app.component('module', module);
 
 app.use(Antd)
 

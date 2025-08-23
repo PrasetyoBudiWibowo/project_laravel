@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HrdController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\ModuleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'auth_register']);
 });
 
-// Logout harus tetap auth
+// Logout
 Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Edit user (gunakan encryptedId)
@@ -46,6 +47,16 @@ Route::middleware(['auth'])->controller(HomeController::class)->group(function (
     Route::get('/', 'index')->name('home')->middleware('guest.redirect'); // jika ingin redirect guest
     Route::get('/welcome', 'index')->name('welcome')->middleware('guest.redirect');
 });
+
+
+
+// -----------------------
+// MODULE
+// -----------------------
+Route::middleware(['auth'])->controller(ModuleController::class)->group(function () {
+    Route::get('/module', 'module');
+});
+
 
 // -----------------------
 // LEVEL USER DATA
