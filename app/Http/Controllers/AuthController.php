@@ -145,7 +145,7 @@ class AuthController extends Controller
             $log->info('Data Request:', $request->all());
 
             $validator = Validator::make($request->all(), [
-                'nama_user' => 'required|alpha_num',
+                'nama_user' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
                 'password' => 'required'
             ], [
                 'nama_user.required' => 'User name tidak boleh kosong',

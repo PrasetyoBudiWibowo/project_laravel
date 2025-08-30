@@ -38,13 +38,15 @@ Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->n
 Route::middleware('auth')->group(function () {
     Route::get('/edit-user/{encryptedId}', [AuthController::class, 'edit_user'])->name('edit_user');
     Route::post('/valisdasi-ubah-user', [AuthController::class, 'valisdasi_ubah_user']);
+
+    Route::get('/check-session', [AuthController::class, 'checkSession'])->name('checkSession');
 });
 
 // -----------------------
 // HOME
 // -----------------------
 Route::middleware(['auth'])->controller(HomeController::class)->group(function () {
-    Route::get('/', 'index')->name('home')->middleware('guest.redirect'); // jika ingin redirect guest
+    Route::get('/', 'index')->name('home')->middleware('guest.redirect');
     Route::get('/welcome', 'index')->name('welcome')->middleware('guest.redirect');
 });
 
@@ -54,10 +56,12 @@ Route::middleware(['auth'])->controller(HomeController::class)->group(function (
 // MODULE
 // -----------------------
 Route::middleware(['auth'])->controller(ModuleController::class)->group(function () {
-    Route::get('/module', 'module')->name('provinmodulesi');;
+    Route::get('/module', 'module')->name('module');;
     Route::post('/module', 'validasi_simpan_module');
 
     Route::get('/get-module', 'getModule');
+
+    Route::get('/akses-module-user', 'akses_module_user')->name('akses_module_user');
 });
 
 

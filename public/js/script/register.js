@@ -22819,7 +22819,6 @@ var register = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
             case 2:
               _context.p = 2;
               _t = _context.v;
-              console.error('Belum login:', _t);
               Swal.fire({
                 icon: 'warning',
                 title: 'Session Habis',
@@ -22846,6 +22845,7 @@ var register = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({
             case 1:
               data = _context2.v;
               _this3.levels = data || [];
+              console.log('djasdjp', data);
               _this3.$nextTick(function () {
                 defaultSelect2("#id_usr_level", "-- Pilih Level --");
               });

@@ -56,7 +56,6 @@ const register = createApp({
                 this.loggedInUser = response.data.user;
 
             } catch (error) {
-                console.error('Belum login:', error);
                 Swal.fire({
                     icon: 'warning',
                     title: 'Session Habis',
@@ -71,13 +70,16 @@ const register = createApp({
                 const data = await getLevelUser();
                 this.levels = data || [];
 
-            this.$nextTick(() => {
-                defaultSelect2("#id_usr_level", "-- Pilih Level --");
-            });
+                console.log('djasdjp', data);
+                
 
-            $("#id_usr_level").on("change", (e) => {
-                this.selectedLevel = e.target.value;
-            });
+                this.$nextTick(() => {
+                    defaultSelect2("#id_usr_level", "-- Pilih Level --");
+                });
+
+                $("#id_usr_level").on("change", (e) => {
+                    this.selectedLevel = e.target.value;
+                });
             } catch (error) {
                 Swal.fire({
                     icon: 'error',

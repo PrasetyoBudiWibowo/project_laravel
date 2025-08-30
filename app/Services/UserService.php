@@ -7,6 +7,7 @@ use App\Models\Karyawan;
 use App\Models\TblUser;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
 
 use App\Helper\DeviceHelper;
@@ -27,7 +28,8 @@ class UserService
 
         $result = $users->map(function ($user) {
             return [
-                'kd_asli_user' => $user->kd_asli_user,
+                // 'kd_asli_user' => $user->kd_asli_user,
+                'kd_asli_user' => Crypt::encryptString($user->kd_asli_user),
                 'kd_karyawan' => $user->kd_karyawan,
                 'nama_user' => $user->nama_user,
                 'id_usr_level' => $user->id_usr_level,
