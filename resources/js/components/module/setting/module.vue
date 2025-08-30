@@ -14,6 +14,19 @@
                         <i class="fas fa-plus me-1"></i> Tambah Module
                     </button>
                 </div>
+
+                <table
+                    id="tabelModule"
+                    class="display nowrap"
+                    style="width: 100%"
+                >
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Module</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
 
             <div
@@ -82,7 +95,7 @@
                             <button
                                 type="button"
                                 class="btn btn-primary"
-                                @click="btnSimpanKotaModule"
+                                @click="btnSimpanModule"
                             >
                                 Simpan
                             </button>
@@ -91,20 +104,27 @@
                 </div>
             </div>
         </div>
+
+        <LoadingData :visible="loading" message="Loading" />
     </div>
 </template>
 <script>
 import * as yup from "yup";
 import { validate } from "vee-validate";
+import LoadingData from "../../loading/loadingData.vue";
 
 export default {
+    components: { LoadingData },
     data() {
         return {
+            dataModule: [],
+            dataTableInstance: null,
             inputData: {
                 nama_module: "",
                 tampil_module: "",
                 url_module: "",
             },
+            loading: true,
         };
     },
     async mounted() {
@@ -113,19 +133,41 @@ export default {
             .getAttribute("content");
         axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
 
+        await this.module();
+
         this.$nextTick(() => {
-            $("#modalTambahKecamatan").on("hide.bs.modal", () => {
+            $("#modalTambahModule").on("hide.bs.modal", () => {
                 this.resetFormTambah();
             });
+
+            this.refreshTable();
         });
+
+        this.loading = false;
     },
     methods: {
+        async module() {
+            try {
+                const data = await getAllModule();
+                this.dataModule = data || [];
+            } catch (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan module: ${err.statusText || err}`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
+        },
         resetFormTambah() {
             this.inputData.nama_module = "";
             this.inputData.tampil_module = "";
             this.inputData.url_module = "";
         },
-        btnSimpanKotaModule() {
+        btnSimpanModule() {
             Swal.fire({
                 title: "Konfirmasi",
                 text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
@@ -164,6 +206,13 @@ export default {
                     .matches(
                         /^[a-zA-Z0-9\s]+$/,
                         "Nama module Hanya Boleh huruf & angka yang diperbolehkan"
+                    ),
+                url_module: yup
+                    .string()
+                    .required("URL module wajib diisi")
+                    .matches(
+                        /^[a-zA-Z0-9_-]+$/,
+                        "URL module hanya boleh huruf, angka, strip (-), atau underscore (_)"
                     ),
             });
 
@@ -221,6 +270,37 @@ export default {
                     buttonsStyling: false,
                 });
             }
+        },
+        refreshTable() {
+            if (this.dataTableInstance) {
+                this.dataTableInstance.clear().destroy();
+                this.dataTableInstance = null;
+            }
+
+            this.dataTableInstance = $("#tabelModule").DataTable({
+                data: this.dataModule,
+                scrollCollapse: true,
+                scrollY: 300,
+                fixedHeader: true,
+                columns: [
+                    {
+                        data: null,
+                        width: "5%",
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        },
+                    },
+                    { data: "nama_module" },
+                ],
+                initComplete: function () {
+                    $("#tabelModule tbody").on("mouseenter", "tr", function () {
+                        $(this).css("background-color", "Yellow");
+                    });
+                    $("#tabelModule tbody").on("mouseleave", "tr", function () {
+                        $(this).css("background-color", "");
+                    });
+                },
+            });
         },
     },
 };

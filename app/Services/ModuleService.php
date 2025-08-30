@@ -13,6 +13,12 @@ use App\Helper\AppLogger;
 
 class ModuleService
 {
+    public function allModule()
+    {
+        $module = Module::all();
+        return $module;
+    }
+
     private function generateKdModule()
     {
         $currentMonth = Carbon::now()->format('Ym');

@@ -57,6 +57,7 @@ export default {
     data() {
         return {
             openCollapseIndex: null,
+            listModule: [],
             menusStatic: [
                 { heading: "Core" },
                 {
@@ -66,9 +67,9 @@ export default {
                 },
                 { heading: "Interface" },
                 {
-                    label: "Module Manager",
-                    icon: "fas fa-puzzle-piece",
-                    route: "/modules",
+                    label: "Module",
+                    icon: "fa-solid fa-book",
+                    children: [],
                     isSuperAdminOnly: true,
                 },
                 {
@@ -105,9 +106,20 @@ export default {
                     ],
                 },
                 {
-                    label: "Module",
-                    icon: "fa-solid fa-book",
-                    route: `/module`,
+                    label: "Setting",
+                    icon: "fa-solid fa-gear",
+                    children: [
+                        {
+                            label: "List",
+                            icon: "fa-regular fa-circle",
+                            route: "/module",
+                        },
+                        {
+                            label: "Hak Akses",
+                            icon: "fa-regular fa-circle",
+                            route: "/module",
+                        },
+                    ],
                     isSuperAdminOnly: true,
                 },
                 {
@@ -117,6 +129,9 @@ export default {
                 },
             ],
         };
+    },
+    async mounted() {
+        await this.module();
     },
     computed: {
         filteredMenus() {
@@ -157,6 +172,35 @@ export default {
         toggleCollapse(index) {
             this.openCollapseIndex =
                 this.openCollapseIndex === index ? null : index;
+        },
+        async module() {
+            try {
+                const data = await getAllModule();
+
+                this.listModule = data.map((it) => ({
+                    label: it.tampil_module,
+                    icon: "fa-regular fa-circle",
+                    route: it.url_module,
+                }));
+
+                const moduleManager = this.menusStatic.find(
+                    (m) => m.label === "Module"
+                );
+
+                if (moduleManager) {
+                    moduleManager.children = this.listModule;
+                }
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan module: ${err.statusText || err}`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
         },
     },
 };

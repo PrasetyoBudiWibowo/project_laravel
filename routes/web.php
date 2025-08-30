@@ -56,6 +56,8 @@ Route::middleware(['auth'])->controller(HomeController::class)->group(function (
 Route::middleware(['auth'])->controller(ModuleController::class)->group(function () {
     Route::get('/module', 'module')->name('provinmodulesi');;
     Route::post('/module', 'validasi_simpan_module');
+
+    Route::get('/get-module', 'getModule');
 });
 
 

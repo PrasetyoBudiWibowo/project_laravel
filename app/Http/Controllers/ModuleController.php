@@ -30,6 +30,23 @@ class ModuleController extends Controller
         return view('module.index');
     }
 
+    public function getModule()
+    {
+        $data = $this->moduleService->allModule();
+
+        if (empty($data)) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]);
+    }
+
     public function validasi_simpan_module(Request $request)
     {
         try {
