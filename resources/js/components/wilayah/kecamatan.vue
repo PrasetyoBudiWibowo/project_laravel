@@ -961,8 +961,6 @@ export default {
                 user_input: window.encryptedUserId,
             };
 
-            console.log("udsa", dataToSave);
-
             let requireValue = [];
 
             requireValue.push({

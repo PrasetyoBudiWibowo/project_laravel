@@ -62,6 +62,7 @@ Route::middleware(['auth'])->controller(ModuleController::class)->group(function
     Route::get('/get-module', 'getModule');
 
     Route::get('/akses-module-user', 'akses_module_user')->name('akses_module_user');
+    Route::post('/akses-module-user', 'validasi_hak_akses_module_user');
 });
 
 

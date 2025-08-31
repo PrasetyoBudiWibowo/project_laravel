@@ -30,6 +30,11 @@ class ModuleController extends Controller
         return view('module.index');
     }
 
+    public function akses_module_user()
+    {
+        return view('module.hak_akses_user');
+    }
+
     public function getModule()
     {
         $data = $this->moduleService->allModule();
@@ -101,6 +106,93 @@ class ModuleController extends Controller
             $module = $this->moduleService->simpanModule($data);
 
             if (!$module) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function validasi_hak_akses_module_user(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-VALIDASI-HAK-AKSES-MODULE-USER');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_hak_akses_module_user"
+                ]);
+            }
+
+            if (empty($request->akses)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Module Harus ada yang di pilih"
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+            $userInput = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$userInput) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "User TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $data = [];
+
+            foreach ($request->akses as $akses) {
+
+                $cekModule = $this->moduleService->cekModule($akses['kd_module']);
+
+                if (!$cekModule) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => "Module '{$cekModule->nama_module}' sudah tidak aktif atau tidak ada",
+                    ]);
+                }
+
+                $cekUser = Crypt::decryptString($request->kd_user);
+
+                $user = $this->userService->getUserByKdAsli($cekUser);
+
+                if (!$user) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => "Module '{$user->nama_user}' yang ingin di beri hak akses tidak ditemukan",
+                    ]);
+                }
+
+                $data[] = [
+                    'kd_user' => $cekUser,
+                    'kd_module' => $akses['kd_module'],
+                    'status_akses' => "YA",
+                    'user_input' => $kdAsliUser,
+                ];
+            }
+
+            $userDelete = Crypt::decryptString($request->kd_user);
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $result = $this->moduleService->simpanHakAksesUser($userDelete, $data);
+
+            if (!$result) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Gagal Simpan'

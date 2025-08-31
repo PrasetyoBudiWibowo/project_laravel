@@ -117,7 +117,7 @@ export default {
                         {
                             label: "Hak Akses",
                             icon: "fa-regular fa-circle",
-                            route: "/module",
+                            route: "/akses-module-user",
                         },
                     ],
                     isSuperAdminOnly: true,
