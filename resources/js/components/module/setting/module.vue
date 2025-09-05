@@ -58,7 +58,7 @@
                                     type="text"
                                     class="form-control"
                                     v-model="inputData.nama_module"
-                                    placeholder="Masukkan kecamatan"
+                                    placeholder="Masukkan nama module"
                                     @input="
                                         inputData.nama_module =
                                             inputData.nama_module.toUpperCase()
@@ -71,7 +71,7 @@
                                     type="text"
                                     class="form-control"
                                     v-model="inputData.tampil_module"
-                                    placeholder="Masukkan kecamatan"
+                                    placeholder="Masukan tampil module"
                                 />
                             </div>
                             <div class="mb-3">
@@ -80,7 +80,7 @@
                                     type="text"
                                     class="form-control"
                                     v-model="inputData.url_module"
-                                    placeholder="Masukkan kecamatan"
+                                    placeholder="Masukan url"
                                 />
                             </div>
                         </div>

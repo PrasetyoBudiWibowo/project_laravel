@@ -69,6 +69,7 @@ Route::middleware(['auth'])->controller(ModuleController::class)->group(function
 // -----------------------
 Route::middleware(['auth'])->controller(MenuController::class)->group(function () {
     Route::get('/daftar-menu', 'daftar_menu')->name('daftar_menu');
+    Route::get('/get-menu', 'getMenu');
 });
 
 // -----------------------

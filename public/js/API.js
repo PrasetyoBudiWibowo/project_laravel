@@ -197,6 +197,30 @@ async function getAllModule() {
   }
 }
 
+async function getAllMenu() {
+    try {
+    const response = await axios.get(`/get-menu`);
+
+    if (response.data.status === "success") {
+      return response.data.data;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: `Terjadi kesalahan pada server.`,
+      });
+      return [];
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan ${error.message}.`,
+    });
+    return [];
+  }
+}
+
 window.getLevelUser = getLevelUser;
 window.getDataUserRegister = getDataUserRegister;
 window.getAllDataKaryawan = getAllDataKaryawan;
@@ -206,3 +230,4 @@ window.getAllDataProvinsi = getAllDataProvinsi;
 window.getAllDataKotaKabupaten = getAllDataKotaKabupaten;
 window.getAllDataKecamatan = getAllDataKecamatan;
 window.getAllModule = getAllModule;
+window.getAllMenu = getAllMenu;
