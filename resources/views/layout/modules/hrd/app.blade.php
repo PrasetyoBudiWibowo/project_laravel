@@ -1,4 +1,4 @@
-<!-- index utama -->
+<!-- index module hrd -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +8,7 @@
     <div id="app">
         @include('layout.navbar')
         <div id="layoutSidenav">
-            @include('layout.sidebar')
+            <!-- @include('layout.sidebar') -->
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">

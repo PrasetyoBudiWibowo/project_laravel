@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HrdController;
 use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\MenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,10 +51,8 @@ Route::middleware(['auth'])->controller(HomeController::class)->group(function (
     Route::get('/welcome', 'index')->name('welcome')->middleware('guest.redirect');
 });
 
-
-
 // -----------------------
-// MODULE
+// MODULE & SETTING
 // -----------------------
 Route::middleware(['auth'])->controller(ModuleController::class)->group(function () {
     Route::get('/module', 'module')->name('module');;
@@ -65,6 +64,12 @@ Route::middleware(['auth'])->controller(ModuleController::class)->group(function
     Route::post('/akses-module-user', 'validasi_hak_akses_module_user');
 });
 
+// -----------------------
+// MENU
+// -----------------------
+Route::middleware(['auth'])->controller(MenuController::class)->group(function () {
+    Route::get('/daftar-menu', 'daftar_menu')->name('daftar_menu');
+});
 
 // -----------------------
 // LEVEL USER DATA

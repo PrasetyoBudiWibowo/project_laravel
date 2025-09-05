@@ -119,6 +119,11 @@ export default {
                             icon: "fa-regular fa-circle",
                             route: "/akses-module-user",
                         },
+                        {
+                            label: "Menu Side Bar",
+                            icon: "fa-regular fa-circle",
+                            route: "/daftar-menu",
+                        },
                     ],
                     isSuperAdminOnly: true,
                 },

@@ -15,6 +15,7 @@ import kotaKabupaten from './components/wilayah/kotaKabupaten.vue';
 import kecamatan from './components/wilayah/kecamatan.vue';
 import module from './components/module/setting/module.vue';
 import aksesModule from './components/module/setting/aksesModule.vue';
+import menuSidebar from './components/module/setting/menuSidebar.vue';
 
 const app = createApp({});
 
@@ -27,6 +28,7 @@ app.component('kota-kabupaten', kotaKabupaten);
 app.component('kecamatan', kecamatan);
 app.component('module', module);
 app.component('akses-module', aksesModule);
+app.component('menu-sidebar', menuSidebar);
 
 app.use(Antd)
 
