@@ -88,6 +88,7 @@
                                     class="form-control"
                                     id="parent_menu"
                                     v-model="inputData.parent_menu"
+                                    :disabled="!inputData.kd_module"
                                 >
                                     <option value="">
                                         -- Tidak ada parent (Menu Utama) --
@@ -109,25 +110,28 @@
                                     class="form-control"
                                     v-model="inputData.nama_menu"
                                     placeholder="Masukkan nama module"
-                                    @input="
-                                        inputData.nama_menu =
-                                            inputData.nama_menu.toUpperCase()
-                                    "
+                                    @input="urlOtomatis"
                                 />
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">URL Menu</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    v-model="inputData.url_module"
-                                    placeholder="Masukkan URL menu"
-                                    @input="
-                                        inputData.url_module =
-                                            inputData.url_module
-                                    "
-                                />
+                            <div class="mb-3 row">
+                                <label class="form-label">Icon Menu</label>
+
+                                <div class="col-8">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        v-model="inputData.icon_menu"
+                                        placeholder="Contoh: fa-brands fa-slack"
+                                    />
+                                </div>
+
+                                <div class="col-4" v-if="inputData.icon_menu">
+                                    <i
+                                        :class="inputData.icon_menu"
+                                        style="font-size: 38px"
+                                    ></i>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -153,6 +157,7 @@
     </div>
 </template>
 <script>
+import * as yup from "yup";
 import LoadingData from "../../loading/loadingData.vue";
 
 export default {
@@ -164,8 +169,9 @@ export default {
             inputData: {
                 kd_module: "",
                 nama_menu: "",
-                url_module: "",
+                url_menu: "",
                 parent_menu: "",
+                icon_menu: "",
             },
             loading: true,
         };
@@ -181,9 +187,14 @@ export default {
 
         this.$nextTick(() => {
             defaultSelect2("#select_module", "-- PILIH --", "#modalTambahMenu");
+            defaultSelect2("#select_module", "-- PILIH --", "#modalTambahMenu");
 
             $("#select_module").on("change", (e) => {
                 this.inputData.kd_module = $(e.target).val();
+            });
+
+            $("#modalTambahMenu").on("hide.bs.modal", () => {
+                this.resetFormTambah();
             });
         });
     },
@@ -207,8 +218,9 @@ export default {
         async daftarMenu() {
             try {
                 const data = await getAllMenu();
+                let optionMenu = data.filter((it) => it.parent_menu === null);
 
-                console.log("dlma", data);
+                this.dataMenu = optionMenu || [];
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -222,6 +234,19 @@ export default {
                     },
                 });
             }
+        },
+        resetFormTambah() {
+            this.inputData.nama_menu = "";
+            this.inputData.url_menu = "";
+            this.inputData.kd_module = "";
+            this.inputData.parent_menu = "";
+            this.inputData.icon_menu = "";
+            $("#select_module").val("").trigger("change");
+            $("#parent_menu").val(null).trigger("change");
+        },
+        urlOtomatis() {
+            this.inputData.nama_menu = this.inputData.nama_menu.toUpperCase();
+            this.inputData.url_menu = generateUrl(this.inputData.nama_menu);
         },
         btnSimpanMenu() {
             Swal.fire({
@@ -247,6 +272,87 @@ export default {
                 ...this.inputData,
                 user_input: window.encryptedUserId,
             };
+
+            let requireValue = [];
+
+            requireValue.push({
+                value: dataToSave.nama_menu,
+                message: "Nama Menu Tidak Boleh Kosong",
+            });
+
+            const schema = yup.object({
+                nama_menu: yup
+                    .string()
+                    .required("Nama Menu wajib diisi")
+                    .matches(
+                        /^[A-Za-z\s]+$/,
+                        "Nama Menu hanya boleh huruf dan spasi"
+                    ),
+                icon_menu: yup
+                    .string()
+                    .matches(
+                        /^[a-z\s\-]+$/,
+                        "Icon Menu hanya boleh huruf kecil, spasi, dan karakter '-'"
+                    ),
+            });
+
+            try {
+                await schema.validate(dataToSave, { abortEarly: false });
+
+                Swal.fire({
+                    title: "Sedang Proses Simpan Data",
+                    text: "Mohon tunggu.",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                const response = await axios.post("/simpan-menu", dataToSave);
+                const result = response.data;
+
+                Swal.close();
+
+                if (result.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: result.message || "Data berhasil Diubah!",
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                        },
+                    }).then(() => {
+                        $("#modalTambahMenu").modal("hide");
+                        $("#modalTambahMenu").on("hidden.bs.modal", () => {
+                            window.location.reload();
+                        });
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: result.message,
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                    });
+                }
+            } catch (error) {
+                Swal.close();
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan: ${
+                        error.response?.data?.message || error.message
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                    buttonsStyling: false,
+                });
+            }
         },
     },
 };

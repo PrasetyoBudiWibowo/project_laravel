@@ -140779,7 +140779,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _loading_loadingData_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../loading/loadingData.vue */ "./resources/js/components/loading/loadingData.vue");
+/* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! yup */ "./node_modules/yup/index.esm.js");
+/* harmony import */ var _loading_loadingData_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../loading/loadingData.vue */ "./resources/js/components/loading/loadingData.vue");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -140791,6 +140792,7 @@ function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { 
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -140800,8 +140802,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       inputData: {
         kd_module: "",
         nama_menu: "",
-        url_module: "",
-        parent_menu: ""
+        url_menu: "",
+        parent_menu: "",
+        icon_menu: ""
       },
       loading: true
     };
@@ -140823,8 +140826,12 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
           case 2:
             _this.$nextTick(function () {
               defaultSelect2("#select_module", "-- PILIH --", "#modalTambahMenu");
+              defaultSelect2("#select_module", "-- PILIH --", "#modalTambahMenu");
               $("#select_module").on("change", function (e) {
                 _this.inputData.kd_module = $(e.target).val();
+              });
+              $("#modalTambahMenu").on("hide.bs.modal", function () {
+                _this.resetFormTambah();
               });
             });
           case 3:
@@ -140868,8 +140875,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }))();
     },
     daftarMenu: function daftarMenu() {
+      var _this3 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-        var data, _t2;
+        var data, optionMenu, _t2;
         return _regenerator().w(function (_context3) {
           while (1) switch (_context3.p = _context3.n) {
             case 0:
@@ -140878,7 +140886,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return getAllMenu();
             case 1:
               data = _context3.v;
-              console.log("dlma", data);
+              optionMenu = data.filter(function (it) {
+                return it.parent_menu === null;
+              });
+              _this3.dataMenu = optionMenu || [];
               _context3.n = 3;
               break;
             case 2:
@@ -140899,8 +140910,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         }, _callee3, null, [[0, 2]]);
       }))();
     },
+    resetFormTambah: function resetFormTambah() {
+      this.inputData.nama_menu = "";
+      this.inputData.url_menu = "";
+      this.inputData.kd_module = "";
+      this.inputData.parent_menu = "";
+      this.inputData.icon_menu = "";
+      $("#select_module").val("").trigger("change");
+      $("#parent_menu").val(null).trigger("change");
+    },
+    urlOtomatis: function urlOtomatis() {
+      this.inputData.nama_menu = this.inputData.nama_menu.toUpperCase();
+      this.inputData.url_menu = generateUrl(this.inputData.nama_menu);
+    },
     btnSimpanMenu: function btnSimpanMenu() {
-      var _this3 = this;
+      var _this4 = this;
       Swal.fire({
         title: "Konfirmasi",
         text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
@@ -140915,24 +140939,94 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this3.simpanMenu();
+          _this4.simpanMenu();
         }
       });
     },
     simpanMenu: function simpanMenu() {
-      var _this4 = this;
+      var _this5 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-        var dataToSave;
+        var dataToSave, requireValue, schema, response, result, _error$response, _t3;
         return _regenerator().w(function (_context4) {
-          while (1) switch (_context4.n) {
+          while (1) switch (_context4.p = _context4.n) {
             case 0:
-              dataToSave = _objectSpread(_objectSpread({}, _this4.inputData), {}, {
+              dataToSave = _objectSpread(_objectSpread({}, _this5.inputData), {}, {
                 user_input: window.encryptedUserId
               });
-            case 1:
+              requireValue = [];
+              requireValue.push({
+                value: dataToSave.nama_menu,
+                message: "Nama Menu Tidak Boleh Kosong"
+              });
+              schema = yup__WEBPACK_IMPORTED_MODULE_0__.object({
+                nama_menu: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Nama Menu wajib diisi").matches(/^[A-Za-z\s]+$/, "Nama Menu hanya boleh huruf dan spasi"),
+                icon_menu: yup__WEBPACK_IMPORTED_MODULE_0__.string().matches(/^[a-z\s\-]+$/, "Icon Menu hanya boleh huruf kecil, spasi, dan karakter '-'")
+              });
+              _context4.p = 1;
+              _context4.n = 2;
+              return schema.validate(dataToSave, {
+                abortEarly: false
+              });
+            case 2:
+              Swal.fire({
+                title: "Sedang Proses Simpan Data",
+                text: "Mohon tunggu.",
+                allowOutsideClick: false,
+                didOpen: function didOpen() {
+                  Swal.showLoading();
+                }
+              });
+              _context4.n = 3;
+              return axios.post("/simpan-menu", dataToSave);
+            case 3:
+              response = _context4.v;
+              result = response.data;
+              Swal.close();
+              if (result.status === "success") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: result.message || "Data berhasil Diubah!",
+                  customClass: {
+                    confirmButton: "btn btn-success"
+                  }
+                }).then(function () {
+                  $("#modalTambahMenu").modal("hide");
+                  $("#modalTambahMenu").on("hidden.bs.modal", function () {
+                    window.location.reload();
+                  });
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: result.message,
+                  confirmButtonText: "Tutup",
+                  customClass: {
+                    confirmButton: "btn btn-danger"
+                  }
+                });
+              }
+              _context4.n = 5;
+              break;
+            case 4:
+              _context4.p = 4;
+              _t3 = _context4.v;
+              Swal.close();
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan: ".concat(((_error$response = _t3.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || _t3.message),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+              });
+            case 5:
               return _context4.a(2);
           }
-        }, _callee4);
+        }, _callee4, null, [[1, 4]]);
       }))();
     }
   }
@@ -141079,7 +141173,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               requireValue = [];
               requireValue.push({
                 value: dataToSave.nama_module,
-                message: "Kecamatan Tidak Boleh Kosong"
+                message: "Module Tidak Boleh Kosong"
               });
               schema = yup__WEBPACK_IMPORTED_MODULE_0__.object({
                 nama_module: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Nama module wajib diisi").matches(/^[a-zA-Z0-9\s]+$/, "Nama module Hanya Boleh huruf & angka yang diperbolehkan"),
@@ -142518,7 +142612,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     resetFormTambah: function resetFormTambah() {
       this.inputData.nama_kecamatan = "";
       this.inputData.kd_provinsi = "";
-      this.inputData.kd_provinsi = "";
+      this.inputData.kd_kota_kabupaten = "";
       $("#select_pro_kota").val("").trigger("change");
     },
     openEditModal: function openEditModal(rowData) {
@@ -144088,18 +144182,26 @@ var _hoisted_9 = ["value"];
 var _hoisted_10 = {
   "class": "mb-3"
 };
-var _hoisted_11 = ["value"];
-var _hoisted_12 = {
-  "class": "mb-3"
-};
+var _hoisted_11 = ["disabled"];
+var _hoisted_12 = ["value"];
 var _hoisted_13 = {
   "class": "mb-3"
 };
 var _hoisted_14 = {
+  "class": "mb-3 row"
+};
+var _hoisted_15 = {
+  "class": "col-8"
+};
+var _hoisted_16 = {
+  key: 0,
+  "class": "col-4"
+};
+var _hoisted_17 = {
   "class": "modal-footer"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header\"><div>Daftar Menu</div></div><div class=\"card-body\"><div class=\"d-flex justify-start-end mb-3\"><button class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target=\"#modalTambahMenu\"><i class=\"fas fa-plus me-1\"></i> Tambah Menu </button></div><table id=\"tabelDaftarMenu\" class=\"display nowrap\" style=\"width:100%;\"><thead><tr><th>No</th><th>Module</th><th>Nama Menu</th><th>Status Menu</th><th>Aksi</th></tr></thead></table></div>", 2)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"card-header\"><div>Daftar Menu</div></div><div class=\"card-body\"><div class=\"d-flex justify-start-end mb-3\"><button class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target=\"#modalTambahMenu\"><i class=\"fas fa-plus me-1\"></i> Tambah Menu </button></div><table id=\"tabelDaftarMenu\" class=\"display nowrap\" style=\"width:100%;\"><thead><tr><th>No</th><th>Module</th><th>Nama Menu</th><th>Status Menu</th><th>Aksi</th></tr></thead></table></div>", 2)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "modal-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
     "class": "modal-title",
@@ -144109,7 +144211,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn-close",
     "data-bs-dismiss": "modal",
     "aria-label": "Close"
-  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "select_module",
     "class": "form-label"
   }, "Module", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
@@ -144119,14 +144221,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.inputData.kd_module = $event;
     })
-  }, [_cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+  }, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
     value: ""
   }, " -- PILIH MODULE -- ", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataModule, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: item.kd_module,
       value: item.kd_module
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.nama_module), 9 /* TEXT, PROPS */, _hoisted_9);
-  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.kd_module]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.kd_module]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "parent_menu",
     "class": "form-label"
   }, "Parent Menu", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
@@ -144134,15 +144236,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "parent_menu",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $data.inputData.parent_menu = $event;
-    })
-  }, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    }),
+    disabled: !$data.inputData.kd_module
+  }, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
     value: ""
   }, " -- Tidak ada parent (Menu Utama) -- ", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataMenu, function (menu) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: menu.kd_menu,
       value: menu.kd_menu
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(menu.nama_menu), 9 /* TEXT, PROPS */, _hoisted_11);
-  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.parent_menu]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(menu.nama_menu), 9 /* TEXT, PROPS */, _hoisted_12);
+  }), 128 /* KEYED_FRAGMENT */))], 8 /* PROPS */, _hoisted_11), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.parent_menu]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label"
   }, "Nama Menu", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
@@ -144151,29 +144254,31 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.inputData.nama_menu = $event;
     }),
     placeholder: "Masukkan nama module",
-    onInput: _cache[3] || (_cache[3] = function ($event) {
-      return $data.inputData.nama_menu = $data.inputData.nama_menu.toUpperCase();
+    onInput: _cache[3] || (_cache[3] = function () {
+      return $options.urlOtomatis && $options.urlOtomatis.apply($options, arguments);
     })
-  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.nama_menu]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.nama_menu]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-label"
-  }, "URL Menu", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, "Icon Menu", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "class": "form-control",
     "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
-      return $data.inputData.url_module = $event;
+      return $data.inputData.icon_menu = $event;
     }),
-    placeholder: "Masukkan URL menu",
-    onInput: _cache[5] || (_cache[5] = function ($event) {
-      return $data.inputData.url_module = $data.inputData.url_module;
-    })
-  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.url_module]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    placeholder: "Contoh: fa-brands fa-slack"
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.icon_menu]])]), $data.inputData.icon_menu ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)($data.inputData.icon_menu),
+    style: {
+      "font-size": "38px"
+    }
+  }, null, 2 /* CLASS */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-secondary",
     "data-bs-dismiss": "modal"
   }, " Batal ", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-primary",
-    onClick: _cache[6] || (_cache[6] = function () {
+    onClick: _cache[5] || (_cache[5] = function () {
       return $options.btnSimpanMenu && $options.btnSimpanMenu.apply($options, arguments);
     })
   }, " Simpan ")])])])])])]);

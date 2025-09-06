@@ -346,6 +346,14 @@ function formatNumber(value) {
   return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // format ribuan
 }
 
+// generate url
+function generateUrl(text) {
+  let url = text.toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-");
+
+    return url;
+}
 
 window.formatNumberIDR = formatNumberIDR;
 window.makeUppercase = makeUppercase;
@@ -364,3 +372,4 @@ window.loadSelectOptions = loadSelectOptions;
 window.getSemuaBulan = getSemuaBulan;
 window.getTahun = getTahun;
 window.formatNumber = formatNumber;
+window.generateUrl = generateUrl;

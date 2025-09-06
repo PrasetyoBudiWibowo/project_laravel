@@ -29,6 +29,12 @@ class ModuleService
         return $module;
     }
 
+    public function cekModuleByKd($data)
+    {
+        $module = Module::find($data);
+        return $module;
+    }
+
     private function generateKdModule()
     {
         $currentMonth = Carbon::now()->format('Ym');

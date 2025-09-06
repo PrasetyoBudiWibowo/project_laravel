@@ -33,6 +33,8 @@ class MasterMenu extends Model
         'type_device',
     ];
 
+    public $timestamps = false;
+
     public function module()
     {
         return $this->belongsTo(Module::class, 'kd_module', 'kd_module');

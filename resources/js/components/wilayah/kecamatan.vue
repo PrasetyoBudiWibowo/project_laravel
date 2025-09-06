@@ -764,7 +764,7 @@ export default {
         resetFormTambah() {
             this.inputData.nama_kecamatan = "";
             this.inputData.kd_provinsi = "";
-            this.inputData.kd_provinsi = "";
+            this.inputData.kd_kota_kabupaten = "";
             $("#select_pro_kota").val("").trigger("change");
         },
         openEditModal(rowData) {

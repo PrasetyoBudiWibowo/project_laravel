@@ -196,7 +196,7 @@ export default {
 
             requireValue.push({
                 value: dataToSave.nama_module,
-                message: "Kecamatan Tidak Boleh Kosong",
+                message: "Module Tidak Boleh Kosong",
             });
 
             const schema = yup.object({
