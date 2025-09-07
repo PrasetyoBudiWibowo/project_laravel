@@ -21,8 +21,9 @@ class MenuService
         $result = $menus->map(function ($menu) {
             return [
                 'kd_menu' => Crypt::encryptString($menu->kd_menu),
-                'kd_module' => Crypt::encryptString($menu->kd_module),
+                'kd_module' => $menu->kd_module,
                 'nama_menu' => $menu->nama_menu,
+                'urutan' => $menu->urutan,
                 'url_menu' => $menu->url_menu,
                 'parent_menu' => $menu->parent_menu,
                 'icon_menu' => $menu->icon_menu,
@@ -35,8 +36,16 @@ class MenuService
 
     public function getMenuByKode($data)
     {
-        $user = MasterMenu::find($data);
-        return $user;
+        $menu = MasterMenu::find($data);
+        return $menu;
+    }
+
+    public function getMenuByNameAndParent($parentMenu, $namaMenu)
+    {
+        $menu = MasterMenu::where('kd_menu', $parentMenu)
+            ->where('nama_menu', $namaMenu)
+            ->first();
+        return $menu;
     }
 
     private function generateKdModule()
@@ -59,13 +68,14 @@ class MenuService
         return $prefix . $newNumber;
     }
 
-    private function generateNoUrut($kd_module)
+    private function generateNoUrut($kd_module, $parent_menu)
     {
         $lastMenu = MasterMenu::where('kd_module', $kd_module)
+            ->where('parent_menu', $parent_menu)
             ->orderBy('urutan', 'DESC')
             ->first();
 
-        if (!$lastMenu) {
+        if (!$lastMenu || !$lastMenu->urutan) {
             return 1;
         }
 
@@ -84,8 +94,11 @@ class MenuService
             $kd_menu = $this->generateKdModule();
             $log->info("<================= BERHASIL BUAT PK =================>");
 
-            $urutan = $this->generateNoUrut($data['kd_module']);
-            $log->info("<================= BERHASIL BUAT NO URUT =================>");
+            $urutan = null;
+            if (!empty($data['parent_menu']) && $data['tipe_menu'] === "child") {
+                $urutan = $this->generateNoUrut($data['kd_module'], $data['parent_menu']);
+                $log->info("<================= BERHASIL BUAT NO URUT =================>");
+            }
 
             $now = Carbon::now('Asia/Jakarta');
             $tgl_input = $now->toDateString();
@@ -107,7 +120,7 @@ class MenuService
             $masterMenu->kd_menu = $kd_menu;
             $masterMenu->kd_module = $data['kd_module'];
             $masterMenu->nama_menu = $data['nama_menu'];
-            $masterMenu->urutan = $data['parent_menu'] !== null ? $urutan : null;
+            $masterMenu->urutan =  $urutan;
             $masterMenu->url_menu = $data['url_menu'];
             $masterMenu->parent_menu = $data['parent_menu'] ?? null;
             $masterMenu->icon_menu = $data['icon_menu'];

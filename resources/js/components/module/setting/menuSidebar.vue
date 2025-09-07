@@ -90,9 +90,6 @@
                                     v-model="inputData.parent_menu"
                                     :disabled="!inputData.kd_module"
                                 >
-                                    <option value="">
-                                        -- Tidak ada parent (Menu Utama) --
-                                    </option>
                                     <option
                                         v-for="menu in dataMenu"
                                         :key="menu.kd_menu"
@@ -101,6 +98,34 @@
                                         {{ menu.nama_menu }}
                                     </option>
                                 </select>
+                            </div>
+
+                            <div
+                                class="form-group mt-2 mb-3"
+                                v-if="
+                                    inputData.parent_menu &&
+                                    inputData.parent_menu !== 'default'
+                                "
+                            >
+                                <label>Tipe Menu</label>
+                                <div>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            value="child"
+                                            v-model="inputData.tipe_menu"
+                                        />
+                                        Tetap sebagai Child
+                                    </label>
+                                    <label class="ml-3">
+                                        <input
+                                            type="radio"
+                                            value="parent"
+                                            v-model="inputData.tipe_menu"
+                                        />
+                                        Jadikan Parent baru
+                                    </label>
+                                </div>
                             </div>
 
                             <div class="mb-3">
@@ -164,6 +189,7 @@ export default {
     data() {
         return {
             dataModule: [],
+            allMenu: [],
             dataMenu: [],
             dataTableInstance: null,
             inputData: {
@@ -172,9 +198,20 @@ export default {
                 url_menu: "",
                 parent_menu: "",
                 icon_menu: "",
+                tipe_menu: "",
             },
             loading: true,
         };
+    },
+    watch: {
+        "inputData.kd_module"(val) {
+            if (val) {
+                this.filterMenu(val);
+                this.inputData.parent_menu = "";
+            } else {
+                this.dataMenu = [];
+            }
+        },
     },
     async mounted() {
         const token = document
@@ -187,7 +224,7 @@ export default {
 
         this.$nextTick(() => {
             defaultSelect2("#select_module", "-- PILIH --", "#modalTambahMenu");
-            defaultSelect2("#select_module", "-- PILIH --", "#modalTambahMenu");
+            defaultSelect2("#parent_menu", "-- PILIH --", "#modalTambahMenu");
 
             $("#select_module").on("change", (e) => {
                 this.inputData.kd_module = $(e.target).val();
@@ -195,6 +232,10 @@ export default {
 
             $("#modalTambahMenu").on("hide.bs.modal", () => {
                 this.resetFormTambah();
+            });
+
+            $("#parent_menu").on("change", (e) => {
+                this.inputData.parent_menu = $(e.target).val();
             });
         });
     },
@@ -218,9 +259,9 @@ export default {
         async daftarMenu() {
             try {
                 const data = await getAllMenu();
-                let optionMenu = data.filter((it) => it.parent_menu === null);
 
-                this.dataMenu = optionMenu || [];
+                this.allMenu = data || [];
+                this.filterMenu(this.inputData.kd_module);
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -235,12 +276,24 @@ export default {
                 });
             }
         },
+        filterMenu(kdModule) {
+            this.dataMenu = this.allMenu.filter(
+                (it) => it.urutan === null && it.kd_module === kdModule
+            );
+
+            this.dataMenu.push({
+                kd_module: "",
+                kd_menu: "default",
+                nama_menu: "-- Tidak ada parent (Menu Utama) --",
+            });
+        },
         resetFormTambah() {
             this.inputData.nama_menu = "";
             this.inputData.url_menu = "";
             this.inputData.kd_module = "";
             this.inputData.parent_menu = "";
             this.inputData.icon_menu = "";
+            this.inputData.tipe_menu = "child";
             $("#select_module").val("").trigger("change");
             $("#parent_menu").val(null).trigger("change");
         },
@@ -270,6 +323,10 @@ export default {
         async simpanMenu() {
             let dataToSave = {
                 ...this.inputData,
+                tipe_menu:
+                    this.inputData.parent_menu === "default"
+                        ? "parent"
+                        : this.inputData.tipe_menu,
                 user_input: window.encryptedUserId,
             };
 
@@ -279,6 +336,18 @@ export default {
                 value: dataToSave.nama_menu,
                 message: "Nama Menu Tidak Boleh Kosong",
             });
+
+            requireValue.push({
+                value: dataToSave.parent_menu,
+                message: "Parent Menu Tidak Boleh Kosong",
+            });
+
+            if (dataToSave.parent_menu !== "default") {
+                requireValue.push({
+                    value: dataToSave.tipe_menu,
+                    message: "Tipe Menu Tidak Boleh Kosong",
+                });
+            }
 
             const schema = yup.object({
                 nama_menu: yup

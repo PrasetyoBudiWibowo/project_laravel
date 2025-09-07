@@ -83,7 +83,7 @@ class MenuController extends Controller
             }
 
             $perentMenu = "";
-            if (!empty($request->parent_menu)) {
+            if (!empty($request->parent_menu) && $request->parent_menu !== "default") {
                 $cekParentMenu = Crypt::decryptString($request->parent_menu);
                 $getParentMenu = $this->menuService->getMenuByKode($cekParentMenu);
 
@@ -95,6 +95,15 @@ class MenuController extends Controller
                 }
 
                 $perentMenu = $getParentMenu->kd_menu;
+            }
+
+            $cekMenuSidebar = $this->menuService->getMenuByNameAndParent($perentMenu, $request->nama_menu);
+
+            if ($cekMenuSidebar) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Menu '{$request->nama_menu}' sudah ada"
+                ]);
             }
 
             $moduleUrl = "";
@@ -126,10 +135,11 @@ class MenuController extends Controller
             $data = [
                 'kd_module' => $request->kd_module,
                 'nama_menu' => $request->nama_menu,
-                'parent_menu' => !empty($request->parent_menu) ? $perentMenu : $request->parent_menu,
-                'url_menu' => !empty($request->parent_menu) ? $moduleUrl . '/' . ltrim($request->url_menu, '/') : null,
+                'parent_menu' => !empty($request->parent_menu) &&  $request->parent_menu !== "default" ? $perentMenu : null,
+                'url_menu' => !empty($request->parent_menu) && $request->tipe_menu === "child" ? $moduleUrl . '/' . ltrim($request->url_menu, '/') : null,
                 'icon_menu' => $request->icon_menu !== null ? $request->icon_menu : "fa-regular fa-circle",
                 'user_input' => $kdAsliUser,
+                'tipe_menu' => $request->tipe_menu,
             ];
 
             $menuSideBar = $this->menuService->simpanMenu($data);
