@@ -16,7 +16,7 @@ class MenuService
 {
     public function getAllMenu()
     {
-        $menus = MasterMenu::get();
+        $menus = MasterMenu::with(['module', 'parent'])->get();
 
         $result = $menus->map(function ($menu) {
             return [
@@ -28,6 +28,13 @@ class MenuService
                 'parent_menu' => $menu->parent_menu,
                 'icon_menu' => $menu->icon_menu,
                 'status_akses' => $menu->status_akses,
+                'module' => [
+                    'nama_module' => $menu->module->nama_module ?? null,
+                    'status_module' => $menu->module->status_module ?? null,
+                ],
+                'parent' => [
+                    'nama_menu' => $menu->parent?->nama_menu ?? null,
+                ],
             ];
         });
 

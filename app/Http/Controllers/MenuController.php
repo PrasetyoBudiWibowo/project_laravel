@@ -33,6 +33,11 @@ class MenuController extends Controller
         return view('setting.daftar_menu');
     }
 
+    public function hak_akses_menu()
+    {
+        return view('setting.hak_akses_menu');
+    }
+
     public function getMenu()
     {
         $data = $this->menuService->getAllMenu();

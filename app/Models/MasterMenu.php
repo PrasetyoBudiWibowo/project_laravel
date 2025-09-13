@@ -39,4 +39,9 @@ class MasterMenu extends Model
     {
         return $this->belongsTo(Module::class, 'kd_module', 'kd_module');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(MasterMenu::class, 'parent_menu', 'kd_menu');
+    }
 }

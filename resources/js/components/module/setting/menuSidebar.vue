@@ -25,8 +25,8 @@
                             <th>No</th>
                             <th>Module</th>
                             <th>Nama Menu</th>
+                            <th>Parent Menu</th>
                             <th>Status Menu</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                 </table>
@@ -188,6 +188,9 @@ import LoadingData from "../../loading/loadingData.vue";
 export default {
     data() {
         return {
+            dataTableMenu: [],
+            filterDataTableMenu: [],
+            dataTableInstance: null,
             dataModule: [],
             allMenu: [],
             dataMenu: [],
@@ -237,6 +240,8 @@ export default {
             $("#parent_menu").on("change", (e) => {
                 this.inputData.parent_menu = $(e.target).val();
             });
+
+            this.refreshTable();
         });
     },
     methods: {
@@ -262,6 +267,8 @@ export default {
 
                 this.allMenu = data || [];
                 this.filterMenu(this.inputData.kd_module);
+
+                this.dataTableMenu = data || [];
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -300,6 +307,48 @@ export default {
         urlOtomatis() {
             this.inputData.nama_menu = this.inputData.nama_menu.toUpperCase();
             this.inputData.url_menu = generateUrl(this.inputData.nama_menu);
+        },
+        refreshTable() {
+            if (this.dataTableInstance) {
+                this.dataTableInstance.clear().destroy();
+                this.dataTableInstance = null;
+            }
+
+            this.dataTableInstance = $("#tabelDaftarMenu").DataTable({
+                data: this.dataTableMenu,
+                scrollCollapse: true,
+                scrollY: 300,
+                fixedHeader: true,
+                columns: [
+                    {
+                        data: null,
+                        width: "5%",
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        },
+                    },
+                    { data: "module.nama_module" },
+                    { data: "nama_menu" },
+                    { data: "parent.nama_menu" },
+                    { data: "status_akses" },
+                ],
+                initComplete: function () {
+                    $("#tabelDaftarMenu tbody").on(
+                        "mouseenter",
+                        "tr",
+                        function () {
+                            $(this).css("background-color", "Yellow");
+                        }
+                    );
+                    $("#tabelDaftarMenu tbody").on(
+                        "mouseleave",
+                        "tr",
+                        function () {
+                            $(this).css("background-color", "");
+                        }
+                    );
+                },
+            });
         },
         btnSimpanMenu() {
             Swal.fire({
