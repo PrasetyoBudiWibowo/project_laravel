@@ -48,4 +48,9 @@ class TblUser extends Model
     {
         return $this->belongsTo(Karyawan::class, 'kd_karyawan', 'kd_karyawan');
     }
+
+    public function akses_module()
+    {
+        return $this->hasMany(HakAksesModule::class, 'kd_user', 'kd_asli_user');
+    }
 }

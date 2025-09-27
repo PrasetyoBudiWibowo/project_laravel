@@ -111,7 +111,7 @@
                                                         (m) =>
                                                             m.kd_module ===
                                                             item.kd_module
-                                                    )?.tampil_module
+                                                    )?.tampil_module || "-"
                                                 }}
                                             </td>
                                             <td>
@@ -175,6 +175,11 @@ export default {
         };
     },
     async mounted() {
+        const token = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+        axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
+
         await this.user();
         await this.module();
 
@@ -245,6 +250,8 @@ export default {
                 this.dataTableInstance = null;
             }
 
+            console.log("ks", this.dataUser);
+
             this.dataTableInstance = $("#tabelAkesModuleUser").DataTable({
                 data: this.dataUser,
                 scrollCollapse: true,
@@ -259,7 +266,31 @@ export default {
                         },
                     },
                     { data: "nama_user" },
-                    { data: "nama_user" },
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            if (row.level.level_user === "SUPER ADMIN") {
+                                return `<span class="badge bg-success">Dapat Akses Semua Module</span>`;
+                            } else {
+                                if (
+                                    !row.akses_module ||
+                                    row.akses_module.length === 0
+                                ) {
+                                    return `<span class="badge bg-secondary">Belum ada akses</span>`;
+                                }
+                                const listItems = row.akses_module
+                                    .map(
+                                        (a) =>
+                                            `<li>${
+                                                a.module?.tampil_module || "-"
+                                            }</li>`
+                                    )
+                                    .join("");
+
+                                return `<ul>${listItems}</ul>`;
+                            }
+                        },
+                    },
                     {
                         data: null,
                         orderable: false,
@@ -294,7 +325,11 @@ export default {
             this.inputData.kd_user = data.kd_user;
             this.inputData.nama_user = data.nama_user;
             this.inputData.kd_user = data.kd_asli_user;
-            this.inputData.akses = data.akses || [];
+
+            // pastikan akses berisi kd_module saja
+            this.inputData.akses = (data.akses_module || []).map((a) => ({
+                kd_module: a.module?.kd_module || a.kd_module,
+            }));
 
             this.modalInstance.show();
         },

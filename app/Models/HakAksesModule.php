@@ -30,7 +30,7 @@ class HakAksesModule extends Model
 
     public function user()
     {
-        return $this->belongsTo(TblUser::class, 'kd_user', 'kd_user');
+        return $this->belongsTo(TblUser::class, 'kd_user', 'kd_asli_user');
     }
 
     public function module()

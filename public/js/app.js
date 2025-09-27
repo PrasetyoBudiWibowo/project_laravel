@@ -140546,9 +140546,12 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   mounted: function mounted() {
     var _this = this;
     return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var token;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.n) {
           case 0:
+            token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+            axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
             _context.n = 1;
             return _this.user();
           case 1:
@@ -140647,6 +140650,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         this.dataTableInstance.clear().destroy();
         this.dataTableInstance = null;
       }
+      console.log("ks", this.dataUser);
       this.dataTableInstance = $("#tabelAkesModuleUser").DataTable({
         data: this.dataUser,
         scrollCollapse: true,
@@ -140661,7 +140665,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         }, {
           data: "nama_user"
         }, {
-          data: "nama_user"
+          data: null,
+          render: function render(data, type, row, meta) {
+            if (row.level.level_user === "SUPER ADMIN") {
+              return "<span class=\"badge bg-success\">Dapat Akses Semua Module</span>";
+            } else {
+              if (!row.akses_module || row.akses_module.length === 0) {
+                return "<span class=\"badge bg-secondary\">Belum ada akses</span>";
+              }
+              var listItems = row.akses_module.map(function (a) {
+                var _a$module;
+                return "<li>".concat(((_a$module = a.module) === null || _a$module === void 0 ? void 0 : _a$module.tampil_module) || "-", "</li>");
+              }).join("");
+              return "<ul>".concat(listItems, "</ul>");
+            }
+          }
         }, {
           data: null,
           orderable: false,
@@ -140684,7 +140702,14 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       this.inputData.kd_user = data.kd_user;
       this.inputData.nama_user = data.nama_user;
       this.inputData.kd_user = data.kd_asli_user;
-      this.inputData.akses = data.akses || [];
+
+      // pastikan akses berisi kd_module saja
+      this.inputData.akses = (data.akses_module || []).map(function (a) {
+        var _a$module2;
+        return {
+          kd_module: ((_a$module2 = a.module) === null || _a$module2 === void 0 ? void 0 : _a$module2.kd_module) || a.kd_module
+        };
+      });
       this.modalInstance.show();
     },
     tambahAkses: function tambahAkses() {
@@ -144288,9 +144313,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     var _$data$dataModule$fin;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: index
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$data$dataModule$fin = $data.dataModule.find(function (m) {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$dataModule$fin = $data.dataModule.find(function (m) {
       return m.kd_module === item.kd_module;
-    })) === null || _$data$dataModule$fin === void 0 ? void 0 : _$data$dataModule$fin.tampil_module), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    })) === null || _$data$dataModule$fin === void 0 ? void 0 : _$data$dataModule$fin.tampil_module) || "-"), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       type: "button",
       "class": "btn btn-sm btn-danger",
       onClick: function onClick($event) {

@@ -24,7 +24,10 @@ class UserService
 
     public function getAlluser()
     {
-        $users = TblUser::with('level')->get();
+        $users = TblUser::with('level')
+            ->with('karyawan')
+            ->with('akses_module')
+            ->get();
 
         $result = $users->map(function ($user) {
             return [
@@ -43,7 +46,17 @@ class UserService
                 ],
                 'karyawan' => [
                     'nama_karyawan' => $user->karayawan->nama_karyawan ?? null
-                ]
+                ],
+                'akses_module' => $user->akses_module->map(function ($mod) {
+                    return [
+                        'status_akses' => $mod->status_akses,
+                        'module' => [
+                            'kd_module' => $mod->module->kd_module ?? null,
+                            'nama_module' => $mod->module->nama_module ?? null,
+                            'tampil_module' => $mod->module->tampil_module ?? null,
+                        ]
+                    ];
+                })
             ];
         });
 
