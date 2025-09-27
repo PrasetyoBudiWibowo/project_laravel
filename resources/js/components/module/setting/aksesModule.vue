@@ -250,8 +250,6 @@ export default {
                 this.dataTableInstance = null;
             }
 
-            console.log("ks", this.dataUser);
-
             this.dataTableInstance = $("#tabelAkesModuleUser").DataTable({
                 data: this.dataUser,
                 scrollCollapse: true,

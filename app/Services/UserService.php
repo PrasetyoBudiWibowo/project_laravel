@@ -56,6 +56,16 @@ class UserService
                             'tampil_module' => $mod->module->tampil_module ?? null,
                         ]
                     ];
+                }),
+                'akses_menu' => $user->akses_menu->map(function ($menu) {
+                    return [
+                        'status_akses' => $menu->status_akses,
+                        'menu' => [
+                            'kd_menu' => $menu->module->kd_menu ?? null,
+                            'nama_menu' => $menu->menu->nama_menu ?? null,
+                            'url_menu' => $menu->menu->url_menu ?? null,
+                        ]
+                    ];
                 })
             ];
         });

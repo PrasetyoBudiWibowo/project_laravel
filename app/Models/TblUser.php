@@ -53,4 +53,9 @@ class TblUser extends Model
     {
         return $this->hasMany(HakAksesModule::class, 'kd_user', 'kd_asli_user');
     }
+
+    public function akses_menu()
+    {
+        return $this->hasMany(HakAksesMenu::class, 'kd_user', 'kd_asli_user');
+    }
 }
