@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\MasterMenu;
+use App\Models\HakAksesMenu;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -69,6 +70,26 @@ class MenuService
         }
 
         $lastId = $menu->kd_menu;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
+    private function generateKdHakAksesMenu()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'HAKM-' . $currentMonth . '-';
+
+        $menu = HakAksesMenu::where('kd_hak_akses_menu', 'LIKE', $prefix . '%')
+            ->orderBy('kd_hak_akses_menu', 'DESC')
+            ->first();
+
+        if (!$menu) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $menu->kd_hak_akses_menu;
         $lastNumber = substr($lastId, -4);
 
         $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
@@ -148,6 +169,69 @@ class MenuService
 
             $log->info("PROSES SELESAI");
             return $masterMenu;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function simpanHakAksesMenu($user, $data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('SIMPAN-HAK-AKSES-MENU');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN SIMPAN-HAK-AKSES-MENU KE DATABASE =================>");
+            $log->info("Data dari controller: ADA" . json_encode($data));
+
+            HakAksesMenu::where('kd_user', $user['kd_asli_user'])->delete();
+
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $log->info("<================= MULAI PROSES SIMPAN =================>");
+
+            $saveData = [];
+
+            foreach ($data as $d) {
+                $kd_hak_akses_menu = $this->generateKdHakAksesMenu();
+
+                $hakAksesMenu = new HakAksesMenu();
+                $hakAksesMenu->kd_hak_akses_menu = $kd_hak_akses_menu;
+                $hakAksesMenu->kd_menu  = $d['kd_menu'];
+                $hakAksesMenu->kd_user = $d['kd_user'];
+                $hakAksesMenu->bisa_insert = $d['bisa_insert'];
+                $hakAksesMenu->bisa_edit = $d['bisa_edit'];
+                $hakAksesMenu->bisa_export = $d['bisa_export'];
+                $hakAksesMenu->status_akses = $d['status_akses'];
+                $hakAksesMenu->tgl_input = $tgl_input;
+                $hakAksesMenu->bln_input = $bln_input;
+                $hakAksesMenu->thn_input = $thn_input;
+                $hakAksesMenu->waktu_input = $waktu_input;
+                $hakAksesMenu->user_input = $d['user_input'];
+                $hakAksesMenu->device = $device;
+                $hakAksesMenu->alamat_device = $ipDevice;
+                $hakAksesMenu->type_device = $deviceType;
+                $hakAksesMenu->save();
+
+                $saveData[] = $hakAksesMenu;
+            }
+
+            $log->info("BERHASILLLLLLLLL");
+
+            DB::commit();
+            return $saveData;
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);

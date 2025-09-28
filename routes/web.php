@@ -74,6 +74,7 @@ Route::middleware(['auth'])->controller(MenuController::class)->group(function (
     Route::post('/simpan-menu', 'validasi_simpan_menu');
 
     Route::get('/hak-akses-menu', 'hak_akses_menu')->name('hak_akses_menu');
+    Route::post('/hak-akses-menu', 'validasi_simpan_hak_akses_menu');
 });
 
 // -----------------------

@@ -60,6 +60,9 @@ class UserService
                 'akses_menu' => $user->akses_menu->map(function ($menu) {
                     return [
                         'status_akses' => $menu->status_akses,
+                        'bisa_insert' => $menu->bisa_insert,
+                        'bisa_edit' => $menu->bisa_edit,
+                        'bisa_export' => $menu->bisa_export,
                         'menu' => [
                             'kd_menu' => $menu->module->kd_menu ?? null,
                             'nama_menu' => $menu->menu->nama_menu ?? null,

@@ -167,4 +167,91 @@ class MenuController extends Controller
             ]);
         }
     }
+
+    public function validasi_simpan_hak_akses_menu(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-SIMPAN HAK AKSES MENU');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_simpan_hak_akses_menu"
+                ]);
+            }
+
+            $kdUserInput = Crypt::decryptString($request->user_input);
+            $userInput = $this->userService->getUserByKdAsli($kdUserInput);
+
+            if (!$userInput) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "USER YANG MENGINPUT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            if (empty($request->menus)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Belum ada menu yang di pilih"
+                ]);
+            }
+
+            $kdSelectedUser = Crypt::decryptString($request->kd_user);
+            $selectedUser = $this->userService->getUserByKdAsli($kdSelectedUser);
+
+            if (!$selectedUser) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "USER YANG DIPILIH TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $data = [];
+
+            foreach ($request->menus as $menu) {
+
+                $kdSelectedMenu = Crypt::decryptString($menu['kd_menu']);
+                $cekMenu = $this->menuService->getMenuByKode($kdSelectedMenu);
+
+                if (!$cekMenu) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => "MENU YANG DIPILIH TIDAK DITEMUKAN"
+                    ]);
+                }
+
+                $data[] = [
+                    'kd_user' => $selectedUser['kd_asli_user'],
+                    'kd_menu' => $cekMenu['kd_menu'],
+                    'status_akses' => $menu['status_akses'] === false ? "TIDAK" : "YA",
+                    'bisa_insert' => $menu['can_insert'] === false ? "TIDAK" : "YA",
+                    'bisa_edit' => $menu['can_edit'] === false ? "TIDAK" : "YA",
+                    'bisa_export' => $menu['can_export'] === false ? "TIDAK" : "YA",
+                    'user_input' => $userInput['kd_asli_user'],
+                ];
+            }
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $result = $this->menuService->simpanHakAksesMenu($selectedUser, $data);
+
+            if (!$result) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }

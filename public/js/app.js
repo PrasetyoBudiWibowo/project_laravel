@@ -141049,15 +141049,28 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       $("#selected_menu").val("").trigger("change");
     },
     editUser: function editUser(user) {
+      var _this5 = this;
       this.selectedUser = JSON.parse(JSON.stringify(user));
       this.inputData.kd_user = user.kd_asli_user;
+      if (Array.isArray(user.akses_menu) && user.akses_menu.length > 0) {
+        user.akses_menu.forEach(function (aksesMenu) {
+          _this5.inputData.menus.push({
+            kd_menu: aksesMenu.menu.kd_menu,
+            nama_menu: aksesMenu.menu.nama_menu,
+            can_insert: aksesMenu.bisa_insert === "YA" ? true : false,
+            can_edit: aksesMenu.bisa_edit === "YA" ? true : false,
+            can_export: aksesMenu.bisa_export === "YA" ? true : false,
+            status_akses: aksesMenu.status_akses === "YA" ? true : false
+          });
+        });
+      }
       if (!this.editModal) {
         this.editModal = new bootstrap__WEBPACK_IMPORTED_MODULE_1__.Modal($("#modalEditHakAksesMenu"));
       }
       this.editModal.show();
     },
     tambahAksesMenu: function tambahAksesMenu() {
-      var _this5 = this;
+      var _this6 = this;
       if (!this.selectedMenu) {
         Swal.fire({
           icon: "warning",
@@ -141071,7 +141084,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         return;
       }
       var sudahAda = this.inputData.menus.some(function (m) {
-        return m.kd_menu === _this5.selectedMenu;
+        return m.kd_menu === _this6.selectedMenu;
       });
       if (sudahAda) {
         Swal.fire({
@@ -141086,7 +141099,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         return;
       }
       var menuObj = this.dataMenu.find(function (m) {
-        return m.kd_menu === _this5.selectedMenu;
+        return m.kd_menu === _this6.selectedMenu;
       });
       if (menuObj) {
         this.inputData.menus.push({
@@ -141094,7 +141107,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
           nama_menu: menuObj.nama_menu,
           can_insert: false,
           can_edit: false,
-          can_export: false
+          can_export: false,
+          status_akses: false
         });
         this.selectedMenu = null;
       }
@@ -141122,7 +141136,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       });
     },
     btnSimpanAksesMenu: function btnSimpanAksesMenu() {
-      var _this6 = this;
+      var _this7 = this;
       Swal.fire({
         title: "Konfirmasi",
         text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
@@ -141137,22 +141151,80 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this6.simpanAksesMenu();
+          _this7.simpanAksesMenu();
         }
       });
     },
     simpanAksesMenu: function simpanAksesMenu() {
-      var _this7 = this;
+      var _this8 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-        var dataToSave;
+        var dataToSave, response, result, _error$response, _t4;
         return _regenerator().w(function (_context5) {
-          while (1) switch (_context5.n) {
+          while (1) switch (_context5.p = _context5.n) {
             case 0:
-              dataToSave = _objectSpread({}, _this7.inputData);
-            case 1:
+              dataToSave = _objectSpread(_objectSpread({}, _this8.inputData), {}, {
+                user_input: window.encryptedUserId
+              });
+              _context5.p = 1;
+              Swal.fire({
+                title: "Sedang Proses Simpan Data",
+                text: "Mohon tunggu.",
+                allowOutsideClick: false,
+                didOpen: function didOpen() {
+                  Swal.showLoading();
+                }
+              });
+              _context5.n = 2;
+              return axios.post("/hak-akses-menu", dataToSave);
+            case 2:
+              response = _context5.v;
+              result = response.data;
+              Swal.close();
+              if (result.status === "success") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: result.message || "Data berhasil Diubah!",
+                  customClass: {
+                    confirmButton: "btn btn-success"
+                  }
+                }).then(function () {
+                  $("#modalEditHakAksesMenu").modal("hide");
+                  $("#modalEditHakAksesMenu").on("hidden.bs.modal", function () {
+                    window.location.reload();
+                  });
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: result.message,
+                  confirmButtonText: "Tutup",
+                  customClass: {
+                    confirmButton: "btn btn-danger"
+                  }
+                });
+              }
+              _context5.n = 4;
+              break;
+            case 3:
+              _context5.p = 3;
+              _t4 = _context5.v;
+              Swal.close();
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan: ".concat(((_error$response = _t4.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || _t4.message),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+              });
+            case 4:
               return _context5.a(2);
           }
-        }, _callee5);
+        }, _callee5, null, [[1, 3]]);
       }))();
     }
   }
@@ -144721,11 +144793,12 @@ var _hoisted_20 = {
 var _hoisted_21 = ["onUpdate:modelValue"];
 var _hoisted_22 = ["onUpdate:modelValue"];
 var _hoisted_23 = ["onUpdate:modelValue"];
-var _hoisted_24 = ["onClick"];
-var _hoisted_25 = {
+var _hoisted_24 = ["onUpdate:modelValue"];
+var _hoisted_25 = ["onClick"];
+var _hoisted_26 = {
   key: 0
 };
-var _hoisted_26 = {
+var _hoisted_27 = {
   "class": "modal-footer"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -144734,7 +144807,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "card-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Daftar Menu")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_4, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     style: {
-      "width": "10%"
+      "width": "5%"
     }
   }, "No"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "User"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Hak Akses"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
     style: {
@@ -144814,34 +144887,39 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[3] || (_cache[3] = function () {
       return $options.tambahAksesMenu && $options.tambahAksesMenu.apply($options, arguments);
     })
-  }, " Tambah "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_20, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "No"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Nama Menu"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Bisa Tambah Data"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Bisa Ubah Data"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Bisa Export Data"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Aksi")])], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.inputData.menus, function (menu, index) {
+  }, " Tambah "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_20, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "No"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Nama Menu"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Bisa Akses Menu"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Bisa Tambah Data"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Bisa Ubah Data"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Bisa Export Data"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, "Aksi")])], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.inputData.menus, function (menu, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: menu.kd_menu
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(menu.nama_menu), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       type: "checkbox",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
+        return menu.status_akses = $event;
+      }
+    }, null, 8 /* PROPS */, _hoisted_21), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, menu.status_akses]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      type: "checkbox",
+      "onUpdate:modelValue": function onUpdateModelValue($event) {
         return menu.can_insert = $event;
       }
-    }, null, 8 /* PROPS */, _hoisted_21), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, menu.can_insert]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, null, 8 /* PROPS */, _hoisted_22), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, menu.can_insert]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       type: "checkbox",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return menu.can_edit = $event;
       }
-    }, null, 8 /* PROPS */, _hoisted_22), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, menu.can_edit]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, null, 8 /* PROPS */, _hoisted_23), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, menu.can_edit]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       type: "checkbox",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return menu.can_export = $event;
       }
-    }, null, 8 /* PROPS */, _hoisted_23), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, menu.can_export]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, null, 8 /* PROPS */, _hoisted_24), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, menu.can_export]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-sm btn-danger",
       onClick: function onClick($event) {
         return $options.hapusAksesMenu(index);
       }
-    }, " Hapus ", 8 /* PROPS */, _hoisted_24)])]);
-  }), 128 /* KEYED_FRAGMENT */)), $data.inputData.menus.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_25, _cache[12] || (_cache[12] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
-    colspan: "6",
+    }, " Hapus ", 8 /* PROPS */, _hoisted_25)])]);
+  }), 128 /* KEYED_FRAGMENT */)), $data.inputData.menus.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", _hoisted_26, _cache[12] || (_cache[12] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", {
+    colspan: "7",
     "class": "text-center"
-  }, " Belum ada menu dipilih ", -1 /* CACHED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, " Belum ada menu dipilih ", -1 /* CACHED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-secondary",
     "data-bs-dismiss": "modal"

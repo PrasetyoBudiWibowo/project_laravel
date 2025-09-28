@@ -12,7 +12,7 @@
                 >
                     <thead>
                         <tr>
-                            <th style="width: 10%">No</th>
+                            <th style="width: 5%">No</th>
                             <th>User</th>
                             <th>Hak Akses</th>
                             <th style="width: 20%">Aksi</th>
@@ -149,6 +149,7 @@
                                         <tr>
                                             <td>No</td>
                                             <td>Nama Menu</td>
+                                            <td>Bisa Akses Menu</td>
                                             <td>Bisa Tambah Data</td>
                                             <td>Bisa Ubah Data</td>
                                             <td>Bisa Export Data</td>
@@ -164,6 +165,12 @@
                                         >
                                             <td>{{ index + 1 }}</td>
                                             <td>{{ menu.nama_menu }}</td>
+                                            <td>
+                                                <input
+                                                    type="checkbox"
+                                                    v-model="menu.status_akses"
+                                                />
+                                            </td>
                                             <td>
                                                 <input
                                                     type="checkbox"
@@ -194,7 +201,7 @@
                                             </td>
                                         </tr>
                                         <tr v-if="inputData.menus.length === 0">
-                                            <td colspan="6" class="text-center">
+                                            <td colspan="7" class="text-center">
                                                 Belum ada menu dipilih
                                             </td>
                                         </tr>
@@ -380,6 +387,22 @@ export default {
             this.selectedUser = JSON.parse(JSON.stringify(user));
             this.inputData.kd_user = user.kd_asli_user;
 
+            if (Array.isArray(user.akses_menu) && user.akses_menu.length > 0) {
+                user.akses_menu.forEach((aksesMenu) => {
+                    this.inputData.menus.push({
+                        kd_menu: aksesMenu.menu.kd_menu,
+                        nama_menu: aksesMenu.menu.nama_menu,
+                        can_insert:
+                            aksesMenu.bisa_insert === "YA" ? true : false,
+                        can_edit: aksesMenu.bisa_edit === "YA" ? true : false,
+                        can_export:
+                            aksesMenu.bisa_export === "YA" ? true : false,
+                        status_akses:
+                            aksesMenu.status_akses === "YA" ? true : false,
+                    });
+                });
+            }
+
             if (!this.editModal) {
                 this.editModal = new Modal($("#modalEditHakAksesMenu"));
             }
@@ -427,6 +450,7 @@ export default {
                     can_insert: false,
                     can_edit: false,
                     can_export: false,
+                    status_akses: false,
                 });
                 this.selectedMenu = null;
             }
@@ -485,7 +509,70 @@ export default {
         async simpanAksesMenu() {
             let dataToSave = {
                 ...this.inputData,
+                user_input: window.encryptedUserId,
             };
+
+            try {
+                Swal.fire({
+                    title: "Sedang Proses Simpan Data",
+                    text: "Mohon tunggu.",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                const response = await axios.post(
+                    "/hak-akses-menu",
+                    dataToSave
+                );
+                const result = response.data;
+
+                Swal.close();
+
+                if (result.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: result.message || "Data berhasil Diubah!",
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                        },
+                    }).then(() => {
+                        $("#modalEditHakAksesMenu").modal("hide");
+                        $("#modalEditHakAksesMenu").on(
+                            "hidden.bs.modal",
+                            () => {
+                                window.location.reload();
+                            }
+                        );
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: result.message,
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                    });
+                }
+            } catch (error) {
+                Swal.close();
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan: ${
+                        error.response?.data?.message || error.message
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                    buttonsStyling: false,
+                });
+            }
         },
     },
 };
