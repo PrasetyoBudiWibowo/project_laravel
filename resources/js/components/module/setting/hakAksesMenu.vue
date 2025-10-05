@@ -26,9 +26,31 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ user.nama_user }}</td>
                             <td>
-                                <span class="badge bg-primary">
-                                    {{ user.level.level_user }}
-                                </span>
+                                <template
+                                    v-if="
+                                        user.akses_menu &&
+                                        user.akses_menu.length > 0
+                                    "
+                                >
+                                    <ul class="mb-0 ps-3">
+                                        <li
+                                            v-for="(
+                                                akses, i
+                                            ) in user.akses_menu"
+                                            :key="i"
+                                        >
+                                            {{
+                                                akses?.menu?.module.nama_module
+                                            }}
+                                            - {{ akses?.menu?.nama_menu }}
+                                        </li>
+                                    </ul>
+                                </template>
+                                <template v-else>
+                                    <span class="badge bg-secondary"
+                                        >Belum ada akses</span
+                                    >
+                                </template>
                             </td>
                             <td>
                                 <button
@@ -350,6 +372,8 @@ export default {
                             it.id_usr_level !== "1" ||
                             it.level.level_user !== "SUPER ADMIN"
                     ) || [];
+
+                console.log("datadasar", data);
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -577,3 +601,14 @@ export default {
     },
 };
 </script>
+<style>
+#tabelHakAksesMenu td ul {
+    list-style: disc;
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+#tabelHakAksesMenu td li {
+    line-height: 1.3rem;
+}
+</style>

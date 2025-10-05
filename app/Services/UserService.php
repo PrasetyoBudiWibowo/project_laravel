@@ -64,9 +64,13 @@ class UserService
                         'bisa_edit' => $menu->bisa_edit,
                         'bisa_export' => $menu->bisa_export,
                         'menu' => [
-                            'kd_menu' => $menu->module->kd_menu ?? null,
+                            'kd_menu' => $menu->menu->kd_menu ?? null,
                             'nama_menu' => $menu->menu->nama_menu ?? null,
                             'url_menu' => $menu->menu->url_menu ?? null,
+                            'module' => [
+                                'nama_module' => $menu->menu->module->nama_module ?? null,
+                                'status_module' => $menu->menu->module->status_module ?? null,
+                            ],
                         ]
                     ];
                 })

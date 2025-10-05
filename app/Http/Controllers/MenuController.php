@@ -236,7 +236,7 @@ class MenuController extends Controller
 
             $result = $this->menuService->simpanHakAksesMenu($selectedUser, $data);
 
-            if (!$result) {
+            if (!$result || count($result) <= 0) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Gagal Simpan'
