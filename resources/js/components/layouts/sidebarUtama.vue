@@ -142,6 +142,7 @@ export default {
             loadingMenu: true,
 
             listMenuModule: [],
+            listAksesModule: [],
             menusStatic: [
                 { heading: "Core" },
                 {
@@ -154,7 +155,6 @@ export default {
                     label: "Module",
                     icon: "fa-solid fa-book",
                     children: [],
-                    isSuperAdminOnly: true,
                 },
                 {
                     label: "Pages",
@@ -188,6 +188,7 @@ export default {
                             route: "/wilayah/kecamatan",
                         },
                     ],
+                    isSuperAdminOnly: true,
                 },
                 {
                     label: "Setting",
@@ -233,11 +234,15 @@ export default {
     async mounted() {
         await this.module();
         await this.moduleWithMenu();
+        await this.aksesModuleByUser();
 
         this.expandActiveMenu();
 
         // const currentUrl = window.location.href;
         // const currentPath = window.location.pathname;
+
+        console.log("user", window.userData);
+        console.log("wefafgaf", window.encryptedUserId);
 
         this.currentPath = window.location.pathname;
 
@@ -364,15 +369,47 @@ export default {
         isActiveRoute(route) {
             return window.location.pathname === route;
         },
+        async aksesModuleByUser() {
+            try {
+                const data = await getModuleByUser();
+
+                this.listAksesModule = data || [];
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan aksesModuleByUser: ${
+                        err.statusText || err
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
+        },
+
         async module() {
             try {
+                await this.aksesModuleByUser();
+
                 const data = await getAllModule();
 
-                this.listModule = data.map((it) => ({
-                    label: it.tampil_module,
-                    icon: "fa-regular fa-circle",
-                    route: it.url_module,
-                }));
+                if (window.userData.level_user === "SUPER ADMIN") {
+                    this.listModule = data.map((it) => ({
+                        label: it.tampil_module,
+                        icon: "fa-regular fa-circle",
+                        route: it.url_module,
+                    }));
+                } else {
+                    this.listModule = (this.listAksesModule || []).map(
+                        (it) => ({
+                            label: it.module.tampil_module,
+                            icon: "fa-regular fa-circle",
+                            route: it.module.url_module,
+                        })
+                    );
+                }
 
                 const moduleManager = this.menusStatic.find(
                     (m) => m.label === "Module"

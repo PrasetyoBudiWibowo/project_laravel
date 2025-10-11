@@ -140281,6 +140281,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       listModule: [],
       loadingMenu: true,
       listMenuModule: [],
+      listAksesModule: [],
       menusStatic: [{
         heading: "Core"
       }, {
@@ -140292,8 +140293,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }, {
         label: "Module",
         icon: "fa-solid fa-book",
-        children: [],
-        isSuperAdminOnly: true
+        children: []
       }, {
         label: "Pages",
         icon: "fas fa-book-open",
@@ -140320,7 +140320,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
           label: "Kecamatan",
           icon: "fa-regular fa-circle",
           route: "/wilayah/kecamatan"
-        }]
+        }],
+        isSuperAdminOnly: true
       }, {
         label: "Setting",
         icon: "fa-solid fa-gear",
@@ -140365,14 +140366,19 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             _context.n = 2;
             return _this.moduleWithMenu();
           case 2:
+            _context.n = 3;
+            return _this.aksesModuleByUser();
+          case 3:
             _this.expandActiveMenu();
 
             // const currentUrl = window.location.href;
             // const currentPath = window.location.pathname;
 
+            console.log("user", window.userData);
+            console.log("wefafgaf", window.encryptedUserId);
             _this.currentPath = window.location.pathname;
             _this.loadingMenu = false;
-          case 3:
+          case 4:
             return _context.a(2);
         }
       }, _callee);
@@ -140463,31 +140469,19 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     isActiveRoute: function isActiveRoute(route) {
       return window.location.pathname === route;
     },
-    module: function module() {
+    aksesModuleByUser: function aksesModuleByUser() {
       var _this2 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-        var data, moduleManager, _t;
+        var data, _t;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.p = _context2.n) {
             case 0:
               _context2.p = 0;
               _context2.n = 1;
-              return getAllModule();
+              return getModuleByUser();
             case 1:
               data = _context2.v;
-              _this2.listModule = data.map(function (it) {
-                return {
-                  label: it.tampil_module,
-                  icon: "fa-regular fa-circle",
-                  route: it.url_module
-                };
-              });
-              moduleManager = _this2.menusStatic.find(function (m) {
-                return m.label === "Module";
-              });
-              if (moduleManager) {
-                moduleManager.children = _this2.listModule;
-              }
+              _this2.listAksesModule = data || [];
               _context2.n = 3;
               break;
             case 2:
@@ -140496,7 +140490,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               Swal.fire({
                 icon: "error",
                 title: "Gagal",
-                text: "Terjadi kesalahan module: ".concat(_t.statusText || _t),
+                text: "Terjadi kesalahan aksesModuleByUser: ".concat(_t.statusText || _t),
                 confirmButtonText: "Tutup",
                 customClass: {
                   confirmButton: "btn btn-danger"
@@ -140508,23 +140502,48 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         }, _callee2, null, [[0, 2]]);
       }))();
     },
-    moduleWithMenu: function moduleWithMenu() {
+    module: function module() {
       var _this3 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-        var data, _t2;
+        var data, moduleManager, _t2;
         return _regenerator().w(function (_context3) {
           while (1) switch (_context3.p = _context3.n) {
             case 0:
               _context3.p = 0;
               _context3.n = 1;
-              return getAllModuleWithMenu();
+              return _this3.aksesModuleByUser();
             case 1:
-              data = _context3.v;
-              _this3.listMenuModule = data || [];
-              _context3.n = 3;
-              break;
+              _context3.n = 2;
+              return getAllModule();
             case 2:
-              _context3.p = 2;
+              data = _context3.v;
+              if (window.userData.level_user === "SUPER ADMIN") {
+                _this3.listModule = data.map(function (it) {
+                  return {
+                    label: it.tampil_module,
+                    icon: "fa-regular fa-circle",
+                    route: it.url_module
+                  };
+                });
+              } else {
+                _this3.listModule = (_this3.listAksesModule || []).map(function (it) {
+                  return {
+                    label: it.module.tampil_module,
+                    icon: "fa-regular fa-circle",
+                    route: it.module.url_module
+                  };
+                });
+              }
+              moduleManager = _this3.menusStatic.find(function (m) {
+                return m.label === "Module";
+              });
+              if (moduleManager) {
+                moduleManager.children = _this3.listModule;
+              }
+              _context3.n = 4;
+              break;
+            case 3:
+              _context3.p = 3;
               _t2 = _context3.v;
               Swal.fire({
                 icon: "error",
@@ -140535,31 +140554,64 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   confirmButton: "btn btn-danger"
                 }
               });
-            case 3:
+            case 4:
               return _context3.a(2);
           }
-        }, _callee3, null, [[0, 2]]);
+        }, _callee3, null, [[0, 3]]);
+      }))();
+    },
+    moduleWithMenu: function moduleWithMenu() {
+      var _this4 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+        var data, _t3;
+        return _regenerator().w(function (_context4) {
+          while (1) switch (_context4.p = _context4.n) {
+            case 0:
+              _context4.p = 0;
+              _context4.n = 1;
+              return getAllModuleWithMenu();
+            case 1:
+              data = _context4.v;
+              _this4.listMenuModule = data || [];
+              _context4.n = 3;
+              break;
+            case 2:
+              _context4.p = 2;
+              _t3 = _context4.v;
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan module: ".concat(_t3.statusText || _t3),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                }
+              });
+            case 3:
+              return _context4.a(2);
+          }
+        }, _callee4, null, [[0, 2]]);
       }))();
     },
     expandActiveMenu: function expandActiveMenu() {
-      var _this4 = this;
+      var _this5 = this;
       var currentPath = window.location.pathname;
       this.filteredMenus.forEach(function (menu, mIndex) {
         if (menu.children) {
           menu.children.forEach(function (child, cIndex) {
             if (child.route === currentPath) {
-              _this4.openCollapseIndex = mIndex;
+              _this5.openCollapseIndex = mIndex;
             } else if (child.children) {
               child.children.forEach(function (subChild) {
                 if (subChild.route === currentPath) {
-                  _this4.openCollapseIndex = mIndex;
-                  _this4.subCollapseIndex = "".concat(mIndex, "-").concat(cIndex);
+                  _this5.openCollapseIndex = mIndex;
+                  _this5.subCollapseIndex = "".concat(mIndex, "-").concat(cIndex);
                 }
               });
             }
           });
         } else if (menu.route === currentPath) {
-          _this4.openCollapseIndex = null;
+          _this5.openCollapseIndex = null;
         }
       });
     }

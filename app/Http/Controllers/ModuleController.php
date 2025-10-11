@@ -69,6 +69,41 @@ class ModuleController extends Controller
         ]);
     }
 
+    public function getModuleByUser(Request $request)
+    {
+        $sessionUser = session('user');
+
+        $log = AppLogger::getLogger('CEK-USER-SESSION');
+        $log->info("PROSES PENGECEKAN DATA");
+
+        $user = $this->userService->getUserByKdAsli($sessionUser['kd_asli_user']);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "User TIDAK DITEMUKAN"
+            ]);
+        }
+
+        $log->info("LEWAT CEK USER");
+
+        $aksesModule = $this->moduleService->cekAksesModuleByUser($user);
+
+        if (!$aksesModule) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal'
+            ]);
+        }
+
+        $log->info("LEWAT CEK MODULE");
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $aksesModule
+        ]);
+    }
+
     public function validasi_simpan_module(Request $request)
     {
         try {

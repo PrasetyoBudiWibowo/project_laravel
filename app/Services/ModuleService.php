@@ -38,6 +38,26 @@ class ModuleService
         return $module;
     }
 
+    public function cekAksesModuleByUser($data)
+    {
+        $aksesModule = HakAksesModule::where('kd_user', $data->kd_asli_user)
+            ->with('module')
+            ->get();
+
+        $result = $aksesModule->map(function ($data) {
+            return [
+                'status_akses' => $data->status_akses,
+                'module' => [
+                    'nama_module' => $data->module->nama_module,
+                    'tampil_module' => $data->module->tampil_module,
+                    'url_module' => $data->module->url_module,
+                ],
+            ];
+        });
+
+        return $result;
+    }
+
     public function moduleWithMenu()
     {
         $modules = Module::where('status_module', 'ACTIVE')

@@ -245,6 +245,32 @@ async function getAllModuleWithMenu() {
   }
 }
 
+async function getModuleByUser() {
+  try {
+    const response = await axios.get('/module-by-user', {
+      withCredentials: true,
+    });
+
+    if (response.data?.status === "success") {
+      return response.data.data || [];
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: response.data?.message || "Terjadi kesalahan pada server.",
+      });
+      return [];
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan: ${error.response?.data?.message || error.message}`,
+    });
+    return [];
+  }
+}
+
 window.getLevelUser = getLevelUser;
 window.getDataUserRegister = getDataUserRegister;
 window.getAllDataKaryawan = getAllDataKaryawan;
@@ -256,3 +282,4 @@ window.getAllDataKecamatan = getAllDataKecamatan;
 window.getAllModule = getAllModule;
 window.getAllMenu = getAllMenu;
 window.getAllModuleWithMenu = getAllModuleWithMenu;
+window.getModuleByUser = getModuleByUser;

@@ -44,12 +44,12 @@ class AuthController extends Controller
             }
 
             $validator = Validator::make($request->all(), [
-                'nama_user' => 'required|alpha_num',
-                'password' => 'required'
+                'nama_user' => ['required', 'regex:/^[A-Za-z0-9\s]+$/'],
+                'password'  => 'required'
             ], [
                 'nama_user.required' => 'User name tidak boleh kosong',
-                'nama_user.alpha_num' => 'User name hanya boleh mengandung huruf dan angka',
-                'password.required' => 'Password tidak boleh kosong'
+                'nama_user.regex'    => 'User name hanya boleh mengandung huruf, angka, dan spasi',
+                'password.required'  => 'Password tidak boleh kosong'
             ]);
 
             if ($validator->fails()) {
