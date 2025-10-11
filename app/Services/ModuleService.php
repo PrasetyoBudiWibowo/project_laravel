@@ -6,11 +6,14 @@ use App\Models\Module;
 use App\Models\HakAksesModule;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
 
 use App\Helper\DeviceHelper;
 use App\Helper\GeoDetector;
 use App\Helper\AppLogger;
+
+use function PHPSTORM_META\map;
 
 class ModuleService
 {
@@ -33,6 +36,39 @@ class ModuleService
     {
         $module = Module::find($data);
         return $module;
+    }
+
+    public function moduleWithMenu()
+    {
+        $modules = Module::where('status_module', 'ACTIVE')
+            ->with('menu')
+            ->get();
+
+        $result = $modules->map(function ($module) {
+            return [
+                'nama_module' => $module->nama_module,
+                'url_module'  => $module->url_module,
+                'menu' => $module->menu->map(function ($menu) {
+                    return [
+                        'nama_menu' => $menu->nama_menu,
+                        'url_menu'  => $menu->url_menu,
+                        'children'  => $menu->children->map(function ($child) {
+                            return [
+                                'nama_menu' => $child->nama_menu,
+                                'url_menu'  => $child->url_menu,
+                                'urutan'  => $child->urutan,
+                            ];
+                        })->filter()->values(),
+                    ];
+                })
+                    ->filter(function ($menu) {
+                        return $menu['children']->isNotEmpty();
+                    })
+                    ->values(),
+            ];
+        });
+
+        return $result;
     }
 
     private function generateKdModule()

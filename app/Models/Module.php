@@ -28,4 +28,9 @@ class Module extends Model
     ];
 
     public $timestamps = false;
+
+    public function menu()
+    {
+        return $this->hasMany(MasterMenu::class, 'kd_module', 'kd_module');
+    }
 }

@@ -15,6 +15,11 @@ class HrdController extends Controller
         $this->hrdService = $hrdService;
     }
 
+    public function index()
+    {
+        return view('module.hrd.dasboard');
+    }
+
     public function allDataKaryawan()
     {
         $karyawan = $this->hrdService->allKaryawan();

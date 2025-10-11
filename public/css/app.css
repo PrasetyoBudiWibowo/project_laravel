@@ -532,6 +532,9 @@ video {
 .-mt-px {
   margin-top: -1px;
 }
+.mb-0 {
+  margin-bottom: 0px;
+}
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -594,9 +597,6 @@ video {
 }
 .mt-auto {
   margin-top: auto;
-}
-.mb-0 {
-  margin-bottom: 0px;
 }
 .flex {
   display: flex;

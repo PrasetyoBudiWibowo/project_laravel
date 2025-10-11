@@ -52,6 +52,23 @@ class ModuleController extends Controller
         ]);
     }
 
+    public function getModuleWithMenu()
+    {
+        $data = $this->moduleService->moduleWithMenu();
+
+        if (empty($data)) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ]);
+    }
+
     public function validasi_simpan_module(Request $request)
     {
         try {

@@ -44,4 +44,9 @@ class MasterMenu extends Model
     {
         return $this->belongsTo(MasterMenu::class, 'parent_menu', 'kd_menu');
     }
+
+    public function children()
+    {
+        return $this->hasMany(MasterMenu::class, 'parent_menu', 'kd_menu');
+    }
 }

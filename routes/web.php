@@ -62,6 +62,8 @@ Route::middleware(['auth'])->controller(ModuleController::class)->group(function
 
     Route::get('/akses-module-user', 'akses_module_user')->name('akses_module_user');
     Route::post('/akses-module-user', 'validasi_hak_akses_module_user');
+
+    Route::get('/module-with-menu', 'getModuleWithMenu');
 });
 
 // -----------------------
@@ -91,6 +93,8 @@ Route::middleware(['auth'])->prefix('user')->controller(UserController::class)->
 // DATA KARYAWAN
 // -----------------------
 Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->group(function () {
+    Route::get('/', 'index');
+
     Route::get('/karyawan', 'allDataKaryawan');
 });
 
