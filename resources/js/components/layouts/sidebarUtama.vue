@@ -121,16 +121,27 @@
             </template>
         </ul>
     </div>
+
+    <loadingData :visible="loadingMenu" message="Loading" />
 </template>
 
 <script>
+import loadingData from "../loading/loadingData.vue";
+
 export default {
+    components: { loadingData },
     name: "SidebarUtama",
     data() {
         return {
             openCollapseIndex: null,
             subCollapseIndex: null,
+            currentPath: null,
+            currentUrl: null,
             listModule: [],
+
+            loadingMenu: true,
+
+            listMenuModule: [],
             menusStatic: [
                 { heading: "Core" },
                 {
@@ -221,61 +232,124 @@ export default {
     },
     async mounted() {
         await this.module();
+        await this.moduleWithMenu();
+
         this.expandActiveMenu();
+
+        // const currentUrl = window.location.href;
+        // const currentPath = window.location.pathname;
+
+        this.currentPath = window.location.pathname;
+
+        this.loadingMenu = false;
     },
     computed: {
         filteredMenus() {
             const isSuperAdmin = window.userData?.level_user === "SUPER ADMIN";
 
-            return this.menusStatic
-                .map((menu) => {
-                    if (menu.label === "Ubah Setting") {
-                        return {
-                            ...menu,
-                            route: `/edit-user/${window.encryptedUserId || ""}`,
-                        };
-                    }
+            if (!this.currentPath || !this.listMenuModule) {
+                return this.menusStatic;
+            }
 
-                    if (menu.isSuperAdminOnly && !isSuperAdmin) {
-                        return null;
-                    }
+            const currentPath = this.currentPath;
 
-                    if (menu.children) {
-                        const filteredChildren = menu.children
-                            .map((child) => {
-                                if (child.isSuperAdminOnly && !isSuperAdmin)
-                                    return null;
+            const moduleMatch = this.listMenuModule.find((it) =>
+                currentPath.startsWith(it.url_module)
+            );
 
-                                if (child.children) {
-                                    const subFiltered = child.children.filter(
-                                        (subChild) =>
-                                            !subChild.isSuperAdminOnly ||
-                                            isSuperAdmin
-                                    );
+            if (moduleMatch) {
+                const filterMenuModule = this.listMenuModule.filter(
+                    (it) => it.url_module === moduleMatch.url_module
+                );
 
-                                    if (subFiltered.length === 0) return null;
+                const menuWithChildren = filterMenuModule.flatMap((mod) =>
+                    mod.menu
+                        .filter(
+                            (menuItem) =>
+                                menuItem.children &&
+                                menuItem.children.length > 0
+                        )
+                        .map((menuItem) => ({
+                            label: menuItem.nama_menu,
+                            icon: "fa-regular fa-folder",
+                            children: menuItem.children
+                                .slice()
+                                .sort(
+                                    (a, b) => (a.urutan || 0) - (b.urutan || 0)
+                                )
+                                .map((child) => ({
+                                    label: child.nama_menu,
+                                    route: child.url_menu,
+                                })),
+                        }))
+                );
 
-                                    return {
-                                        ...child,
-                                        children: subFiltered,
-                                    };
-                                }
+                if (menuWithChildren.length > 0) {
+                    return [
+                        { heading: "Core" },
+                        {
+                            label: `Dashboard ${moduleMatch.nama_module}`,
+                            icon: "fas fa-tachometer-alt",
+                            route: `${moduleMatch.url_module}`,
+                        },
+                        ...menuWithChildren,
+                    ];
+                }
+            } else {
+                return this.menusStatic
+                    .map((menu) => {
+                        if (menu.label === "Ubah Setting") {
+                            return {
+                                ...menu,
+                                route: `/edit-user/${
+                                    window.encryptedUserId || ""
+                                }`,
+                            };
+                        }
 
-                                return child;
-                            })
-                            .filter(Boolean);
+                        if (menu.isSuperAdminOnly && !isSuperAdmin) return null;
 
-                        if (filteredChildren.length === 0) return null;
+                        if (menu.children) {
+                            const filteredChildren = menu.children
+                                .map((child) => {
+                                    if (child.isSuperAdminOnly && !isSuperAdmin)
+                                        return null;
 
-                        return {
-                            ...menu,
-                            children: filteredChildren,
-                        };
-                    }
+                                    if (child.children) {
+                                        const subFiltered =
+                                            child.children.filter(
+                                                (subChild) =>
+                                                    !subChild.isSuperAdminOnly ||
+                                                    isSuperAdmin
+                                            );
 
-                    return menu;
-                })
-                .filter(Boolean);
+                                        if (subFiltered.length === 0)
+                                            return null;
+
+                                        return {
+                                            ...child,
+                                            children: subFiltered,
+                                        };
+                                    }
+
+                                    return child;
+                                })
+                                .filter(Boolean);
+
+                            if (filteredChildren.length === 0) return null;
+
+                            return {
+                                ...menu,
+                                children: filteredChildren,
+                            };
+                        }
+
+                        return menu;
+                    })
+                    .filter(Boolean);
+            }
+
+            this.loadingMenu = false;
         },
     },
     methods: {
@@ -307,6 +381,23 @@ export default {
                 if (moduleManager) {
                     moduleManager.children = this.listModule;
                 }
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan module: ${err.statusText || err}`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
+        },
+        async moduleWithMenu() {
+            try {
+                const data = await getAllModuleWithMenu();
+
+                this.listMenuModule = data || [];
             } catch (err) {
                 Swal.fire({
                     icon: "error",

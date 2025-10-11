@@ -17,6 +17,7 @@ import module from './components/module/setting/module.vue';
 import aksesModule from './components/module/setting/aksesModule.vue';
 import menuSidebar from './components/module/setting/menuSidebar.vue';
 import hakAksesMenu from './components/module/setting/hakAksesMenu.vue';
+import dasboardHrd from './components/module/hrd/dasboardHrd.vue';
 
 const app = createApp({});
 
@@ -31,6 +32,7 @@ app.component('module', module);
 app.component('akses-module', aksesModule);
 app.component('menu-sidebar', menuSidebar);
 app.component('hak-akses-menu', hakAksesMenu);
+app.component('dasboard-hrd', dasboardHrd);
 
 app.use(Antd)
 
