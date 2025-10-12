@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\TblUser;
 use App\Models\HistoryLoginUser;
 use App\Models\LevelUser;
+use App\Models\HakAksesModule;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -135,6 +136,10 @@ class AuthService
                 throw new \Exception("HISTORY LOGI GAGAL DI BUAT");
             }
 
+            $aksesModule = HakAksesModule::where('kd_user', $user->kd_asli_user)
+                ->where('status_akses', 'YA')
+                ->count();
+
             return [
                 'kd_asli_user' => $user->kd_asli_user,
                 'nama_user' => $user->nama_user,
@@ -150,7 +155,8 @@ class AuthService
                         'id' => $user->level->id,
                         'level_user' => $user->level->level_user,
                     ]
-                ]
+                ],
+                'jumlah_akses_module' => $aksesModule,
             ];
         }
 

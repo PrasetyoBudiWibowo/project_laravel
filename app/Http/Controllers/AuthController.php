@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Crypt;
 use App\Services\AuthService;
 use App\Services\HrdService;
 use App\Services\UserService;
+use App\Services\ModuleService;
 
 use App\Helper\AppLogger;
 
@@ -17,15 +18,18 @@ class AuthController extends Controller
     protected $authService;
     protected $hrdService;
     protected $userService;
+    protected $moduleService;
 
     public function __construct(
         AuthService $authService,
         HrdService $hrdService,
-        UserService $userService
+        UserService $userService,
+        ModuleService $moduleService,
     ) {
         $this->authService = $authService;
         $this->hrdService = $hrdService;
         $this->userService = $userService;
+        $this->moduleService = $moduleService;
     }
 
     public function showLoginForm()
@@ -76,12 +80,43 @@ class AuthController extends Controller
                     ],
                     'user_logged_in' => true
                 ]);
+                $log = AppLogger::getLogger('DAPET USER');
+                $log->info("DATA USER LOGIN");
+
+                $log->info("Data =======>" . json_encode($user));
+
+                $jumlahModule = $user['jumlah_akses_module'];
+
+                if (
+                    intval($user['id_level_user']) === 1 ||
+                    strtoupper($user['level_user'][0]['level_user'] ?? '') === 'SUPER ADMIN'
+                ) {
+                    $redirectUrl = route('welcome');
+                } else {
+                    if ($jumlahModule === 1) {
+                        $aksesModule = $this->moduleService->cekAksesModuleByUser($user);
+
+                        $log->info("AKSES =======>" . json_encode($aksesModule));
+
+                        $firstModule = is_array($aksesModule) ? $aksesModule[0] : $aksesModule->first();
+
+                        if ($firstModule && isset($firstModule['module']['url_module'])) {
+                            $redirectUrl = url($firstModule['module']['url_module']);
+                        } else {
+                            $redirectUrl = route('welcome');
+                        }
+
+                        $log->info("redirectUrl =======>" . json_encode($redirectUrl));
+                    } else {
+                        $redirectUrl = route('welcome');
+                    }
+                }
 
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Login berhasil',
                     'user' => $user,
-                    'redirect' => route('welcome')
+                    'redirect' => $redirectUrl
                 ]);
             }
 

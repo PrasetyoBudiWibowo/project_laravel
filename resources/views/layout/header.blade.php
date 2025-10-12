@@ -34,7 +34,8 @@
         // window.userRole = "{{ session('user.level_user') ?? 'guest' }}";
         window.userData = {
             nama_user: "{{ session('user.nama_user') }}",
-            level_user: "{{ session('user.level_user') }}"
+            level_user: "{{ session('user.level_user') }}",
+            jumlah_akses_module: "{{ session('user.jumlah_akses_module') }}"
         }
         window.encryptedUserId = "{{ Crypt::encryptString(session('user.kd_asli_user')) }}";
     </script>

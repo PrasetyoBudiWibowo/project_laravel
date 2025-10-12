@@ -40,7 +40,12 @@ class ModuleService
 
     public function cekAksesModuleByUser($data)
     {
-        $aksesModule = HakAksesModule::where('kd_user', $data->kd_asli_user)
+        $log = AppLogger::getLogger('=======> cekAksesModuleByUser');
+        $log->info("Data dari controller: ADA" . json_encode($data));
+
+        $kd_asli_user = is_array($data) ? $data['kd_asli_user'] : $data->kd_asli_user;
+
+        $aksesModule = HakAksesModule::where('kd_user', $kd_asli_user)
             ->with('module')
             ->get();
 
