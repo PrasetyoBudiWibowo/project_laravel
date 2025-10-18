@@ -138,6 +138,7 @@ export default {
             currentPath: null,
             currentUrl: null,
             listModule: [],
+            dataUser: window.userData,
 
             loadingMenu: true,
 
@@ -241,9 +242,6 @@ export default {
         // const currentUrl = window.location.href;
         // const currentPath = window.location.pathname;
 
-        console.log("user", window.userData);
-        console.log("wefafgaf", window.encryptedUserId);
-
         this.currentPath = window.location.pathname;
 
         this.loadingMenu = false;
@@ -251,6 +249,8 @@ export default {
     computed: {
         filteredMenus() {
             const isSuperAdmin = window.userData?.level_user === "SUPER ADMIN";
+
+            console.log(">>>>>", this.dataUser);
 
             if (!this.currentPath || !this.listMenuModule) {
                 return this.menusStatic;
@@ -267,38 +267,125 @@ export default {
                     (it) => it.url_module === moduleMatch.url_module
                 );
 
-                const menuWithChildren = filterMenuModule.flatMap((mod) =>
-                    mod.menu
-                        .filter(
-                            (menuItem) =>
-                                menuItem.children &&
-                                menuItem.children.length > 0
-                        )
-                        .map((menuItem) => ({
-                            label: menuItem.nama_menu,
-                            icon: "fa-regular fa-folder",
-                            children: menuItem.children
-                                .slice()
-                                .sort(
-                                    (a, b) => (a.urutan || 0) - (b.urutan || 0)
-                                )
-                                .map((child) => ({
-                                    label: child.nama_menu,
-                                    route: child.url_menu,
-                                })),
-                        }))
-                );
+                let menuWithChildren;
+
+                if (this.dataUser.level_user === "SUPER ADMIN") {
+                    menuWithChildren = filterMenuModule.flatMap((mod) =>
+                        mod.menu
+                            .filter(
+                                (menuItem) =>
+                                    menuItem.children &&
+                                    menuItem.children.length > 0
+                            )
+                            .map((menuItem) => ({
+                                label: menuItem.nama_menu,
+                                icon: "fa-regular fa-folder",
+                                children: menuItem.children
+                                    .slice()
+                                    .sort(
+                                        (a, b) =>
+                                            (a.urutan || 0) - (b.urutan || 0)
+                                    )
+                                    .map((child) => ({
+                                        label: child.nama_menu,
+                                        route: child.url_menu,
+                                    })),
+                            }))
+                    );
+                } else {
+                    const allowedMenus =
+                        (this.dataUser.akses_menu || []).map(
+                            (m) => m.menu?.nama_menu
+                        ) || [];
+
+                    menuWithChildren = filterMenuModule.flatMap((mod) =>
+                        mod.menu
+                            .filter(
+                                (menuItem) =>
+                                    menuItem.children &&
+                                    menuItem.children.length > 0 &&
+                                    menuItem.children.some((child) =>
+                                        allowedMenus.includes(child.nama_menu)
+                                    )
+                            )
+                            .map((menuItem) => ({
+                                label: menuItem.nama_menu,
+                                icon: "fa-regular fa-folder",
+                                children: menuItem.children
+                                    .filter((child) =>
+                                        allowedMenus.includes(child.nama_menu)
+                                    )
+                                    .slice()
+                                    .sort(
+                                        (a, b) =>
+                                            (a.urutan || 0) - (b.urutan || 0)
+                                    )
+                                    .map((child) => ({
+                                        label: child.nama_menu,
+                                        route: child.url_menu,
+                                    })),
+                            }))
+                    );
+                }
 
                 if (menuWithChildren.length > 0) {
-                    return [
-                        { heading: "Core" },
-                        {
-                            label: `Dashboard ${moduleMatch.nama_module}`,
-                            icon: "fas fa-tachometer-alt",
-                            route: `${moduleMatch.url_module}`,
-                        },
-                        ...menuWithChildren,
-                    ];
+                    if (
+                        this.dataUser.jumlah_akses_module === 1 &&
+                        this.dataUser.level_user !== "SUPER ADMIN"
+                    ) {
+                        return [
+                            { heading: "Core" },
+                            {
+                                label: `Dashboard ${moduleMatch.nama_module}`,
+                                icon: "fas fa-tachometer-alt",
+                                route: `${moduleMatch.url_module}`,
+                            },
+                            ...menuWithChildren,
+                        ];
+                    } else if (
+                        this.dataUser.jumlah_akses_module > 1 &&
+                        this.dataUser.level_user !== "SUPER ADMIN"
+                    ) {
+                        return [
+                            { heading: "Core" },
+                            {
+                                label: "MENU UTAMA",
+                                icon: "fa-solid fa-house",
+                                route: "/welcome",
+                            },
+                            {
+                                label: `Dashboard ${moduleMatch.nama_module}`,
+                                icon: "fas fa-tachometer-alt",
+                                route: `${moduleMatch.url_module}`,
+                            },
+                            ...menuWithChildren,
+                        ];
+                    } else if (this.dataUser.level_user === "SUPER ADMIN") {
+                        return [
+                            { heading: "Core" },
+                            {
+                                label: "MENU UTAMA",
+                                icon: "fa-solid fa-house",
+                                route: "/welcome",
+                            },
+                            {
+                                label: `Dashboard ${moduleMatch.nama_module}`,
+                                icon: "fas fa-tachometer-alt",
+                                route: `${moduleMatch.url_module}`,
+                            },
+                            ...menuWithChildren,
+                        ];
+                    }
+
+                    // return [
+                    //     { heading: "Core" },
+                    //     {
+                    //         label: `Dashboard ${moduleMatch.nama_module}`,
+                    //         icon: "fas fa-tachometer-alt",
+                    //         route: `${moduleMatch.url_module}`,
+                    //     },
+                    //     ...menuWithChildren,
+                    // ];
                 }
             } else {
                 return this.menusStatic
@@ -388,7 +475,6 @@ export default {
                 });
             }
         },
-
         async module() {
             try {
                 await this.aksesModuleByUser();

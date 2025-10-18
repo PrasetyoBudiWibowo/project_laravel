@@ -77,13 +77,13 @@ class AuthController extends Controller
                         'password_tampil' => $user['password_tampil'],
                         'status_user' => $user['status_user'],
                         'blokir' => $user['blokir'],
+                        'jumlah_akses_module' => $user['jumlah_akses_module'],
+                        'akses_menu' => $user['akses_menu']->toArray(),
                     ],
                     'user_logged_in' => true
                 ]);
                 $log = AppLogger::getLogger('DAPET USER');
                 $log->info("DATA USER LOGIN");
-
-                $log->info("Data =======>" . json_encode($user));
 
                 $jumlahModule = $user['jumlah_akses_module'];
 

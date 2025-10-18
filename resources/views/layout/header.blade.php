@@ -35,8 +35,9 @@
         window.userData = {
             nama_user: "{{ session('user.nama_user') }}",
             level_user: "{{ session('user.level_user') }}",
-            jumlah_akses_module: "{{ session('user.jumlah_akses_module') }}"
-        }
+            jumlah_akses_module: "{{ session('user.jumlah_akses_module') }}",
+            akses_menu: @json(session('user.akses_menu'))
+        };
         window.encryptedUserId = "{{ Crypt::encryptString(session('user.kd_asli_user')) }}";
     </script>
 </head>

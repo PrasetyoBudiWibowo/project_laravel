@@ -113,6 +113,7 @@ class AuthService
             ->where('blokir', 'TIDAK')
             ->where('status_user', 'ACTIVE')
             ->with('level')
+            ->with('akses_menu')
             ->first();
 
         if (!$user) {
@@ -157,6 +158,14 @@ class AuthService
                     ]
                 ],
                 'jumlah_akses_module' => $aksesModule,
+                'akses_menu' => $user->akses_menu->map(function ($akses) {
+                    return [
+                        'menu' => [
+                            'nama_menu' => $akses->menu->nama_menu,
+                            'url_menu' => $akses->menu->url_menu,
+                        ],
+                    ];
+                }),
             ];
         }
 

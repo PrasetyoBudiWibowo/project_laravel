@@ -55,6 +55,25 @@ class MenuController extends Controller
         ]);
     }
 
+    public function menuByUser()
+    {
+        $sessionUser = session('user');
+
+        $log = AppLogger::getLogger('CEK-USER-SESSION-menuByUser');
+        $log->info("PROSES PENGECEKAN DATA");
+
+        $user = $this->userService->getUserByKdAsli($sessionUser['kd_asli_user']);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "User TIDAK DITEMUKAN"
+            ]);
+        }
+
+        $log->info("LEWAT CEK USER");
+    }
+
     public function validasi_simpan_menu(Request $request)
     {
         try {

@@ -140279,6 +140279,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       currentPath: null,
       currentUrl: null,
       listModule: [],
+      dataUser: window.userData,
       loadingMenu: true,
       listMenuModule: [],
       listAksesModule: [],
@@ -140374,8 +140375,6 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             // const currentUrl = window.location.href;
             // const currentPath = window.location.pathname;
 
-            console.log("user", window.userData);
-            console.log("wefafgaf", window.encryptedUserId);
             _this.currentPath = window.location.pathname;
             _this.loadingMenu = false;
           case 4:
@@ -140388,6 +140387,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     filteredMenus: function filteredMenus() {
       var _window$userData;
       var isSuperAdmin = ((_window$userData = window.userData) === null || _window$userData === void 0 ? void 0 : _window$userData.level_user) === "SUPER ADMIN";
+      console.log(">>>>>", this.dataUser);
       if (!this.currentPath || !this.listMenuModule) {
         return this.menusStatic;
       }
@@ -140399,32 +140399,98 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         var filterMenuModule = this.listMenuModule.filter(function (it) {
           return it.url_module === moduleMatch.url_module;
         });
-        var menuWithChildren = filterMenuModule.flatMap(function (mod) {
-          return mod.menu.filter(function (menuItem) {
-            return menuItem.children && menuItem.children.length > 0;
-          }).map(function (menuItem) {
-            return {
-              label: menuItem.nama_menu,
-              icon: "fa-regular fa-folder",
-              children: menuItem.children.slice().sort(function (a, b) {
-                return (a.urutan || 0) - (b.urutan || 0);
-              }).map(function (child) {
-                return {
-                  label: child.nama_menu,
-                  route: child.url_menu
-                };
-              })
-            };
+        var menuWithChildren;
+        if (this.dataUser.level_user === "SUPER ADMIN") {
+          menuWithChildren = filterMenuModule.flatMap(function (mod) {
+            return mod.menu.filter(function (menuItem) {
+              return menuItem.children && menuItem.children.length > 0;
+            }).map(function (menuItem) {
+              return {
+                label: menuItem.nama_menu,
+                icon: "fa-regular fa-folder",
+                children: menuItem.children.slice().sort(function (a, b) {
+                  return (a.urutan || 0) - (b.urutan || 0);
+                }).map(function (child) {
+                  return {
+                    label: child.nama_menu,
+                    route: child.url_menu
+                  };
+                })
+              };
+            });
           });
-        });
+        } else {
+          var allowedMenus = (this.dataUser.akses_menu || []).map(function (m) {
+            var _m$menu;
+            return (_m$menu = m.menu) === null || _m$menu === void 0 ? void 0 : _m$menu.nama_menu;
+          }) || [];
+          menuWithChildren = filterMenuModule.flatMap(function (mod) {
+            return mod.menu.filter(function (menuItem) {
+              return menuItem.children && menuItem.children.length > 0 && menuItem.children.some(function (child) {
+                return allowedMenus.includes(child.nama_menu);
+              });
+            }).map(function (menuItem) {
+              return {
+                label: menuItem.nama_menu,
+                icon: "fa-regular fa-folder",
+                children: menuItem.children.filter(function (child) {
+                  return allowedMenus.includes(child.nama_menu);
+                }).slice().sort(function (a, b) {
+                  return (a.urutan || 0) - (b.urutan || 0);
+                }).map(function (child) {
+                  return {
+                    label: child.nama_menu,
+                    route: child.url_menu
+                  };
+                })
+              };
+            });
+          });
+        }
         if (menuWithChildren.length > 0) {
-          return [{
-            heading: "Core"
-          }, {
-            label: "Dashboard ".concat(moduleMatch.nama_module),
-            icon: "fas fa-tachometer-alt",
-            route: "".concat(moduleMatch.url_module)
-          }].concat(_toConsumableArray(menuWithChildren));
+          if (this.dataUser.jumlah_akses_module === 1 && this.dataUser.level_user !== "SUPER ADMIN") {
+            return [{
+              heading: "Core"
+            }, {
+              label: "Dashboard ".concat(moduleMatch.nama_module),
+              icon: "fas fa-tachometer-alt",
+              route: "".concat(moduleMatch.url_module)
+            }].concat(_toConsumableArray(menuWithChildren));
+          } else if (this.dataUser.jumlah_akses_module > 1 && this.dataUser.level_user !== "SUPER ADMIN") {
+            return [{
+              heading: "Core"
+            }, {
+              label: "MENU UTAMA",
+              icon: "fa-solid fa-house",
+              route: "/welcome"
+            }, {
+              label: "Dashboard ".concat(moduleMatch.nama_module),
+              icon: "fas fa-tachometer-alt",
+              route: "".concat(moduleMatch.url_module)
+            }].concat(_toConsumableArray(menuWithChildren));
+          } else if (this.dataUser.level_user === "SUPER ADMIN") {
+            return [{
+              heading: "Core"
+            }, {
+              label: "MENU UTAMA",
+              icon: "fa-solid fa-house",
+              route: "/welcome"
+            }, {
+              label: "Dashboard ".concat(moduleMatch.nama_module),
+              icon: "fas fa-tachometer-alt",
+              route: "".concat(moduleMatch.url_module)
+            }].concat(_toConsumableArray(menuWithChildren));
+          }
+
+          // return [
+          //     { heading: "Core" },
+          //     {
+          //         label: `Dashboard ${moduleMatch.nama_module}`,
+          //         icon: "fas fa-tachometer-alt",
+          //         route: `${moduleMatch.url_module}`,
+          //     },
+          //     ...menuWithChildren,
+          // ];
         }
       } else {
         return this.menusStatic.map(function (menu) {
