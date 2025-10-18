@@ -250,8 +250,6 @@ export default {
         filteredMenus() {
             const isSuperAdmin = window.userData?.level_user === "SUPER ADMIN";
 
-            console.log(">>>>>", this.dataUser);
-
             if (!this.currentPath || !this.listMenuModule) {
                 return this.menusStatic;
             }
