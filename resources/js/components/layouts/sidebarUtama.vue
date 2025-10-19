@@ -328,7 +328,7 @@ export default {
 
                 if (menuWithChildren.length > 0) {
                     if (
-                        this.dataUser.jumlah_akses_module === 1 &&
+                        this.dataUser.jumlah_akses_module === "1" &&
                         this.dataUser.level_user !== "SUPER ADMIN"
                     ) {
                         return [
@@ -341,7 +341,7 @@ export default {
                             ...menuWithChildren,
                         ];
                     } else if (
-                        this.dataUser.jumlah_akses_module > 1 &&
+                        this.dataUser.jumlah_akses_module > "1" &&
                         this.dataUser.level_user !== "SUPER ADMIN"
                     ) {
                         return [

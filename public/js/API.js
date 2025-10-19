@@ -271,6 +271,45 @@ async function getModuleByUser() {
   }
 }
 
+async function validasiUserHalaman(data) {
+    try {
+    const response = await axios.post(`/user/cek-halaman-by-user`, data);
+
+    if (response.data.status === "success") {
+      return response.data.data;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Akses Ditolak",
+        text:
+            result.message ||
+            "Kamu tidak memiliki akses ke halaman ini.",
+        confirmButtonText: "Kembali",
+        customClass: {
+            confirmButton: "btn btn-danger",
+        },
+      }).then(() => {
+          window.history.back();
+      });
+      return [];
+    }
+  } catch (error) {
+    Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: `Terjadi kesalahan: ${
+            error.response?.data?.message || error.message
+        }`,
+        confirmButtonText: "Tutup",
+        customClass: {
+            confirmButton: "btn btn-danger",
+        },
+        buttonsStyling: false,
+    });
+    return [];
+  }
+}
+
 window.getLevelUser = getLevelUser;
 window.getDataUserRegister = getDataUserRegister;
 window.getAllDataKaryawan = getAllDataKaryawan;
@@ -283,3 +322,4 @@ window.getAllModule = getAllModule;
 window.getAllMenu = getAllMenu;
 window.getAllModuleWithMenu = getAllModuleWithMenu;
 window.getModuleByUser = getModuleByUser;
+window.validasiUserHalaman = validasiUserHalaman;

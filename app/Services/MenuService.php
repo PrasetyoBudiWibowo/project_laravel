@@ -56,24 +56,21 @@ class MenuService
         return $menu;
     }
 
+    public function cekUrlMenu($data)
+    {
+        $url = MasterMenu::where('url_menu', $data)->first();
+
+        return $url;
+    }
+
     public function cekAksesMenuByUser($data)
     {
-        $log = AppLogger::getLogger('=======> cekAksesMenuByUser');
-        $log->info("Data dari controller: ADA" . json_encode($data));
-
-        $kd_asli_user = is_array($data) ? $data['kd_asli_user'] : $data->kd_asli_user;
-
-        $aksesMenu = HakAksesMenu::where('kd_user', $kd_asli_user)
+        $aksesMenu = HakAksesMenu::where('kd_user', $data['kd_user'])
+            ->where('kd_menu', $data['kd_menu'])
             ->where('status_akses', "YA")
-            ->with('menu')
             ->get();
 
-        // $result = $aksesMenu->map(function ($data) {
-        //     return [
-        //         'menu' => $data->menu->
-        //     ];
-        // });
-
+        return $aksesMenu;
     }
 
     private function generateKdModule()

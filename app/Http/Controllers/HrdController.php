@@ -20,6 +20,11 @@ class HrdController extends Controller
         return view('module.hrd.dasboard');
     }
 
+    public function master_karyawan()
+    {
+        return view('module.hrd.masterData.master_karyawan');
+    }
+
     public function allDataKaryawan()
     {
         $karyawan = $this->hrdService->allKaryawan();

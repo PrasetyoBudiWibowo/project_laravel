@@ -90,6 +90,8 @@ Route::middleware(['auth'])->prefix('user')->controller(UserController::class)->
     Route::get('/level', 'getDataLevelUser');
     Route::get('/detail/{encryptedId}', 'getUserByKode');
     Route::get('/user-register', 'user_register')->name('user_register');
+
+    Route::post('/cek-halaman-by-user', 'validasi_user_visit_halaman');
 });
 
 // -----------------------
@@ -99,6 +101,7 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
     Route::get('/', 'index');
 
     Route::get('/karyawan', 'allDataKaryawan');
+    Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');
 });
 
 // -----------------------
