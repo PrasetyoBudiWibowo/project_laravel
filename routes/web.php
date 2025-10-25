@@ -100,6 +100,9 @@ Route::middleware(['auth'])->prefix('user')->controller(UserController::class)->
 Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->group(function () {
     Route::get('/', 'index');
 
+    Route::get('/master-divisi', 'master_divisi')->name('master_divisi');
+    Route::post('/simpan-divisi', 'validasi_simpan_divisi');
+
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');
 });

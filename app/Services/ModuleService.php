@@ -41,7 +41,6 @@ class ModuleService
     public function cekAksesModuleByUser($data)
     {
         $log = AppLogger::getLogger('=======> cekAksesModuleByUser');
-        $log->info("Data dari controller: ADA" . json_encode($data));
 
         $kd_asli_user = is_array($data) ? $data['kd_asli_user'] : $data->kd_asli_user;
 

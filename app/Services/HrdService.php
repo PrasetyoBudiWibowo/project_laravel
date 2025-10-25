@@ -220,4 +220,75 @@ class HrdService
         $karyawan = Karyawan::find($data);
         return $karyawan;
     }
+
+    private function generateKdDivisi()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'DVS-' . $currentMonth . '-';
+
+        $lastDivisi = Divisi::where('kd_divisi', 'LIKE', $prefix . '%')
+            ->orderBy('kd_divisi', 'DESC')
+            ->first();
+
+        if (!$lastDivisi) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $lastDivisi->kd_divisi;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
+
+    public function simpanDivisi($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('SIMPAN-DIVISI');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE MASTER DIVISI =================>");
+
+            $kd_divisi = $this->generateKdDivisi();
+            $log->info("<================= BERHASIL BUAT PK =================>");
+
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $divisi = Divisi::create([
+                'kd_divisi' => $kd_divisi,
+                'nama_divisi' => $data['nama_divisi'],
+                'user_input' => $data['user_input'],
+                'tgl_input' => $tgl_input,
+                'bln_input' => $bln_input,
+                'thn_input' => $thn_input,
+                'waktu_input' => $waktu_input,
+                'alamat_device' => $ipDevice,
+                'type_device' => $deviceType,
+                'device' => $device,
+            ]);
+
+            $log->info("BERHASIL SIMPAN DATA");
+
+            DB::commit();
+
+            $log->info("PROSES SELESAI");
+            return $divisi;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
 }
