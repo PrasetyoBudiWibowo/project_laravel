@@ -137,6 +137,15 @@ class AuthService
                 throw new \Exception("HISTORY LOGI GAGAL DI BUAT");
             }
 
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_login_terakhir = $now->toDateString();
+            $waktu_login_terakhir = $now->format('H:i:s');
+
+            $user->update([
+                'tgl_login_terakhir' => $tgl_login_terakhir,
+                'waktu_login_terakhir' => $waktu_login_terakhir,
+            ]);
+
             $aksesModule = HakAksesModule::where('kd_user', $user->kd_asli_user)
                 ->where('status_akses', 'YA')
                 ->count();

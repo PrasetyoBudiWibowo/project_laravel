@@ -30,6 +30,8 @@ class TblUser extends Model
         'blokir',
         'img_user',
         'format_img_user',
+        'tgl_login_terakhir',
+        'waktu_login_terakhir',
         'tgl_input',
         'waktu_input',
         'bln_input',

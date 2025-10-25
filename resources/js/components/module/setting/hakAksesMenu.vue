@@ -103,9 +103,8 @@
                                 <input
                                     type="text"
                                     class="form-control"
-                                    name="selected_user_name"
                                     id="selected_user_name"
-                                    :value="selectedUser.nama_user"
+                                    v-model="selectedUser.nama_user"
                                     disabled
                                 />
                             </div>
@@ -408,6 +407,7 @@ export default {
             $("#selected_menu").val("").trigger("change");
         },
         editUser(user) {
+            this.inputData.menus = [];
             this.selectedUser = JSON.parse(JSON.stringify(user));
             this.inputData.kd_user = user.kd_asli_user;
 

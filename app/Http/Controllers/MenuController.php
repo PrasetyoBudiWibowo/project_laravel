@@ -200,8 +200,24 @@ class MenuController extends Controller
                 ]);
             }
 
-            $kdUserInput = Crypt::decryptString($request->user_input);
-            $userInput = $this->userService->getUserByKdAsli($kdUserInput);
+            if (!empty($request->kd_user)) {
+                try {
+                    $kdUserInput = Crypt::decryptString($request->user_input);
+                    $userInput = $this->userService->getUserByKdAsli($kdUserInput);
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Invalid user payload.',
+                    ], 400);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User ID not provided.',
+                ], 400);
+            }
+
+
 
             if (!$userInput) {
                 return response()->json([
