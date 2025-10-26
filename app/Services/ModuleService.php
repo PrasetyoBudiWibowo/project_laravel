@@ -40,7 +40,7 @@ class ModuleService
 
     public function cekAksesModuleByUser($data)
     {
-        $log = AppLogger::getLogger('=======> cekAksesModuleByUser');
+        // $log = AppLogger::getLogger('=======> cekAksesModuleByUser');
 
         $kd_asli_user = is_array($data) ? $data['kd_asli_user'] : $data->kd_asli_user;
 

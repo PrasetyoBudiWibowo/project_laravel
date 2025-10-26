@@ -39,13 +39,30 @@ class HrdController extends Controller
         return view('module.hrd.masterData.master_divisi');
     }
 
+    public function allDataDivisi()
+    {
+        $divisi = $this->hrdService->allDivisi();
+
+        if (empty($divisi)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $divisi
+        ]);
+    }
+
     public function allDataKaryawan()
     {
         $karyawan = $this->hrdService->allKaryawan();
 
         if (empty($karyawan)) {
             return response()->json([
-                'status' => 'success',
+                'status' => 'error',
                 'message' => 'Tidak ada data.'
             ]);
         }
@@ -101,6 +118,81 @@ class HrdController extends Controller
             ];
 
             $result = $this->hrdService->simpanDivisi($data);
+
+            if (!$result) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function validasi_ubah_divisi(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-UBAH DATA DIVISI');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_ubah_divisi"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_divisi' => ['required', 'regex:/^[A-Z\s]+$/i'],
+            ], [
+                'nama_divisi.required' => 'Nama Divisi tidak boleh kosong',
+                'nama_divisi.regex' => 'Nama Divisi hanya boleh mengandung huruf dan spasi',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "USER YANG SEDANG INPUT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $kdDivisi = Crypt::decryptString($request->kd_divisi);
+            $divisi = $this->hrdService->cekDivisi($kdDivisi);
+
+            if (!$divisi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DIVISI '{$request->nama_divisi}' TIDAK DITEMUKAN",
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $data = [
+                'kd_divisi' => $kdDivisi,
+                'nama_divisi' => $request->nama_divisi,
+            ];
+
+            $result = $this->hrdService->ubahDivisi($data);
 
             if (!$result) {
                 return response()->json([

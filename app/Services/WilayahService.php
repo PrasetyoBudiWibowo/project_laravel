@@ -294,7 +294,6 @@ class WilayahService
 
             if ($KotaKabupaten) {
                 $KotaKabupaten->update([
-                    'kd_provinsi' => $data['kd_provinsi'],
                     'nama_kota_kabupaten' => $data['nama_kota_kabupaten'],
                     'status_tampil' => $data['status_tampil'],
                 ]);
@@ -375,7 +374,6 @@ class WilayahService
 
             if ($kecamatan) {
                 $kecamatan->update([
-                    'kd_kota_kabupaten' => $data['kd_kota_kabupaten'],
                     'nama_kecamatan' => $data['nama_kecamatan'],
                     'status_tampil' => $data['status_tampil'],
                 ]);

@@ -96,7 +96,7 @@ class AuthController extends Controller
                     if ($jumlahModule === 1) {
                         $aksesModule = $this->moduleService->cekAksesModuleByUser($user);
 
-                        $log->info("AKSES =======>" . json_encode($aksesModule));
+                        // $log->info("AKSES =======>" . json_encode($aksesModule));
 
                         $firstModule = is_array($aksesModule) ? $aksesModule[0] : $aksesModule->first();
 

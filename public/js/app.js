@@ -140740,6 +140740,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! yup */ "./node_modules/yup/index.esm.js");
 /* harmony import */ var _loading_loadingData_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../loading/loadingData.vue */ "./resources/js/components/loading/loadingData.vue");
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -140752,15 +140753,23 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     loadingData: _loading_loadingData_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
+      dataDivisi: [],
       inputData: {
         nama_divisi: ""
       },
+      editData: {
+        kd_divisi: "",
+        nama_divisi: ""
+      },
+      dataTableInstance: null,
+      editModal: null,
       loadingMenu: true,
       dataUser: window.userData
     };
@@ -140782,13 +140791,17 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             _context.n = 1;
             return _this.cekStatusAkses();
           case 1:
+            _context.n = 2;
+            return _this.divisi();
+          case 2:
             _this.$nextTick(function () {
               $("#modalTambahDivisi").on("hidden.bs.modal", function () {
                 _this.inputData.nama_divisi = "";
               });
+              _this.refreshTable();
             });
             _this.loadingMenu = false;
-          case 2:
+          case 3:
             return _context.a(2);
         }
       }, _callee);
@@ -140837,8 +140850,70 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         }, _callee2, null, [[0, 3]]);
       }))();
     },
-    btnSimpanDivisi: function btnSimpanDivisi() {
+    divisi: function divisi() {
       var _this2 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+        var data, _t2;
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.p = _context3.n) {
+            case 0:
+              _context3.p = 0;
+              _context3.n = 1;
+              return getAllDivisi();
+            case 1:
+              data = _context3.v;
+              _this2.dataDivisi = data || [];
+              _context3.n = 3;
+              break;
+            case 2:
+              _context3.p = 2;
+              _t2 = _context3.v;
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan this.divisi(): ".concat(err.statusText || err),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                }
+              });
+            case 3:
+              return _context3.a(2);
+          }
+        }, _callee3, null, [[0, 2]]);
+      }))();
+    },
+    refreshTable: function refreshTable() {
+      if (this.dataTableInstance) {
+        this.dataTableInstance.clear().destroy();
+        this.dataTableInstance = null;
+      }
+      this.dataTableInstance = $("#tableDivisi").DataTable({
+        // scrollCollapse: true,
+        // scrollY: 300,
+        // fixedHeader: true,
+        initComplete: function initComplete() {
+          $("#tableDivisi tbody").on("mouseenter", "tr", function () {
+            $(this).css("background-color", "Yellow");
+          });
+          $("#tableDivisi tbody").on("mouseleave", "tr", function () {
+            $(this).css("background-color", "");
+          });
+        }
+      });
+    },
+    editDivisi: function editDivisi(data) {
+      if (data) {
+        this.editData.kd_divisi = data.kd_divisi;
+        this.editData.nama_divisi = data.nama_divisi;
+      }
+      if (!this.editModal) {
+        this.editModal = new bootstrap__WEBPACK_IMPORTED_MODULE_2__.Modal($("#modalEditDivisi"));
+      }
+      this.editModal.show();
+    },
+    btnSimpanDivisi: function btnSimpanDivisi() {
+      var _this3 = this;
       Swal.fire({
         title: "Konfirmasi",
         text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
@@ -140853,18 +140928,18 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this2.simpanDivisi();
+          _this3.simpanDivisi();
         }
       });
     },
     simpanDivisi: function simpanDivisi() {
-      var _this3 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-        var dataToSave, requireValue, schema, response, result, _error$response2, _t2;
-        return _regenerator().w(function (_context3) {
-          while (1) switch (_context3.p = _context3.n) {
+      var _this4 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+        var dataToSave, requireValue, schema, response, result, _error$response2, _t3;
+        return _regenerator().w(function (_context4) {
+          while (1) switch (_context4.p = _context4.n) {
             case 0:
-              dataToSave = _objectSpread(_objectSpread({}, _this3.inputData), {}, {
+              dataToSave = _objectSpread(_objectSpread({}, _this4.inputData), {}, {
                 user_input: window.encryptedUserId
               });
               requireValue = [];
@@ -140875,8 +140950,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               schema = yup__WEBPACK_IMPORTED_MODULE_0__.object({
                 nama_divisi: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Nama Divisi wajib diisi").matches(/^[A-Za-z\s]+$/, "Nama Divisi Hanya Boleh huruf yang diperbolehkan")
               });
-              _context3.p = 1;
-              _context3.n = 2;
+              _context4.p = 1;
+              _context4.n = 2;
               return schema.validate(dataToSave, {
                 abortEarly: false
               });
@@ -140889,10 +140964,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   Swal.showLoading();
                 }
               });
-              _context3.n = 3;
+              _context4.n = 3;
               return axios.post("/hrd/simpan-divisi", dataToSave);
             case 3:
-              response = _context3.v;
+              response = _context4.v;
               result = response.data;
               Swal.close();
               if (result.status === "success") {
@@ -140917,16 +140992,16 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   }
                 });
               }
-              _context3.n = 5;
+              _context4.n = 5;
               break;
             case 4:
-              _context3.p = 4;
-              _t2 = _context3.v;
+              _context4.p = 4;
+              _t3 = _context4.v;
               Swal.close();
               Swal.fire({
                 icon: "error",
                 title: "Gagal",
-                text: "Terjadi kesalahan: ".concat(((_error$response2 = _t2.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || _t2.message),
+                text: "Terjadi kesalahan simpanDivisi: ".concat(((_error$response2 = _t3.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || _t3.message),
                 confirmButtonText: "Tutup",
                 customClass: {
                   confirmButton: "btn btn-danger"
@@ -140934,9 +141009,111 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 buttonsStyling: false
               });
             case 5:
-              return _context3.a(2);
+              return _context4.a(2);
           }
-        }, _callee3, null, [[1, 4]]);
+        }, _callee4, null, [[1, 4]]);
+      }))();
+    },
+    btnSimpanEditDivisi: function btnSimpanEditDivisi() {
+      var _this5 = this;
+      Swal.fire({
+        title: "Konfirmasi",
+        text: "Apakah Anda Yakin Ingin Mengubah Data ini?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+        customClass: {
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger"
+        },
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this5.ubahDivisi();
+        }
+      });
+    },
+    ubahDivisi: function ubahDivisi() {
+      var _this6 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+        var dataToSave, requireValue, schema, response, result, _error$response3, _t4;
+        return _regenerator().w(function (_context5) {
+          while (1) switch (_context5.p = _context5.n) {
+            case 0:
+              dataToSave = _objectSpread(_objectSpread({}, _this6.editData), {}, {
+                user_input: window.encryptedUserId
+              });
+              requireValue = [];
+              requireValue.push({
+                value: dataToSave.nama_divisi,
+                message: "Divisi Tidak Boleh Kosong"
+              });
+              schema = yup__WEBPACK_IMPORTED_MODULE_0__.object({
+                nama_divisi: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Nama Divisi wajib diisi").matches(/^[A-Za-z\s]+$/, "Nama Divisi Hanya Boleh huruf yang diperbolehkan")
+              });
+              _context5.p = 1;
+              _context5.n = 2;
+              return schema.validate(dataToSave, {
+                abortEarly: false
+              });
+            case 2:
+              Swal.fire({
+                title: "Sedang Proses Simpan Data",
+                text: "Mohon tunggu.",
+                allowOutsideClick: false,
+                didOpen: function didOpen() {
+                  Swal.showLoading();
+                }
+              });
+              _context5.n = 3;
+              return axios.post("/hrd/ubah-divisi", dataToSave);
+            case 3:
+              response = _context5.v;
+              result = response.data;
+              Swal.close();
+              if (result.status === "success") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: result.message || "Data berhasil Disimpan!",
+                  customClass: {
+                    confirmButton: "btn btn-success"
+                  }
+                }).then(function () {
+                  window.location.reload();
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: result.message,
+                  confirmButtonText: "Tutup",
+                  customClass: {
+                    confirmButton: "btn btn-danger"
+                  }
+                });
+              }
+              _context5.n = 5;
+              break;
+            case 4:
+              _context5.p = 4;
+              _t4 = _context5.v;
+              Swal.close();
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan ubahDivisi: ".concat(((_error$response3 = _t4.response) === null || _error$response3 === void 0 || (_error$response3 = _error$response3.data) === null || _error$response3 === void 0 ? void 0 : _error$response3.message) || _t4.message),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+              });
+            case 5:
+              return _context5.a(2);
+          }
+        }, _callee5, null, [[1, 4]]);
       }))();
     }
   }
@@ -145162,6 +145339,23 @@ var _hoisted_3 = {
   "class": "card-body"
 };
 var _hoisted_4 = {
+  "class": "row mt-2"
+};
+var _hoisted_5 = {
+  "class": "col-12"
+};
+var _hoisted_6 = {
+  "class": "table-responsive"
+};
+var _hoisted_7 = {
+  id: "tableDivisi",
+  "class": "display nowrap table-bordered",
+  style: {
+    "width": "100%"
+  }
+};
+var _hoisted_8 = ["onClick"];
+var _hoisted_9 = {
   "class": "modal fade",
   id: "modalTambahDivisi",
   tabindex: "-1",
@@ -145170,26 +145364,69 @@ var _hoisted_4 = {
   "data-bs-backdrop": "static",
   "data-bs-keyboard": "false"
 };
-var _hoisted_5 = {
+var _hoisted_10 = {
   "class": "modal-dialog"
 };
-var _hoisted_6 = {
+var _hoisted_11 = {
   "class": "modal-content"
 };
-var _hoisted_7 = {
+var _hoisted_12 = {
   "class": "modal-body"
 };
-var _hoisted_8 = {
+var _hoisted_13 = {
   "class": "mb-3"
 };
-var _hoisted_9 = {
+var _hoisted_14 = {
+  "class": "modal-footer"
+};
+var _hoisted_15 = {
+  "class": "modal fade",
+  id: "modalEditDivisi",
+  tabindex: "-1",
+  "aria-labelledby": "modalEditDivisiLabel",
+  "aria-hidden": "true",
+  "data-bs-backdrop": "static",
+  "data-bs-keyboard": "false"
+};
+var _hoisted_16 = {
+  "class": "modal-dialog"
+};
+var _hoisted_17 = {
+  "class": "modal-content"
+};
+var _hoisted_18 = {
+  "class": "modal-body"
+};
+var _hoisted_19 = {
+  "class": "mb-3"
+};
+var _hoisted_20 = {
   "class": "modal-footer"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_loadingData = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("loadingData");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "card-header"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "MASTER DIVISI")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"d-flex justify-start-end mb-3\"><button class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target=\"#modalTambahDivisi\"><i class=\"fas fa-plus me-1\"></i> Tambah </button></div><div class=\"row mt-2\"><div class=\"col-12\"><div class=\"table-responsive\"><table id=\"tblDivisi\" class=\"table table-bordered\" style=\"width:100%;\"><thead><tr><th>No</th><th>Divisi</th><th>Aksi</th></tr></thead></table></div></div></div>", 2)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "MASTER DIVISI")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "d-flex justify-start-end mb-3"
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-success",
+    "data-bs-toggle": "modal",
+    "data-bs-target": "#modalTambahDivisi"
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-plus me-1"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Tambah ")])], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_7, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "No"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Divisi"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Aksi")])], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataDivisi, function (item, index) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
+      key: item.kd_divisi
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.nama_divisi), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      "class": "btn btn-sm btn-warning me-2",
+      onClick: function onClick($event) {
+        return $options.editDivisi(item);
+      }
+    }, " Edit ", 8 /* PROPS */, _hoisted_8), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      "class": "btn btn-sm btn-danger"
+    }, " Hapus ", -1 /* CACHED */))])]);
+  }), 128 /* KEYED_FRAGMENT */))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "modal-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
     "class": "modal-title",
@@ -145199,7 +145436,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn-close",
     "data-bs-dismiss": "modal",
     "aria-label": "Close"
-  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [_cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "nama_divisi",
     "class": "form-label"
   }, "Nama Divisi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -145213,7 +145450,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onInput: _cache[1] || (_cache[1] = function ($event) {
       return $data.inputData.nama_divisi = $data.inputData.nama_divisi.toUpperCase();
     })
-  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.nama_divisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.nama_divisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-danger",
     "data-bs-dismiss": "modal",
@@ -145227,9 +145464,49 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[2] || (_cache[2] = function () {
       return $options.btnSimpanDivisi && $options.btnSimpanDivisi.apply($options, arguments);
     })
-  }, _cache[4] || (_cache[4] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, _cache[10] || (_cache[10] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fa-solid fa-paper-plane"
-  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Simpan ")]))])])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_loadingData, {
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Simpan ")]))])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "modal-header"
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
+    "class": "modal-title"
+  }, "Ubah Nama Divisi"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn-close",
+    "data-bs-dismiss": "modal",
+    "aria-label": "Close"
+  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "hidden",
+    id: "kd_divisi",
+    "class": "form-control",
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $data.editData.kd_divisi = $event;
+    })
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editData.kd_divisi]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    "for": "nama_divisi",
+    "class": "form-label"
+  }, "Nama Divisi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    autocomplete: "off",
+    "class": "form-control",
+    placeholder: "Masukkan Nama Divisi",
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+      return $data.editData.nama_divisi = $event;
+    }),
+    onInput: _cache[5] || (_cache[5] = function ($event) {
+      return $data.editData.nama_divisi = $data.editData.nama_divisi.toUpperCase();
+    })
+  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editData.nama_divisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn btn-secondary",
+    "data-bs-dismiss": "modal"
+  }, " Tutup ", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn btn-primary",
+    onClick: _cache[6] || (_cache[6] = function () {
+      return $options.btnSimpanEditDivisi && $options.btnSimpanEditDivisi.apply($options, arguments);
+    })
+  }, " Ubah Nama Divisi ")])])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_loadingData, {
     visible: $data.loadingMenu,
     message: "Loading"
   }, null, 8 /* PROPS */, ["visible"])], 64 /* STABLE_FRAGMENT */);

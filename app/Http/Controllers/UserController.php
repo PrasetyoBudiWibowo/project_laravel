@@ -88,8 +88,8 @@ class UserController extends Controller
     public function validasi_user_visit_halaman(Request $request)
     {
         try {
-            $log = AppLogger::getLogger('MULAI-PROSES-VALIDASI-USER-PERHALAMAN');
-            $log->info("PROSES PENGECEKAN DATA");
+            // $log = AppLogger::getLogger('MULAI-PROSES-VALIDASI-USER-PERHALAMAN');
+            // $log->info("PROSES PENGECEKAN DATA");
 
 
             if (!$request->isMethod('post')) {
@@ -125,7 +125,7 @@ class UserController extends Controller
                 ]);
             }
 
-            $log->info("BERHSIL LEWAT PROSES CEK VALIDASI-USER-PERHALAMAN");
+            // $log->info("BERHSIL LEWAT PROSES CEK VALIDASI-USER-PERHALAMAN");
 
             $data = [
                 'kd_user' => is_array($user) ? $user['kd_asli_user'] : $user->kd_asli_user,
@@ -145,6 +145,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'ANDA DAPAT MENGAKSES HALAMAN INI',
+                'data' => $result
             ]);
         } catch (\Throwable $th) {
             return response()->json([

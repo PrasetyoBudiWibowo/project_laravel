@@ -95,13 +95,16 @@ Route::middleware(['auth'])->prefix('user')->controller(UserController::class)->
 });
 
 // -----------------------
-// DATA KARYAWAN
+// DATA HRD
 // -----------------------
 Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->group(function () {
     Route::get('/', 'index');
 
     Route::get('/master-divisi', 'master_divisi')->name('master_divisi');
+    Route::get('/divisi', 'allDataDivisi');
+
     Route::post('/simpan-divisi', 'validasi_simpan_divisi');
+    Route::post('/ubah-divisi', 'validasi_ubah_divisi');
 
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');

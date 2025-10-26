@@ -9,6 +9,7 @@ use App\Models\Posisi;
 use App\Models\Negara;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
 
 use App\Helper\DeviceHelper;
@@ -20,7 +21,15 @@ class HrdService
     public function allDivisi()
     {
         $data = Divisi::all();
-        return $data;
+
+        $result = $data->map(function ($item) {
+            return [
+                'kd_divisi' => Crypt::encryptString($item->kd_divisi),
+                'nama_divisi' => $item->nama_divisi,
+            ];
+        });
+
+        return $result;
     }
 
     public function allDepartement()
@@ -215,10 +224,16 @@ class HrdService
         return $result;
     }
 
-    public static function cekKaryawanByPk($data)
+    public function cekKaryawanByPk($data)
     {
         $karyawan = Karyawan::find($data);
         return $karyawan;
+    }
+
+    public function cekDivisi($data)
+    {
+        $divisi = Divisi::find($data);
+        return $divisi;
     }
 
     private function generateKdDivisi()
@@ -240,7 +255,6 @@ class HrdService
         $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
         return $prefix . $newNumber;
     }
-
 
     public function simpanDivisi($data)
     {
@@ -284,6 +298,34 @@ class HrdService
             DB::commit();
 
             $log->info("PROSES SELESAI");
+            return $divisi;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function ubahDivisi($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('UBAH-DIVISI');
+        try {
+            $log->info("<================= MULAI PROSES UBAH DATA DI DATABASE MASTER DIVISI =================>");
+
+            $divisi = Divisi::find($data['kd_divisi']);
+
+            if ($divisi) {
+                $divisi->update([
+                    'nama_divisi' => $data['nama_divisi'],
+                ]);
+            }
+
+            $log->info("BERHASIL UBAH DATA");
+
+            DB::commit();
+
+            $log->info("PROSES UBAH DIVISI SELESAI");
             return $divisi;
         } catch (\Throwable $th) {
             DB::rollBack();

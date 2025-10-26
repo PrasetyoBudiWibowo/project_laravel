@@ -271,6 +271,32 @@ async function getModuleByUser() {
   }
 }
 
+async function getAllDivisi() {
+  try {
+    const response = await axios.get('/hrd/divisi', {
+      withCredentials: true,
+    });
+
+    if (response.data?.status === "success") {
+      return response.data.data || [];
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: response.data?.message || "Terjadi kesalahan pada API getAllDivisi.",
+      });
+      return [];
+    }
+  } catch (error) {
+        Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan API getAllDivisi: ${error.response?.data?.message || error.message}`,
+    });
+    return [];
+  }
+}
+
 async function validasiUserHalaman(data) {
     try {
     const response = await axios.post(`/user/cek-halaman-by-user`, data);
@@ -322,4 +348,5 @@ window.getAllModule = getAllModule;
 window.getAllMenu = getAllMenu;
 window.getAllModuleWithMenu = getAllModuleWithMenu;
 window.getModuleByUser = getModuleByUser;
+window.getAllDivisi = getAllDivisi;
 window.validasiUserHalaman = validasiUserHalaman;
