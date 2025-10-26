@@ -5,13 +5,22 @@
                 <div>MASTER DIVISI</div>
             </div>
             <div class="card-body">
-                <div class="d-flex justify-start-end mb-3">
+                <div class="d-flex justify-content mb-3 gap-2">
                     <button
-                        class="btn btn-success"
+                        v-if="hakAkses?.bisa_insert === 'YA'"
+                        class="btn btn-primary"
                         data-bs-toggle="modal"
                         data-bs-target="#modalTambahDivisi"
                     >
                         <i class="fas fa-plus me-1"></i> Tambah
+                    </button>
+
+                    <button class="btn btn-danger">
+                        <i class="fas fa-print me-1"></i> Print
+                    </button>
+
+                    <button class="btn btn-success">
+                        <i class="fas fa-file-excel me-1"></i> Export Excel
                     </button>
                 </div>
 
@@ -27,7 +36,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Divisi</th>
-                                        <th>Aksi</th>
+                                        <th v-if="hakAkses?.bisa_edit === 'YA'">
+                                            Aksi
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -37,7 +48,7 @@
                                     >
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ item.nama_divisi }}</td>
-                                        <td>
+                                        <td v-if="hakAkses?.bisa_edit === 'YA'">
                                             <button
                                                 class="btn btn-sm btn-warning me-2"
                                                 @click="editDivisi(item)"
@@ -213,6 +224,7 @@ export default {
             },
             dataTableInstance: null,
             editModal: null,
+            hakAkses: null,
 
             loadingMenu: true,
 
@@ -255,6 +267,7 @@ export default {
                 if (!allowed) {
                     return;
                 }
+                console.log("dhnas", (this.hakAkses = allowed[0]));
             } catch (error) {
                 Swal.fire({
                     icon: "error",

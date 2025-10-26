@@ -140770,6 +140770,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       },
       dataTableInstance: null,
       editModal: null,
+      hakAkses: null,
       loadingMenu: true,
       dataUser: window.userData
     };
@@ -140809,6 +140810,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   },
   methods: {
     cekStatusAkses: function cekStatusAkses() {
+      var _this2 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
         var data, allowed, _error$response, _t;
         return _regenerator().w(function (_context2) {
@@ -140829,6 +140831,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               }
               return _context2.a(2);
             case 2:
+              console.log("dhnas", _this2.hakAkses = allowed[0]);
               _context2.n = 4;
               break;
             case 3:
@@ -140851,7 +140854,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }))();
     },
     divisi: function divisi() {
-      var _this2 = this;
+      var _this3 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
         var data, _t2;
         return _regenerator().w(function (_context3) {
@@ -140862,7 +140865,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return getAllDivisi();
             case 1:
               data = _context3.v;
-              _this2.dataDivisi = data || [];
+              _this3.dataDivisi = data || [];
               _context3.n = 3;
               break;
             case 2:
@@ -140913,7 +140916,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       this.editModal.show();
     },
     btnSimpanDivisi: function btnSimpanDivisi() {
-      var _this3 = this;
+      var _this4 = this;
       Swal.fire({
         title: "Konfirmasi",
         text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
@@ -140928,18 +140931,18 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this3.simpanDivisi();
+          _this4.simpanDivisi();
         }
       });
     },
     simpanDivisi: function simpanDivisi() {
-      var _this4 = this;
+      var _this5 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
         var dataToSave, requireValue, schema, response, result, _error$response2, _t3;
         return _regenerator().w(function (_context4) {
           while (1) switch (_context4.p = _context4.n) {
             case 0:
-              dataToSave = _objectSpread(_objectSpread({}, _this4.inputData), {}, {
+              dataToSave = _objectSpread(_objectSpread({}, _this5.inputData), {}, {
                 user_input: window.encryptedUserId
               });
               requireValue = [];
@@ -141015,7 +141018,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }))();
     },
     btnSimpanEditDivisi: function btnSimpanEditDivisi() {
-      var _this5 = this;
+      var _this6 = this;
       Swal.fire({
         title: "Konfirmasi",
         text: "Apakah Anda Yakin Ingin Mengubah Data ini?",
@@ -141030,18 +141033,18 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         reverseButtons: true
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this5.ubahDivisi();
+          _this6.ubahDivisi();
         }
       });
     },
     ubahDivisi: function ubahDivisi() {
-      var _this6 = this;
+      var _this7 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
         var dataToSave, requireValue, schema, response, result, _error$response3, _t4;
         return _regenerator().w(function (_context5) {
           while (1) switch (_context5.p = _context5.n) {
             case 0:
-              dataToSave = _objectSpread(_objectSpread({}, _this6.editData), {}, {
+              dataToSave = _objectSpread(_objectSpread({}, _this7.editData), {}, {
                 user_input: window.encryptedUserId
               });
               requireValue = [];
@@ -145339,23 +145342,38 @@ var _hoisted_3 = {
   "class": "card-body"
 };
 var _hoisted_4 = {
-  "class": "row mt-2"
+  "class": "d-flex justify-content mb-3 gap-2"
 };
 var _hoisted_5 = {
-  "class": "col-12"
+  key: 0,
+  "class": "btn btn-primary",
+  "data-bs-toggle": "modal",
+  "data-bs-target": "#modalTambahDivisi"
 };
 var _hoisted_6 = {
-  "class": "table-responsive"
+  "class": "row mt-2"
 };
 var _hoisted_7 = {
+  "class": "col-12"
+};
+var _hoisted_8 = {
+  "class": "table-responsive"
+};
+var _hoisted_9 = {
   id: "tableDivisi",
   "class": "display nowrap table-bordered",
   style: {
     "width": "100%"
   }
 };
-var _hoisted_8 = ["onClick"];
-var _hoisted_9 = {
+var _hoisted_10 = {
+  key: 0
+};
+var _hoisted_11 = {
+  key: 0
+};
+var _hoisted_12 = ["onClick"];
+var _hoisted_13 = {
   "class": "modal fade",
   id: "modalTambahDivisi",
   tabindex: "-1",
@@ -145364,22 +145382,22 @@ var _hoisted_9 = {
   "data-bs-backdrop": "static",
   "data-bs-keyboard": "false"
 };
-var _hoisted_10 = {
+var _hoisted_14 = {
   "class": "modal-dialog"
 };
-var _hoisted_11 = {
+var _hoisted_15 = {
   "class": "modal-content"
 };
-var _hoisted_12 = {
+var _hoisted_16 = {
   "class": "modal-body"
 };
-var _hoisted_13 = {
+var _hoisted_17 = {
   "class": "mb-3"
 };
-var _hoisted_14 = {
+var _hoisted_18 = {
   "class": "modal-footer"
 };
-var _hoisted_15 = {
+var _hoisted_19 = {
   "class": "modal fade",
   id: "modalEditDivisi",
   tabindex: "-1",
@@ -145388,45 +145406,49 @@ var _hoisted_15 = {
   "data-bs-backdrop": "static",
   "data-bs-keyboard": "false"
 };
-var _hoisted_16 = {
+var _hoisted_20 = {
   "class": "modal-dialog"
 };
-var _hoisted_17 = {
+var _hoisted_21 = {
   "class": "modal-content"
 };
-var _hoisted_18 = {
+var _hoisted_22 = {
   "class": "modal-body"
 };
-var _hoisted_19 = {
+var _hoisted_23 = {
   "class": "mb-3"
 };
-var _hoisted_20 = {
+var _hoisted_24 = {
   "class": "modal-footer"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _$data$hakAkses, _$data$hakAkses2;
   var _component_loadingData = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("loadingData");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[20] || (_cache[20] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "card-header"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "MASTER DIVISI")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    "class": "d-flex justify-start-end mb-3"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    "class": "btn btn-success",
-    "data-bs-toggle": "modal",
-    "data-bs-target": "#modalTambahDivisi"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "MASTER DIVISI")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [((_$data$hakAkses = $data.hakAkses) === null || _$data$hakAkses === void 0 ? void 0 : _$data$hakAkses.bisa_insert) === 'YA' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", _hoisted_5, _cache[7] || (_cache[7] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fas fa-plus me-1"
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Tambah ")])], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_7, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "No"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Divisi"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Aksi")])], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataDivisi, function (item, index) {
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Tambah ")]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-danger"
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-print me-1"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Print ")], -1 /* CACHED */)), _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-success"
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-file-excel me-1"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Export Excel ")], -1 /* CACHED */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "No", -1 /* CACHED */)), _cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Divisi", -1 /* CACHED */)), ((_$data$hakAkses2 = $data.hakAkses) === null || _$data$hakAkses2 === void 0 ? void 0 : _$data$hakAkses2.bisa_edit) === 'YA' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("th", _hoisted_10, " Aksi ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataDivisi, function (item, index) {
+    var _$data$hakAkses3;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: item.kd_divisi
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.nama_divisi), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.nama_divisi), 1 /* TEXT */), ((_$data$hakAkses3 = $data.hakAkses) === null || _$data$hakAkses3 === void 0 ? void 0 : _$data$hakAkses3.bisa_edit) === 'YA' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("td", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-sm btn-warning me-2",
       onClick: function onClick($event) {
         return $options.editDivisi(item);
       }
-    }, " Edit ", 8 /* PROPS */, _hoisted_8), _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, " Edit ", 8 /* PROPS */, _hoisted_12), _cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-sm btn-danger"
-    }, " Hapus ", -1 /* CACHED */))])]);
-  }), 128 /* KEYED_FRAGMENT */))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    }, " Hapus ", -1 /* CACHED */))])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }), 128 /* KEYED_FRAGMENT */))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "modal-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
     "class": "modal-title",
@@ -145436,7 +145458,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn-close",
     "data-bs-dismiss": "modal",
     "aria-label": "Close"
-  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "nama_divisi",
     "class": "form-label"
   }, "Nama Divisi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -145450,7 +145472,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onInput: _cache[1] || (_cache[1] = function ($event) {
       return $data.inputData.nama_divisi = $data.inputData.nama_divisi.toUpperCase();
     })
-  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.nama_divisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.inputData.nama_divisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [_cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-danger",
     "data-bs-dismiss": "modal",
@@ -145464,9 +145486,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[2] || (_cache[2] = function () {
       return $options.btnSimpanDivisi && $options.btnSimpanDivisi.apply($options, arguments);
     })
-  }, _cache[10] || (_cache[10] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, _cache[14] || (_cache[14] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fa-solid fa-paper-plane"
-  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Simpan ")]))])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Simpan ")]))])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [_cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "modal-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
     "class": "modal-title"
@@ -145475,14 +145497,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn-close",
     "data-bs-dismiss": "modal",
     "aria-label": "Close"
-  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "hidden",
     id: "kd_divisi",
     "class": "form-control",
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
       return $data.editData.kd_divisi = $event;
     })
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editData.kd_divisi]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [_cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editData.kd_divisi]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "nama_divisi",
     "class": "form-label"
   }, "Nama Divisi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -145496,7 +145518,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onInput: _cache[5] || (_cache[5] = function ($event) {
       return $data.editData.nama_divisi = $data.editData.nama_divisi.toUpperCase();
     })
-  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editData.nama_divisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, null, 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.editData.nama_divisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [_cache[18] || (_cache[18] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-secondary",
     "data-bs-dismiss": "modal"
