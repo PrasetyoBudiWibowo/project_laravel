@@ -196,97 +196,122 @@ class MenuController extends Controller
             if (!$request->isMethod('post')) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => "Metode request tidak valid di validasi_simpan_hak_akses_menu"
-                ]);
+                    'message' => 'Metode request tidak valid (harus POST).'
+                ], 405);
             }
 
-            if (!empty($request->kd_user)) {
-                try {
-                    $kdUserInput = Crypt::decryptString($request->user_input);
-                    $userInput = $this->userService->getUserByKdAsli($kdUserInput);
-                } catch (\Exception $e) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Invalid user payload.',
-                    ], 400);
-                }
-            } else {
+            if (empty($request->user_input)) {
                 return response()->json([
-                    'success' => false,
-                    'message' => 'User ID not provided.',
+                    'status' => 'error',
+                    'message' => 'User input tidak ditemukan.'
                 ], 400);
             }
 
-
+            try {
+                $kdUserInput = Crypt::decryptString($request->user_input);
+                $userInput = $this->userService->getUserByKdAsli($kdUserInput);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Payload user input tidak valid.'
+                ], 400);
+            }
 
             if (!$userInput) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => "USER YANG MENGINPUT TIDAK DITEMUKAN"
-                ]);
+                    'message' => 'User yang menginput tidak ditemukan.'
+                ], 404);
             }
 
-            if (empty($request->menus)) {
+            if (empty($request->kd_user)) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => "Belum ada menu yang di pilih"
-                ]);
+                    'message' => 'User yang dipilih tidak ditemukan.'
+                ], 400);
             }
 
-            $kdSelectedUser = Crypt::decryptString($request->kd_user);
-            $selectedUser = $this->userService->getUserByKdAsli($kdSelectedUser);
+            try {
+                $kdSelectedUser = Crypt::decryptString($request->kd_user);
+                $selectedUser = $this->userService->getUserByKdAsli($kdSelectedUser);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Payload user yang dipilih tidak valid.'
+                ], 400);
+            }
 
             if (!$selectedUser) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => "USER YANG DIPILIH TIDAK DITEMUKAN"
-                ]);
+                    'message' => 'User yang dipilih tidak ditemukan di database.'
+                ], 404);
+            }
+
+            if (empty($request->menus) || !is_array($request->menus)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Belum ada menu yang dipilih.'
+                ], 400);
             }
 
             $data = [];
-
             foreach ($request->menus as $menu) {
 
-                $kdSelectedMenu = Crypt::decryptString($menu['kd_menu']);
-                $cekMenu = $this->menuService->getMenuByKode($kdSelectedMenu);
+                if (empty($menu['kd_menu'])) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Salah satu data menu tidak memiliki kode.'
+                    ], 400);
+                }
+
+                try {
+                    $cekMenu = $this->menuService->getMenuByKode($menu['kd_menu']);
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Kode menu tidak valid.'
+                    ], 400);
+                }
 
                 if (!$cekMenu) {
                     return response()->json([
                         'status' => 'error',
-                        'message' => "MENU YANG DIPILIH TIDAK DITEMUKAN"
-                    ]);
+                        'message' => "Menu dengan kode '{$menu['kd_menu']}' tidak ditemukan."
+                    ], 404);
                 }
 
                 $data[] = [
                     'kd_user' => $selectedUser['kd_asli_user'],
                     'kd_menu' => $cekMenu['kd_menu'],
-                    'status_akses' => $menu['status_akses'] === false ? "TIDAK" : "YA",
-                    'bisa_insert' => $menu['can_insert'] === false ? "TIDAK" : "YA",
-                    'bisa_edit' => $menu['can_edit'] === false ? "TIDAK" : "YA",
-                    'bisa_export' => $menu['can_export'] === false ? "TIDAK" : "YA",
+                    'status_akses' => !empty($menu['status_akses']) && $menu['status_akses'] === true ? "YA" : "TIDAK",
+                    'bisa_insert' => !empty($menu['can_insert']) && $menu['can_insert'] === true ? "YA" : "TIDAK",
+                    'bisa_edit' => !empty($menu['can_edit']) && $menu['can_edit'] === true ? "YA" : "TIDAK",
+                    'bisa_export' => !empty($menu['can_export']) && $menu['can_export'] === true ? "YA" : "TIDAK",
                     'user_input' => $userInput['kd_asli_user'],
                 ];
             }
-            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $log->info("BERHASIL LEWAT PROSES CEK DATA");
 
             $result = $this->menuService->simpanHakAksesMenu($selectedUser, $data);
 
             if (!$result || count($result) <= 0) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Gagal Simpan'
-                ]);
+                    'message' => 'Gagal menyimpan data hak akses.'
+                ], 500);
             }
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Berhasil Simpan Data',
+                'message' => 'Berhasil menyimpan data hak akses menu.'
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'message' => $th->getMessage()
-            ]);
+            ], 500);
         }
     }
 }

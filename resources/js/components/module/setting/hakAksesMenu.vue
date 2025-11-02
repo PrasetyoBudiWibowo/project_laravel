@@ -309,9 +309,9 @@ export default {
                 this.filterMenu(this.selectedModule);
             });
 
-            $("#modalEditHakAksesMenu").on("hide.bs.modal", () => {
-                this.resetFromEdit();
-            });
+            // $("#modalEditHakAksesMenu").on("hide.bs.modal", () => {
+            //     this.resetFromEdit();
+            // });
 
             $("#selected_menu").on("change", (e) => {
                 this.selectedMenu = $(e.target).val();
@@ -371,8 +371,6 @@ export default {
                             it.id_usr_level !== "1" ||
                             it.level.level_user !== "SUPER ADMIN"
                     ) || [];
-
-                console.log("datadasar", data);
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -396,17 +394,19 @@ export default {
                 this.dataMenu = [];
             }
         },
-        resetFromEdit() {
-            this.selectedModule = null;
-            this.selectedMenu = null;
-            this.inputData = {
-                kd_user: "",
-                menus: [],
-            };
-            $("#select_module").val("").trigger("change");
-            $("#selected_menu").val("").trigger("change");
-        },
+        // resetFromEdit() {
+        //     this.selectedModule = null;
+        //     this.selectedMenu = null;
+        //     this.inputData = {
+        //         kd_user: "",
+        //         menus: [],
+        //     };
+        //     $("#select_module").val("").trigger("change");
+        //     $("#selected_menu").val("").trigger("change");
+        // },
         editUser(user) {
+            console.log("mckcnk", user);
+
             this.inputData.menus = [];
             this.selectedUser = JSON.parse(JSON.stringify(user));
             this.inputData.kd_user = user.kd_asli_user;
@@ -536,14 +536,49 @@ export default {
                 user_input: window.encryptedUserId,
             };
 
+            console.log("kkkml", dataToSave);
+
+            if (!dataToSave.kd_user) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: "Kode user tidak ditemukan atau belum dipilih!",
+                    confirmButtonText: "Tutup",
+                    customClass: { confirmButton: "btn btn-danger" },
+                });
+                return;
+            }
+
+            if (!dataToSave.menus || dataToSave.menus.length === 0) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Perhatian",
+                    text: "Tidak ada menu yang bisa disimpan.",
+                    confirmButtonText: "Tutup",
+                    customClass: { confirmButton: "btn btn-warning" },
+                });
+                return;
+            }
+
+            for (const menu of dataToSave.menus) {
+                if (!menu.kd_menu) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: "Beberapa data menu tidak valid (kd_menu kosong)!",
+                        confirmButtonText: "Tutup",
+                        customClass: { confirmButton: "btn btn-danger" },
+                    });
+                    return;
+                }
+            }
+
             try {
                 Swal.fire({
                     title: "Sedang Proses Simpan Data",
                     text: "Mohon tunggu.",
                     allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    },
+                    didOpen: () => Swal.showLoading(),
                 });
 
                 const response = await axios.post(
