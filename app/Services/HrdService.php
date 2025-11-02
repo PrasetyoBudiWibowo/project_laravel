@@ -256,6 +256,26 @@ class HrdService
         return $prefix . $newNumber;
     }
 
+    private function generateKdDepartement()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'DPT-' . $currentMonth . '-';
+
+        $lasDepartement = Departement::where('kd_departement', 'LIKE', $prefix . '%')
+            ->orderBy('kd_departement', 'DESC')
+            ->first();
+
+        if (!$lasDepartement) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $lasDepartement->kd_departement;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
     public function simpanDivisi($data)
     {
         DB::beginTransaction();
@@ -327,6 +347,65 @@ class HrdService
 
             $log->info("PROSES UBAH DIVISI SELESAI");
             return $divisi;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function simpanDepartement($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('SIMPAN-DEPARTEMENT');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE MASTER DEPARTEMENT =================>");
+            // $log->info("Data CONTROLLER: ADA" . json_encode($data));
+
+            $kd_departement = $this->generateKdDepartement();
+            $log->info("<================= BERHASIL BUAT PK =================>");
+
+            // $log->info("Data PK: ADA" . json_encode($kd_departement));
+
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $departement = Departement::create([
+                'kd_departement' => $kd_departement,
+                'kd_divisi' => $data['kd_divisi'],
+                'nama_departement' => $data['nama_departement'],
+                'user_input' => $data['user_input'],
+                'tgl_input' => $tgl_input,
+                'bln_input' => $bln_input,
+                'thn_input' => $thn_input,
+                'waktu_input' => $waktu_input,
+                'alamat_device' => $ipDevice,
+                'type_device' => $deviceType,
+                'device' => $device,
+            ]);
+
+            if (!$departement) {
+                throw new \Exception("GAGAL ADA DATA YANG SALAH");
+            }
+
+            // $log->info("Data SIMPAN: ADA" . json_encode($departement));
+            $log->info("BERHASIL SIMPAN DATA");
+
+            DB::commit();
+
+            $log->info("PROSES SELESAI");
+            return $departement;
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);

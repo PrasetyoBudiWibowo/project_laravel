@@ -20,6 +20,7 @@ import hakAksesMenu from './components/module/setting/hakAksesMenu.vue';
 import dasboardHrd from './components/module/hrd/dasboardHrd.vue';
 import masterKaryawan from './components/module/hrd/masterData/masterKaryawan.vue';
 import masterDivisi from './components/module/hrd/masterData/masterDivisi.vue';
+import departement from './components/module/hrd/masterData/departement/departement.vue';
 
 const app = createApp({});
 
@@ -37,6 +38,7 @@ app.component('hak-akses-menu', hakAksesMenu);
 app.component('dasboard-hrd', dasboardHrd);
 app.component('master-karyawan', masterKaryawan);
 app.component('master-divisi', masterDivisi);
+app.component('master-departement', departement);
 
 app.use(Antd)
 

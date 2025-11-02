@@ -36,7 +36,13 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Divisi</th>
-                                        <th v-if="hakAkses?.bisa_edit === 'YA'">
+                                        <th
+                                            v-if="
+                                                dataUser?.level_user ===
+                                                    'SUPER ADMIN' ||
+                                                hakAkses?.bisa_edit === 'YA'
+                                            "
+                                        >
                                             Aksi
                                         </th>
                                     </tr>
@@ -232,7 +238,6 @@ export default {
         };
     },
     async mounted() {
-        btnSimpanDivisi;
         const token = document
             .querySelector('meta[name="csrf-token"]')
             .getAttribute("content");
