@@ -61,6 +61,23 @@ class HrdController extends Controller
         ]);
     }
 
+    public function allDataDepartement()
+    {
+        $departement = $this->hrdService->allDepartement();
+
+        if (empty($departement)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $departement
+        ]);
+    }
+
     public function allDataKaryawan()
     {
         $karyawan = $this->hrdService->allKaryawan();
@@ -227,13 +244,12 @@ class HrdController extends Controller
             if (!$request->isMethod('post')) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => "Metode request tidak valid di validasi_simpan_kota_kabupten"
+                    'message' => "Metode request tidak valid di validasi_simpan_departement"
                 ]);
             }
 
             $kdDivisi = Crypt::decryptString($request->kd_divisi);
             $divisi = $this->hrdService->cekDivisi($kdDivisi);
-
 
             if (!$divisi) {
                 return response()->json([
@@ -275,6 +291,93 @@ class HrdController extends Controller
             ];
 
             $result = $this->hrdService->simpanDepartement($data);
+
+            if (!$result) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function valiadasi_ubah_departement(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-UBAH DATA DEPARTEMENT');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di valiadasi_ubah_departement"
+                ]);
+            }
+
+            $kdDepartement = Crypt::decryptString($request->kd_departement);
+            $departement = $this->hrdService->cekDepartement($kdDepartement);
+
+
+            if (!$departement) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DEPARTEMENT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $kdDivisi = Crypt::decryptString($request->kd_divisi);
+            $divisi = $this->hrdService->cekDivisi($kdDivisi);
+
+            if (!$divisi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DIVISI TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_departement' => ['required', 'regex:/^[A-Z\s]+$/i'],
+            ], [
+                'nama_departement.required' => 'Nama Departement tidak boleh kosong',
+                'nama_departement.regex' => 'Nama Departement hanya boleh mengandung huruf dan spasi',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "USER YANG SEDANG INPUT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $data = [
+                'kd_departement' => $kdDepartement,
+                'kd_divisi' => $kdDivisi,
+                'nama_departement' => $request->nama_departement,
+            ];
+
+            $result = $this->hrdService->ubahDepartement($data);
 
             if (!$result) {
                 return response()->json([

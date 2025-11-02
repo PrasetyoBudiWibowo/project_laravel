@@ -54,7 +54,13 @@
                                     >
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ item.nama_divisi }}</td>
-                                        <td v-if="hakAkses?.bisa_edit === 'YA'">
+                                        <td
+                                            v-if="
+                                                dataUser?.level_user ===
+                                                    'SUPER ADMIN' ||
+                                                hakAkses?.bisa_edit === 'YA'
+                                            "
+                                        >
                                             <button
                                                 class="btn btn-sm btn-warning me-2"
                                                 @click="editDivisi(item)"

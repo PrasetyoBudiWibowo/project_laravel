@@ -1,10 +1,10 @@
 <template>
     <div
         class="modal fade"
-        id="modalTambahDepartement"
+        id="modalEditDepartement"
         ref="modal"
         tabindex="-1"
-        aria-labelledby="modalTambahDepartementLabel"
+        aria-labelledby="modalEditDepartementLabel"
         aria-hidden="true"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -12,8 +12,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTambahDepartementLabel">
-                        Tambah Departement
+                    <h5 class="modal-title" id="modalEditDepartementLabel">
+                        Ubah Departement
                     </h5>
                     <button
                         type="button"
@@ -21,16 +21,21 @@
                         @click="closeModal"
                     ></button>
                 </div>
-
                 <div class="modal-body">
+                    <input
+                        type="hidden"
+                        id="kd_departement"
+                        class="form-control"
+                        v-model="editData.kd_departement"
+                    />
                     <div class="mb-3">
-                        <label for="input_kd_divisi" class="form-label"
+                        <label for="edit_kd_divisi" class="form-label"
                             >Divisi</label
                         >
                         <select
-                            id="input_kd_divisi"
+                            id="edit_kd_divisi"
                             class="form-select"
-                            v-model="inputData.kd_divisi"
+                            v-model="editData.kd_divisi"
                         >
                             <option value="">-- Pilih Divisi --</option>
                             <option
@@ -42,7 +47,6 @@
                             </option>
                         </select>
                     </div>
-
                     <div class="mb-3">
                         <label for="nama_departement" class="form-label"
                             >Nama Departement</label
@@ -52,15 +56,14 @@
                             autocomplete="off"
                             class="form-control"
                             placeholder="Masukkan Nama Departement"
-                            v-model="inputData.nama_departement"
+                            v-model="editData.nama_departement"
                             @input="
-                                inputData.nama_departement =
-                                    inputData.nama_departement.toUpperCase()
+                                editData.nama_departement =
+                                    editData.nama_departement.toUpperCase()
                             "
                         />
                     </div>
                 </div>
-
                 <div class="modal-footer">
                     <button
                         type="button"
@@ -72,7 +75,7 @@
                     <button
                         type="button"
                         class="btn btn-primary"
-                        @click="btnSimpanDepartement"
+                        @click="btnUbahDepartement"
                     >
                         Simpan
                     </button>
@@ -87,15 +90,12 @@ import { Modal } from "bootstrap";
 import * as yup from "yup";
 
 export default {
-    // props: {
-    //     dataDivisi: Array,
-    // },
     data() {
         return {
-            selectedDivisi: "",
-            bsModal: null,
             dataDivisi: [],
-            inputData: {
+            modalInstance: null,
+            editData: {
+                kd_departement: "",
                 kd_divisi: "",
                 nama_departement: "",
             },
@@ -107,29 +107,41 @@ export default {
             .getAttribute("content");
         axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
 
-        this.bsModal = new Modal(this.$refs.modal);
+        this.modalInstance = new Modal(this.$refs.modal);
+        await this.divisi();
 
         this.$nextTick(() => {
             defaultSelect2(
-                "#input_kd_divisi",
+                "#edit_kd_divisi",
                 "-- PILIH DIVISI --",
-                "#modalTambahDepartement"
+                "#modalEditDepartement"
             );
-
-            $("#modalTambahDepartement").on("hidden.bs.modal", () => {
-                this.inputData.nama_departement = "";
-                $("#input_kd_divisi").val("").trigger("change");
-            });
         });
-
-        await this.divisi();
     },
     methods: {
-        openModal() {
-            this.bsModal.show();
+        openModal(data) {
+            let selectedDivisi = this.dataDivisi.filter(
+                (it) => it.nama_divisi === data.divisi.nama_divisi
+            );
+
+            if (selectedDivisi) {
+                this.$nextTick(() => {
+                    $("#edit_kd_divisi")
+                        .val(selectedDivisi[0].kd_divisi)
+                        .trigger("change");
+                });
+
+                this.editData = {
+                    kd_departement: data.kd_departement,
+                    nama_departement: data.nama_departement,
+                    kd_divisi: selectedDivisi[0].kd_divisi,
+                };
+            }
+
+            this.modalInstance.show();
         },
         closeModal() {
-            this.bsModal.hide();
+            this.modalInstance.hide();
         },
         async divisi() {
             try {
@@ -149,10 +161,10 @@ export default {
                 });
             }
         },
-        btnSimpanDepartement() {
+        btnUbahDepartement() {
             Swal.fire({
                 title: "Konfirmasi",
-                text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
+                text: "Apakah Anda Yakin Ingin Mengubah Data ini?",
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonText: "Ya",
@@ -164,13 +176,13 @@ export default {
                 reverseButtons: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.simpanDepartement();
+                    this.ubahDepartement();
                 }
             });
         },
-        async simpanDepartement() {
+        async ubahDepartement() {
             let dataToSave = {
-                ...this.inputData,
+                ...this.editData,
                 user_input: window.encryptedUserId,
             };
 
@@ -209,7 +221,7 @@ export default {
                 });
 
                 const response = await axios.post(
-                    "/hrd/simpan-departement",
+                    "/hrd/ubah-departement",
                     dataToSave
                 );
                 const result = response.data;
@@ -238,13 +250,13 @@ export default {
                         },
                     });
                 }
-            } catch (error) {
+            } catch (err) {
                 Swal.close();
                 Swal.fire({
                     icon: "error",
                     title: "Gagal",
                     text: `Terjadi kesalahan simpanDepartement : ${
-                        error.response?.data?.message || error.message
+                        err.response?.data?.message || err.message
                     }`,
                     confirmButtonText: "Tutup",
                     customClass: {

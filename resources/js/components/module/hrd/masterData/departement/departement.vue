@@ -32,9 +32,40 @@
                                         <th>No</th>
                                         <th>Divisi</th>
                                         <th>Depatement</th>
-                                        <th>Aksi</th>
+                                        <th
+                                            v-show="
+                                                dataUser?.level_user ===
+                                                    'SUPER ADMIN' ||
+                                                hakAkses?.bisa_edit === 'YA'
+                                            "
+                                        >
+                                            Aksi
+                                        </th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="(item, index) in dataDepartement"
+                                        :key="item.kd_departement"
+                                    >
+                                        <td>{{ index + 1 }}</td>
+                                        <td>{{ item.divisi.nama_divisi }}</td>
+                                        <td>{{ item.nama_departement }}</td>
+                                        <td>
+                                            <button
+                                                class="btn btn-sm btn-warning me-2"
+                                                @click="openEdit(item)"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                class="btn btn-sm btn-danger"
+                                            >
+                                                Hapus
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -46,21 +77,29 @@
                 /> -->
 
                 <modalTambahDepartement ref="modalTambahDepartement" />
+                <modalEditDepartement ref="modalEditDepartement" />
             </div>
         </div>
     </div>
+
+    <loadingData :visible="loadingMenu" message="Loading" />
 </template>
 
 <script>
 import modalTambahDepartement from "./modal/modalTambahDepartement.vue";
+import modalEditDepartement from "./modal/modalEditDepartement.vue";
+import loadingData from "../../../../loading/loadingData.vue";
 
 export default {
-    components: { modalTambahDepartement },
+    components: { modalTambahDepartement, loadingData, modalEditDepartement },
     data() {
         return {
             dataUser: window.userData,
             hakAkses: null,
             dataTableInstance: null,
+            dataDepartement: [],
+
+            loadingMenu: true,
         };
     },
     async mounted() {
@@ -72,10 +111,20 @@ export default {
         if (this.dataUser.level_user !== "SUPER ADMIN") {
             await this.cekStatusAkses();
         }
+
+        await this.departement();
+        this.$nextTick(() => {
+            this.refreshTable();
+        });
+
+        this.loadingMenu = false;
     },
     methods: {
         openModal() {
             this.$refs.modalTambahDepartement.openModal();
+        },
+        openEdit(item) {
+            this.$refs.modalEditDepartement.openModal(item);
         },
         async cekStatusAkses() {
             try {
@@ -104,6 +153,52 @@ export default {
                     buttonsStyling: false,
                 });
             }
+        },
+        async departement() {
+            try {
+                const data = await getAllDepartement();
+                this.dataDepartement = data || [];
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan this.departement(): ${
+                        err.statusText || err
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
+        },
+        refreshTable() {
+            if (this.dataTableInstance) {
+                this.dataTableInstance.clear().destroy();
+                this.dataTableInstance = null;
+            }
+
+            this.dataTableInstance = $("#tableDepartement").DataTable({
+                // scrollCollapse: true,
+                // scrollY: 300,
+                // fixedHeader: true,
+                initComplete: function () {
+                    $("#tableDepartement tbody").on(
+                        "mouseenter",
+                        "tr",
+                        function () {
+                            $(this).css("background-color", "Yellow");
+                        }
+                    );
+                    $("#tableDepartement tbody").on(
+                        "mouseleave",
+                        "tr",
+                        function () {
+                            $(this).css("background-color", "");
+                        }
+                    );
+                },
+            });
         },
     },
 };

@@ -39,11 +39,10 @@ class HrdService
         $result = [];
         foreach ($data as $d) {
             $result[] = [
-                'kd_departement' => $d->kd_departement,
+                'kd_departement' => Crypt::encryptString($d->kd_departement),
                 'nama_departement' => $d->nama_departement,
-                'kd_divisi' => $d->kd_divisi,
+                'kd_divisi' => Crypt::encryptString($d->kd_divisi),
                 'divisi' => [
-                    'kd_divisi' => $d->Divisi->kd_divisi,
                     'nama_divisi' => $d->Divisi->nama_divisi,
                 ],
             ];
@@ -236,6 +235,12 @@ class HrdService
         return $divisi;
     }
 
+    public function cekDepartement($data)
+    {
+        $divisi = Departement::find($data);
+        return $divisi;
+    }
+
     private function generateKdDivisi()
     {
         $currentMonth = Carbon::now()->format('Ym');
@@ -405,6 +410,43 @@ class HrdService
             DB::commit();
 
             $log->info("PROSES SELESAI");
+            return $departement;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function ubahDepartement($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('UBAH-DEPARTEMENT');
+        try {
+            $log->info("<================= MULAI PROSES UBAH DATA DI DATABASE MASTER DEPARTEMENT =================>");
+
+            if (empty($data['kd_departement']) || empty($data['kd_divisi']) || empty($data['nama_departement'])) {
+                throw new \Exception("Data tidak lengkap untuk mengubah departement.");
+            }
+
+            $departement = Departement::find($data['kd_departement']);
+
+            if (!$departement) {
+                throw new \Exception("Departement tidak ditemukan.");
+            }
+
+            if ($departement) {
+                $departement->update([
+                    'kd_divisi' => $data['kd_divisi'],
+                    'nama_departement' => $data['nama_departement'],
+                ]);
+            }
+
+            $log->info("BERHASIL UBAH DATA");
+
+            DB::commit();
+
+            $log->info("PROSES UBAH DIVISI SELESAI");
             return $departement;
         } catch (\Throwable $th) {
             DB::rollBack();

@@ -107,7 +107,8 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
     Route::post('/ubah-divisi', 'validasi_ubah_divisi');
 
     Route::get('/master-departement', 'master_departement')->name('master_departement');
-    Route::post('/simpan-departement', 'validasi_simpan_departement');
+    Route::get('/departement', 'allDataDepartement');
+    Route::post('/ubah-departement', 'valiadasi_ubah_departement');
 
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');
