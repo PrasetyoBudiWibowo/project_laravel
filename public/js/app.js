@@ -140759,6 +140759,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       dataUser: window.userData,
       hakAkses: null,
       dataTableInstance: null,
+      dataDivisi: [],
+      filteredDataDepartement: [],
+      selectedDivisi: "",
       dataDepartement: [],
       loadingMenu: true
     };
@@ -140780,13 +140783,23 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             return _this.cekStatusAkses();
           case 1:
             _context.n = 2;
-            return _this.departement();
+            return _this.divisi();
           case 2:
+            _context.n = 3;
+            return _this.departement();
+          case 3:
+            _this.filteredDataDepartement = _this.dataDepartement;
+            _this.refreshTable();
             _this.$nextTick(function () {
-              _this.refreshTable();
+              // this.refreshTable();
+
+              defaultSelect2("#filter_divisi", "-- PILIH DIVISI --", null);
+              $("#filter_divisi").on("change", function (e) {
+                _this.selectedProvinsi = e.target.value;
+              });
             });
             _this.loadingMenu = false;
-          case 3:
+          case 4:
             return _context.a(2);
         }
       }, _callee);
@@ -140821,7 +140834,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               }
               return _context2.a(2);
             case 2:
-              console.log("dhnas", _this2.hakAkses = allowed[0]);
+              _this2.hakAkses = allowed[0];
               _context2.n = 4;
               break;
             case 3:
@@ -140876,23 +140889,94 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         }, _callee3, null, [[0, 2]]);
       }))();
     },
+    divisi: function divisi() {
+      var _this4 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+        var data, _t3;
+        return _regenerator().w(function (_context4) {
+          while (1) switch (_context4.p = _context4.n) {
+            case 0:
+              _context4.p = 0;
+              _context4.n = 1;
+              return getAllDivisi();
+            case 1:
+              data = _context4.v;
+              _this4.dataDivisi = data || [];
+              _context4.n = 3;
+              break;
+            case 2:
+              _context4.p = 2;
+              _t3 = _context4.v;
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan this.departement(): ".concat(_t3.statusText || _t3),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                }
+              });
+            case 3:
+              return _context4.a(2);
+          }
+        }, _callee4, null, [[0, 2]]);
+      }))();
+    },
+    handleCari: function handleCari() {
+      this.filterDepartement();
+    },
+    resetFilter: function resetFilter() {
+      this.selectedDivisi = "";
+      this.filterDepartement();
+    },
+    filterDepartement: function filterDepartement() {
+      var _this5 = this;
+      var filtered = this.dataDepartement;
+      if (this.selectedDivisi) {
+        filtered = filtered.filter(function (it) {
+          return it.divisi.nama_divisi === _this5.selectedDivisi;
+        });
+      }
+    },
     refreshTable: function refreshTable() {
+      var _this6 = this;
       if (this.dataTableInstance) {
         this.dataTableInstance.clear().destroy();
         this.dataTableInstance = null;
       }
-      this.dataTableInstance = $("#tableDepartement").DataTable({
-        // scrollCollapse: true,
-        // scrollY: 300,
-        // fixedHeader: true,
-        initComplete: function initComplete() {
-          $("#tableDepartement tbody").on("mouseenter", "tr", function () {
-            $(this).css("background-color", "Yellow");
-          });
-          $("#tableDepartement tbody").on("mouseleave", "tr", function () {
-            $(this).css("background-color", "");
-          });
-        }
+      this.$nextTick(function () {
+        _this6.dataTableInstance = $("#tableDepartement").DataTable({
+          // scrollCollapse: true,
+          // scrollY: 300,
+          // fixedHeader: true,
+          initComplete: function initComplete() {
+            $("#tableDepartement tbody").on("mouseenter", "tr", function () {
+              $(this).css("background-color", "Yellow");
+            });
+            $("#tableDepartement tbody").on("mouseleave", "tr", function () {
+              $(this).css("background-color", "");
+            });
+          },
+          columnDefs: [{
+            targets: 0,
+            orderable: false
+          } // nomor urut
+          ]
+        });
+      });
+    },
+    exportExcel: function exportExcel() {
+      axios({
+        url: "/hrd/export-excel-departement",
+        method: "GET",
+        responseType: "blob"
+      }).then(function (response) {
+        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        var fileLink = document.createElement("a");
+        fileLink.href = fileURL;
+        fileLink.setAttribute("download", "departement.xlsx");
+        document.body.appendChild(fileLink);
+        fileLink.click();
       });
     }
   }
@@ -146030,28 +146114,41 @@ var _hoisted_4 = {
   "class": "d-flex justify-content mb-3 gap-2"
 };
 var _hoisted_5 = {
-  "class": "row mt-2"
+  "class": "mb-2 row align-items-center"
 };
 var _hoisted_6 = {
+  "class": "col-sm-4"
+};
+var _hoisted_7 = ["value", "title"];
+var _hoisted_8 = {
+  "class": "mb-2 row align-items-center"
+};
+var _hoisted_9 = {
+  "class": "col-sm-6 d-flex gap-2"
+};
+var _hoisted_10 = {
+  "class": "row mt-2"
+};
+var _hoisted_11 = {
   "class": "col-12"
 };
-var _hoisted_7 = {
+var _hoisted_12 = {
   "class": "table-responsive"
 };
-var _hoisted_8 = {
+var _hoisted_13 = {
   id: "tableDepartement",
   "class": "display nowrap table-bordered",
   style: {
     "width": "100%"
   }
 };
-var _hoisted_9 = ["onClick"];
+var _hoisted_14 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _$data$dataUser, _$data$hakAkses, _$data$dataUser2, _$data$hakAkses2;
   var _component_modalTambahDepartement = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("modalTambahDepartement");
   var _component_modalEditDepartement = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("modalEditDepartement");
   var _component_loadingData = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("loadingData");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "card-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "MASTER DEPARTEMENT")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [((_$data$dataUser = $data.dataUser) === null || _$data$dataUser === void 0 ? void 0 : _$data$dataUser.level_user) === 'SUPER ADMIN' || ((_$data$hakAkses = $data.hakAkses) === null || _$data$hakAkses === void 0 ? void 0 : _$data$hakAkses.bisa_insert) === 'YA' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
@@ -146059,9 +146156,52 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.openModal && $options.openModal.apply($options, arguments);
     })
-  }, _cache[1] || (_cache[1] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, _cache[5] || (_cache[5] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fas fa-plus me-1"
-  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Tambah ")]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "No", -1 /* CACHED */)), _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Divisi", -1 /* CACHED */)), _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Depatement", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, " Aksi ", 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, ((_$data$dataUser2 = $data.dataUser) === null || _$data$dataUser2 === void 0 ? void 0 : _$data$dataUser2.level_user) === 'SUPER ADMIN' || ((_$data$hakAkses2 = $data.hakAkses) === null || _$data$hakAkses2 === void 0 ? void 0 : _$data$hakAkses2.bisa_edit) === 'YA']])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataDepartement, function (item, index) {
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Tambah ")]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-success",
+    onClick: _cache[1] || (_cache[1] = function () {
+      return $options.exportExcel && $options.exportExcel.apply($options, arguments);
+    })
+  }, _cache[6] || (_cache[6] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-file-excel me-1"
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Excel ")]))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    "class": "col-sm-2 col-form-label"
+  }, "Cari Provinsi:", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    id: "filter_divisi",
+    "class": "form-select",
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+      return $data.selectedDivisi = $event;
+    })
+  }, [_cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: ""
+  }, "Semua Divisi", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataDivisi, function (div) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
+      key: div.kd_divisi,
+      value: div.nama_divisi,
+      title: div.nama_divisi
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(div.nama_divisi), 9 /* TEXT, PROPS */, _hoisted_7);
+  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedDivisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-success",
+    onClick: _cache[3] || (_cache[3] = function () {
+      return $options.handleCari && $options.handleCari.apply($options, arguments);
+    }),
+    style: {
+      "white-space": "nowrap"
+    }
+  }, _cache[9] || (_cache[9] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fa-solid fa-magnifying-glass me-1"
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Cari ")])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-danger",
+    onClick: _cache[4] || (_cache[4] = function () {
+      return $options.resetFilter && $options.resetFilter.apply($options, arguments);
+    }),
+    style: {
+      "white-space": "nowrap"
+    }
+  }, _cache[10] || (_cache[10] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fa fa-xmark me-1"
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Reset ")]))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "No", -1 /* CACHED */)), _cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Divisi", -1 /* CACHED */)), _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Department", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, " Aksi ", 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, ((_$data$dataUser2 = $data.dataUser) === null || _$data$dataUser2 === void 0 ? void 0 : _$data$dataUser2.level_user) === 'SUPER ADMIN' || ((_$data$hakAkses2 = $data.hakAkses) === null || _$data$hakAkses2 === void 0 ? void 0 : _$data$hakAkses2.bisa_edit) === 'YA']])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.filteredDataDepartement, function (item, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: item.kd_departement
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.divisi.nama_divisi), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.nama_departement), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -146069,7 +146209,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       onClick: function onClick($event) {
         return $options.openEdit(item);
       }
-    }, " Edit ", 8 /* PROPS */, _hoisted_9), _cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, " Edit ", 8 /* PROPS */, _hoisted_14), _cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-sm btn-danger"
     }, " Hapus ", -1 /* CACHED */))])]);
   }), 128 /* KEYED_FRAGMENT */))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <modalTambahDepartement\r\n                    ref=\"modalTambahDepartement\"\r\n                    :dataDivisi=\"dataDivisi\"\r\n                /> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_modalTambahDepartement, {

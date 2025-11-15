@@ -36,17 +36,26 @@ class HrdService
     {
         $data = Departement::with('Divisi')->get();
 
-        $result = [];
-        foreach ($data as $d) {
-            $result[] = [
-                'kd_departement' => Crypt::encryptString($d->kd_departement),
-                'nama_departement' => $d->nama_departement,
-                'kd_divisi' => Crypt::encryptString($d->kd_divisi),
+        $result = $data->map(function ($departement) {
+            return [
+                'kd_departement' => Crypt::encryptString($departement->kd_departement),
+                'nama_departement' => $departement->nama_departement,
+                'kd_divisi' => Crypt::encryptString($departement->kd_divisi),
                 'divisi' => [
-                    'nama_divisi' => $d->Divisi->nama_divisi,
+                    'nama_divisi' => $departement->Divisi->nama_divisi,
                 ],
             ];
-        }
+        });
+        // foreach ($data as $d) {
+        //     $result[] = [
+        //         'kd_departement' => Crypt::encryptString($d->kd_departement),
+        //         'nama_departement' => $d->nama_departement,
+        //         'kd_divisi' => Crypt::encryptString($d->kd_divisi),
+        //         'divisi' => [
+        //             'nama_divisi' => $d->Divisi->nama_divisi,
+        //         ],
+        //     ];
+        // }
 
         return $result;
 

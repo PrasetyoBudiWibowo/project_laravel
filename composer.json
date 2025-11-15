@@ -16,6 +16,7 @@
         "maatwebsite/excel": "^3.1",
         "matomo/device-detector": "^6.4",
         "mpdf/mpdf": "^8.2",
+        "phpoffice/phpspreadsheet": "^1.30",
         "vinkla/hashids": "^10.0"
     },
     "require-dev": {

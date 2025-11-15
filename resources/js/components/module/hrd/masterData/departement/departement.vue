@@ -17,6 +17,53 @@
                     >
                         <i class="fas fa-plus me-1"></i> Tambah
                     </button>
+                    <button class="btn btn-success" @click="exportExcel">
+                        <i class="fas fa-file-excel me-1"></i> Excel
+                    </button>
+                </div>
+
+                <div class="mb-2 row align-items-center">
+                    <label class="col-sm-2 col-form-label"
+                        >Cari Provinsi:</label
+                    >
+                    <div class="col-sm-4">
+                        <select
+                            id="filter_divisi"
+                            class="form-select"
+                            v-model="selectedDivisi"
+                        >
+                            <option value="">Semua Divisi</option>
+                            <option
+                                v-for="div in dataDivisi"
+                                :key="div.kd_divisi"
+                                :value="div.nama_divisi"
+                                :title="div.nama_divisi"
+                            >
+                                {{ div.nama_divisi }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-2 row align-items-center">
+                    <div class="col-sm-6 d-flex gap-2">
+                        <button
+                            class="btn btn-success"
+                            @click="handleCari"
+                            style="white-space: nowrap"
+                        >
+                            <i class="fa-solid fa-magnifying-glass me-1"></i>
+                            Cari
+                        </button>
+
+                        <button
+                            class="btn btn-danger"
+                            @click="resetFilter"
+                            style="white-space: nowrap"
+                        >
+                            <i class="fa fa-xmark me-1"></i> Reset
+                        </button>
+                    </div>
                 </div>
 
                 <div class="row mt-2">
@@ -31,7 +78,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Divisi</th>
-                                        <th>Depatement</th>
+                                        <th>Department</th>
                                         <th
                                             v-show="
                                                 dataUser?.level_user ===
@@ -45,7 +92,9 @@
                                 </thead>
                                 <tbody>
                                     <tr
-                                        v-for="(item, index) in dataDepartement"
+                                        v-for="(
+                                            item, index
+                                        ) in filteredDataDepartement"
                                         :key="item.kd_departement"
                                     >
                                         <td>{{ index + 1 }}</td>
@@ -97,6 +146,9 @@ export default {
             dataUser: window.userData,
             hakAkses: null,
             dataTableInstance: null,
+            dataDivisi: [],
+            filteredDataDepartement: [],
+            selectedDivisi: "",
             dataDepartement: [],
 
             loadingMenu: true,
@@ -112,9 +164,20 @@ export default {
             await this.cekStatusAkses();
         }
 
+        await this.divisi();
         await this.departement();
+
+        this.filteredDataDepartement = this.dataDepartement;
+        this.refreshTable();
+
         this.$nextTick(() => {
-            this.refreshTable();
+            // this.refreshTable();
+
+            defaultSelect2("#filter_divisi", "-- PILIH DIVISI --", null);
+
+            $("#filter_divisi").on("change", (e) => {
+                this.selectedProvinsi = e.target.value;
+            });
         });
 
         this.loadingMenu = false;
@@ -138,7 +201,8 @@ export default {
                 if (!allowed) {
                     return;
                 }
-                console.log("dhnas", (this.hakAkses = allowed[0]));
+
+                this.hakAkses = allowed[0];
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -172,32 +236,87 @@ export default {
                 });
             }
         },
+        async divisi() {
+            try {
+                const data = await getAllDivisi();
+                this.dataDivisi = data || [];
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan this.departement(): ${
+                        err.statusText || err
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
+        },
+        handleCari() {
+            this.filterDepartement();
+        },
+        resetFilter() {
+            this.selectedDivisi = "";
+            this.filterDepartement();
+        },
+        filterDepartement() {
+            let filtered = this.dataDepartement;
+
+            if (this.selectedDivisi) {
+                filtered = filtered.filter(
+                    (it) => it.divisi.nama_divisi === this.selectedDivisi
+                );
+            }
+        },
         refreshTable() {
             if (this.dataTableInstance) {
                 this.dataTableInstance.clear().destroy();
                 this.dataTableInstance = null;
             }
 
-            this.dataTableInstance = $("#tableDepartement").DataTable({
-                // scrollCollapse: true,
-                // scrollY: 300,
-                // fixedHeader: true,
-                initComplete: function () {
-                    $("#tableDepartement tbody").on(
-                        "mouseenter",
-                        "tr",
-                        function () {
-                            $(this).css("background-color", "Yellow");
-                        }
-                    );
-                    $("#tableDepartement tbody").on(
-                        "mouseleave",
-                        "tr",
-                        function () {
-                            $(this).css("background-color", "");
-                        }
-                    );
-                },
+            this.$nextTick(() => {
+                this.dataTableInstance = $("#tableDepartement").DataTable({
+                    // scrollCollapse: true,
+                    // scrollY: 300,
+                    // fixedHeader: true,
+                    initComplete: function () {
+                        $("#tableDepartement tbody").on(
+                            "mouseenter",
+                            "tr",
+                            function () {
+                                $(this).css("background-color", "Yellow");
+                            }
+                        );
+                        $("#tableDepartement tbody").on(
+                            "mouseleave",
+                            "tr",
+                            function () {
+                                $(this).css("background-color", "");
+                            }
+                        );
+                    },
+                    columnDefs: [
+                        { targets: 0, orderable: false }, // nomor urut
+                    ],
+                });
+            });
+        },
+        exportExcel() {
+            axios({
+                url: `/hrd/export-excel-departement`,
+                method: "GET",
+                responseType: "blob",
+            }).then((response) => {
+                const fileURL = window.URL.createObjectURL(
+                    new Blob([response.data])
+                );
+                const fileLink = document.createElement("a");
+                fileLink.href = fileURL;
+                fileLink.setAttribute("download", "departement.xlsx");
+                document.body.appendChild(fileLink);
+                fileLink.click();
             });
         },
     },
