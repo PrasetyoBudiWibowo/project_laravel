@@ -51,6 +51,11 @@ class HrdController extends Controller
         return view('module.hrd.masterData.master_departement');
     }
 
+    public function master_posisi()
+    {
+        return view('module.hrd.masterData.master_posisi');
+    }
+
     public function allDataDivisi()
     {
         $divisi = $this->hrdService->allDivisi();
@@ -334,7 +339,6 @@ class HrdController extends Controller
             $kdDepartement = Crypt::decryptString($request->kd_departement);
             $departement = $this->hrdService->cekDepartement($kdDepartement);
 
-
             if (!$departement) {
                 return response()->json([
                     'status' => 'error',
@@ -405,64 +409,177 @@ class HrdController extends Controller
         }
     }
 
-    public function export_excel_departement()
+    public function validasi_simpan_posisi(Request $request)
     {
-        $data = $this->hrdService->allDepartement();
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-SIMPAN DATA POSISI KARYAWAN');
+            $log->info("PROSES PENGECEKAN DATA");
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_simpan_posisi"
+                ]);
+            }
 
-        // Header
-        $sheet->setCellValue('A1', 'No');
-        $sheet->setCellValue('B1', 'Divisi');
-        $sheet->setCellValue('C1', 'Department');
+            $kdDivisi = Crypt::decryptString($request->kd_divisi);
+            $divisi = $this->hrdService->cekDivisi($kdDivisi);
 
-        // Styling header
-        $headerStyle = [
-            'font' => ['bold' => true],
-            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'D9E1F2']],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                    'color' => ['rgb' => '000000'],
-                ],
-            ],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-        ];
-        $sheet->getStyle('A1:C1')->applyFromArray($headerStyle);
+            if (!$divisi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DIVISI TIDAK DITEMUKAN"
+                ]);
+            }
 
-        // Isi data
-        $row = 2;
-        $no = 1;
-        foreach ($data as $item) {
-            $sheet->setCellValue('A' . $row, $no++);
-            $sheet->setCellValue('B' . $row, $item['divisi']['nama_divisi']);
-            $sheet->setCellValue('C' . $row, $item['nama_departement']);
-            $row++;
+            $kdDepartement = Crypt::decryptString($request->kd_departement);
+            $departement = $this->hrdService->cekDepartement($kdDepartement);
+
+            if (!$departement) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DEPARTEMENT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_position' => ['required', 'regex:/^[A-Z\s&]+$/i'],
+            ], [
+                'nama_position.required' => 'Nama Posisi tidak boleh kosong',
+                'nama_position.regex' => 'Nama Posisi hanya boleh mengandung huruf dan spasi',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "USER YANG SEDANG INPUT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $data = [
+                'kd_divisi' => $kdDivisi,
+                'kd_departement' => $kdDepartement,
+                'nama_position' => $request->nama_position,
+                'user_input' => $kdAsliUser,
+            ];
+
+            $result = $this->hrdService->simpanPosisi($data);
+
+            if (!$result) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
         }
+    }
 
-        // Styling data (border)
-        $sheet->getStyle('A2:C' . ($row - 1))->applyFromArray([
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                    'color' => ['rgb' => '000000'],
+    public function export_excel_departement(Request $request)
+    {
+        try {
+            $divisi = $request->query('divisi');
+            if ($divisi) {
+                $divisi = urldecode($divisi);
+            }
+
+            $data = $this->hrdService->allDepartement();
+
+            $data = $this->hrdService->allDepartement();
+
+            if (!empty($divisi)) {
+                $data = $data->filter(function ($item) use ($divisi) {
+                    return isset($item['divisi']['nama_divisi']) &&
+                        $item['divisi']['nama_divisi'] === $divisi;
+                })->values()->toArray();
+            } else {
+                $data = $data->toArray();
+            }
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // Header
+            $sheet->setCellValue('A1', 'No');
+            $sheet->setCellValue('B1', 'Divisi');
+            $sheet->setCellValue('C1', 'Department');
+
+            $headerStyle = [
+                'font' => ['bold' => true],
+                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'D9E1F2']],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['rgb' => '000000'],
+                    ],
                 ],
-            ],
-        ]);
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            ];
+            $sheet->getStyle('A1:C1')->applyFromArray($headerStyle);
 
-        // Auto width
-        foreach (range('A', 'C') as $col) {
-            $sheet->getColumnDimension($col)->setAutoSize(true);
+            // Isi data
+            $row = 2;
+            $no = 1;
+
+            foreach ($data as $item) {
+                $sheet->setCellValue('A' . $row, $no++);
+                $sheet->setCellValue('B' . $row, $item['divisi']['nama_divisi']);
+                $sheet->setCellValue('C' . $row, $item['nama_departement']);
+                $row++;
+            }
+
+            // Styling data
+            if ($row > 2) {
+                $sheet->getStyle('A2:C' . ($row - 1))->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000'],
+                        ],
+                    ],
+                ]);
+            }
+
+            foreach (range('A', 'C') as $col) {
+                $sheet->getColumnDimension($col)->setAutoSize(true);
+            }
+
+            $writer = new Xlsx($spreadsheet);
+            $fileName = "departement.xlsx";
+
+            return response()->streamDownload(function () use ($writer) {
+                $writer->save('php://output');
+            }, $fileName, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'line' => $th->getLine(),
+                'file' => $th->getFile()
+            ], 500);
         }
-
-        $writer = new Xlsx($spreadsheet);
-        $fileName = "departement.xlsx";
-
-        return response()->streamDownload(function () use ($writer) {
-            $writer->save('php://output');
-        }, $fileName, [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        ]);
     }
 }

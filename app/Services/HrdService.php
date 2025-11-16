@@ -290,6 +290,26 @@ class HrdService
         return $prefix . $newNumber;
     }
 
+    private function generateKdPosisi()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'PST-' . $currentMonth . '-';
+
+        $lastPosisition = Posisi::where('kd_position', 'LIKE', $prefix . '%')
+            ->orderBy('kd_position', 'DESC')
+            ->first();
+
+        if (!$lastPosisition) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $lastPosisition->kd_position;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
     public function simpanDivisi($data)
     {
         DB::beginTransaction();
@@ -457,6 +477,64 @@ class HrdService
 
             $log->info("PROSES UBAH DIVISI SELESAI");
             return $departement;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function simpanPosisi($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('SIMPAN-POSISI');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE MASTER DEPARTEMENT =================>");
+            // $log->info("Data CONTROLLER: ADA" . json_encode($data));
+
+            $kd_posisi =  $this->generateKdPosisi();
+            $log->info("<================= BERHASIL BUAT PK =================>");
+
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $posisi = Posisi::create([
+                'kd_position' => $kd_posisi,
+                'kd_divisi' => $data['kd_divisi'],
+                'kd_departement' => $data['kd_departement'],
+                'nama_position' => $data['nama_position'],
+                'user_input' => $data['user_input'],
+                'tgl_input' => $tgl_input,
+                'bln_input' => $bln_input,
+                'thn_input' => $thn_input,
+                'waktu_input' => $waktu_input,
+                'alamat_device' => $ipDevice,
+                'type_device' => $deviceType,
+                'device' => $device,
+            ]);
+
+            if (!$posisi) {
+                throw new \Exception("GAGAL ADA DATA YANG SALAH");
+            }
+
+            // $log->info("Data SIMPAN: ADA" . json_encode($posisi));
+            $log->info("BERHASIL SIMPAN DATA");
+
+            DB::commit();
+
+            $log->info("PROSES SELESAI");
+            return $posisi;
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);

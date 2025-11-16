@@ -23,9 +23,7 @@
                 </div>
 
                 <div class="mb-2 row align-items-center">
-                    <label class="col-sm-2 col-form-label"
-                        >Cari Provinsi:</label
-                    >
+                    <label class="col-sm-2 col-form-label">Divisi:</label>
                     <div class="col-sm-4">
                         <select
                             id="filter_divisi"
@@ -326,8 +324,14 @@ export default {
             });
         },
         exportExcel() {
+            let url = `/hrd/export-excel-departement`;
+
+            if (this.selectedDivisi) {
+                url += `?divisi=${encodeURIComponent(this.selectedDivisi)}`;
+            }
+
             axios({
-                url: `/hrd/export-excel-departement`,
+                url: url,
                 method: "GET",
                 responseType: "blob",
             }).then((response) => {
@@ -336,7 +340,14 @@ export default {
                 );
                 const fileLink = document.createElement("a");
                 fileLink.href = fileURL;
-                fileLink.setAttribute("download", "departement.xlsx");
+                if (this.selectedDivisi) {
+                    fileLink.setAttribute(
+                        "download",
+                        `DEPARTEMENT-${this.selectedDivisi}.xlsx`
+                    );
+                } else {
+                    fileLink.setAttribute("download", "departement.xlsx");
+                }
                 document.body.appendChild(fileLink);
                 fileLink.click();
             });

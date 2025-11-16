@@ -21,6 +21,7 @@ import dasboardHrd from './components/module/hrd/dasboardHrd.vue';
 import masterKaryawan from './components/module/hrd/masterData/masterKaryawan.vue';
 import masterDivisi from './components/module/hrd/masterData/masterDivisi.vue';
 import departement from './components/module/hrd/masterData/departement/departement.vue';
+import posisi from './components/module/hrd/masterData/posisi/posisi.vue';
 
 const app = createApp({});
 
@@ -39,6 +40,7 @@ app.component('dasboard-hrd', dasboardHrd);
 app.component('master-karyawan', masterKaryawan);
 app.component('master-divisi', masterDivisi);
 app.component('master-departement', departement);
+app.component('master-posisi', posisi);
 
 app.use(Antd)
 

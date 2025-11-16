@@ -108,8 +108,12 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
 
     Route::get('/master-departement', 'master_departement')->name('master_departement');
     Route::get('/departement', 'allDataDepartement');
+    Route::post('/simpan-departement', 'validasi_simpan_departement');
     Route::post('/ubah-departement', 'valiadasi_ubah_departement');
     Route::get('/export-excel-departement', 'export_excel_departement');
+
+    Route::get('/master-posisi', 'master_posisi')->name('master_posisi');
+    Route::post('/simpan-posisi', 'validasi_simpan_posisi');
 
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');
