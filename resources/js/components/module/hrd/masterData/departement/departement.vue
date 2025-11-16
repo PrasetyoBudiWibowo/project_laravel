@@ -90,31 +90,6 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr
-                                        v-for="(
-                                            item, index
-                                        ) in filteredDataDepartement"
-                                        :key="item.kd_departement"
-                                    >
-                                        <td>{{ index + 1 }}</td>
-                                        <td>{{ item.divisi.nama_divisi }}</td>
-                                        <td>{{ item.nama_departement }}</td>
-                                        <td>
-                                            <button
-                                                class="btn btn-sm btn-warning me-2"
-                                                @click="openEdit(item)"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                class="btn btn-sm btn-danger"
-                                            >
-                                                Hapus
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -152,6 +127,7 @@ export default {
             dataDepartement: [],
 
             loadingMenu: true,
+            dataTableInstance: null,
         };
     },
     async mounted() {
@@ -164,19 +140,20 @@ export default {
             await this.cekStatusAkses();
         }
 
+        window.openEditDepartement = (data) => {
+            this.openEdit(data);
+        };
+
         await this.divisi();
         await this.departement();
 
-        this.filteredDataDepartement = this.dataDepartement;
-        this.refreshTable();
-
         this.$nextTick(() => {
-            // this.refreshTable();
+            this.refreshTable();
 
             defaultSelect2("#filter_divisi", "-- PILIH DIVISI --", null);
 
             $("#filter_divisi").on("change", (e) => {
-                this.selectedProvinsi = e.target.value;
+                this.selectedDivisi = e.target.value;
             });
         });
 
@@ -222,6 +199,7 @@ export default {
             try {
                 const data = await getAllDepartement();
                 this.dataDepartement = data || [];
+                this.filteredDataDepartement = data || [];
             } catch (err) {
                 Swal.fire({
                     icon: "error",
@@ -256,10 +234,21 @@ export default {
         },
         handleCari() {
             this.filterDepartement();
+            this.refreshTable();
         },
         resetFilter() {
             this.selectedDivisi = "";
-            this.filterDepartement();
+            $("#filter_divisi").val("").trigger("change");
+
+            this.filteredDataDepartement = this.dataDepartement;
+
+            if (this.dataTableInstance) {
+                this.dataTableInstance.clear();
+                this.dataTableInstance.rows.add(this.filteredDataDepartement);
+                this.dataTableInstance.draw();
+            } else {
+                this.refreshTable();
+            }
         },
         filterDepartement() {
             let filtered = this.dataDepartement;
@@ -269,6 +258,16 @@ export default {
                     (it) => it.divisi.nama_divisi === this.selectedDivisi
                 );
             }
+
+            this.filteredDataDepartement = filtered;
+
+            if (this.dataTableInstance) {
+                this.dataTableInstance.clear();
+                this.dataTableInstance.rows.add(filtered);
+                this.dataTableInstance.draw();
+            } else {
+                this.refreshTable();
+            }
         },
         refreshTable() {
             if (this.dataTableInstance) {
@@ -276,31 +275,54 @@ export default {
                 this.dataTableInstance = null;
             }
 
-            this.$nextTick(() => {
-                this.dataTableInstance = $("#tableDepartement").DataTable({
-                    // scrollCollapse: true,
-                    // scrollY: 300,
-                    // fixedHeader: true,
-                    initComplete: function () {
-                        $("#tableDepartement tbody").on(
-                            "mouseenter",
-                            "tr",
-                            function () {
-                                $(this).css("background-color", "Yellow");
-                            }
-                        );
-                        $("#tableDepartement tbody").on(
-                            "mouseleave",
-                            "tr",
-                            function () {
-                                $(this).css("background-color", "");
-                            }
-                        );
+            this.dataTableInstance = $("#tableDepartement").DataTable({
+                data: this.filteredDataDepartement,
+                columns: [
+                    {
+                        data: null,
+                        width: "5%",
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        },
                     },
-                    columnDefs: [
-                        { targets: 0, orderable: false }, // nomor urut
-                    ],
-                });
+                    { data: "divisi.nama_divisi" },
+                    { data: "nama_departement" },
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return `
+                                <button class="btn btn-sm btn-warning me-2 btn-edit" 
+                                        onclick='openEditDepartement(${JSON.stringify(
+                                            data
+                                        )})'">
+                                    Edit
+                                </button>
+                                <button
+                                    class="btn btn-sm btn-danger"
+                                >
+                                    Hapus
+                                </button>`;
+                        },
+                    },
+                ],
+                initComplete: function () {
+                    $("#tableDepartement tbody").on(
+                        "mouseenter",
+                        "tr",
+                        function () {
+                            $(this).css("background-color", "Yellow");
+                        }
+                    );
+                    $("#tableDepartement tbody").on(
+                        "mouseleave",
+                        "tr",
+                        function () {
+                            $(this).css("background-color", "");
+                        }
+                    );
+                },
             });
         },
         exportExcel() {
