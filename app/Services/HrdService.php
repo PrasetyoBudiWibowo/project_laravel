@@ -71,14 +71,13 @@ class HrdService
 
         $result = $data->map(function ($posisi) {
             return [
-                'kd_position' => $posisi->kd_position,
+                'kd_position' => Crypt::encryptString($posisi->kd_position),
                 'nama_position' => $posisi->nama_position,
-                'kd_departement' => $posisi->kd_departement,
                 'departement' => [
-                    'kd_departement' => $posisi->kd_departement,
+                    'kd_departement' => Crypt::encryptString($posisi->departement->kd_departement),
                     'nama_departement' => $posisi->Departement->nama_departement,
                     'divisi' => [
-                        'kd_divisi' => $posisi->Divisi->kd_divisi,
+                        'kd_divisi' => Crypt::encryptString($posisi->departement->divisi->kd_divisi),
                         'nama_divisi' => $posisi->Divisi->nama_divisi,
                     ],
                 ],
@@ -248,6 +247,12 @@ class HrdService
     {
         $divisi = Departement::find($data);
         return $divisi;
+    }
+
+    public function cekPosisi($data)
+    {
+        $posisi = Posisi::find($data);
+        return $posisi;
     }
 
     private function generateKdDivisi()
@@ -538,6 +543,49 @@ class HrdService
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function ubahPosisi($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('UBAH-POSISI');
+        try {
+            $log->info("<================= MULAI PROSES UBAH DATA DI DATABASE MASTER POSISITION =================>");
+
+            if (empty($data['kd_position']) || empty($data['kd_departement']) || empty($data['kd_divisi']) || empty($data['nama_position'])) {
+                throw new \Exception("Data tidak lengkap untuk mengubah Posisi.");
+            }
+
+            // $log->info("Data dari controller: ADA" . json_encode($data));
+
+
+            $posisi = Posisi::find($data['kd_position']);
+
+            // $log->info("Data dari posisi: ADA" . json_encode($posisi));
+
+            if (!$posisi) {
+                throw new \Exception("Posisi tidak ditemukan.");
+            }
+
+            if ($posisi) {
+                $posisi->update([
+                    'kd_divisi' => $data['kd_divisi'],
+                    'kd_departement' => $data['kd_departement'],
+                    'nama_position' => $data['nama_position'],
+                ]);
+            }
+
+            $log->info("BERHASIL UBAH DATA");
+
+            DB::commit();
+
+            $log->info("PROSES UBAH POSISI SELESAI");
+            return $posisi;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            // return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
             throw $th;
         }
     }

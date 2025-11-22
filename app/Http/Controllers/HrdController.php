@@ -90,6 +90,23 @@ class HrdController extends Controller
         ]);
     }
 
+    public function allDataPosisition()
+    {
+        $posisi = $this->hrdService->allPosisition();
+
+        if (empty($posisi)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $posisi
+        ]);
+    }
+
     public function allDataKaryawan()
     {
         $karyawan = $this->hrdService->allKaryawan();
@@ -478,6 +495,104 @@ class HrdController extends Controller
             $result = $this->hrdService->simpanPosisi($data);
 
             if (!$result) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function validasi_ubah_posisi(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-UBAH DATA POSISI KARYAWAN');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_ubah_posisi"
+                ]);
+            }
+
+            $kdPosisi = Crypt::decryptString($request->kd_position);
+            $posisi = $this->hrdService->cekPosisi($kdPosisi);
+
+            if (!$posisi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "POSISI KARYAWAN TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $kdDivisi = Crypt::decryptString($request->kd_divisi);
+            $divisi = $this->hrdService->cekDivisi($kdDivisi);
+
+            if (!$divisi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DIVISI TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $kdDepartement = Crypt::decryptString($request->kd_departement);
+            $departement = $this->hrdService->cekDepartement($kdDepartement);
+
+            if (!$departement) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DEPARTEMENT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_position' => ['required', 'regex:/^[A-Z\s&]+$/i'],
+            ], [
+                'nama_position.required' => 'Nama Posisi tidak boleh kosong',
+                'nama_position.regex' => 'Nama Posisi hanya boleh mengandung huruf dan spasi',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "USER YANG SEDANG INPUT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $data = [
+                'kd_position' => $kdPosisi,
+                'kd_divisi' => $kdDivisi,
+                'kd_departement' => $kdDepartement,
+                'nama_position' => $request->nama_position,
+                'user_input' => $kdAsliUser,
+            ];
+
+            $result = $this->hrdService->ubahPosisi($data);
+
+            if (!$result->kd_position) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Gagal Simpan'

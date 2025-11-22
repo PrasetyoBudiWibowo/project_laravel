@@ -114,6 +114,8 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
 
     Route::get('/master-posisi', 'master_posisi')->name('master_posisi');
     Route::post('/simpan-posisi', 'validasi_simpan_posisi');
+    Route::post('/ubah-posisi', 'validasi_ubah_posisi');
+    Route::get('/posisi', 'allDataPosisition');
 
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');

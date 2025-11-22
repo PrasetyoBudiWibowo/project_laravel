@@ -31,27 +31,70 @@
 
                 <div class="row mt-2">
                     <div class="col-12">
-                        <div class="table-responsive">
-                            <table
-                                id="tablePosisi"
-                                class="display nowrap table-bordered"
-                                style="width: 100%"
-                            >
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Divisi</th>
-                                        <th>Department</th>
-                                        <th>Posisi</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+                        <DataTable
+                            id="tabelPoisisi"
+                            :value="dataPosisition"
+                            stripedRows
+                            :paginator="true"
+                            scrollable
+                            scrollHeight="450px"
+                            showGridlines
+                            removableSort
+                            :rows="5"
+                            :rowsPerPageOptions="[5, 10, 20, 50, 100]"
+                            tableStyle="min-width: 60rem"
+                        >
+                            <Column header="No">
+                                <template #body="row">
+                                    {{ row.index + 1 }}
+                                </template>
+                            </Column>
+
+                            <Column
+                                field="departement.divisi.nama_divisi"
+                                header="Divisi"
+                                sortable
+                                bodyClass="text-capitalize"
+                            />
+
+                            <Column
+                                field="departement.nama_departement"
+                                header="Departement"
+                                sortable
+                            />
+
+                            <Column
+                                field="nama_position"
+                                header="Posisi"
+                                sortable
+                            />
+
+                            <Column header="Aksi">
+                                <template #body="row">
+                                    <button
+                                        class="btn btn-primary btn-sm me-2"
+                                        @click="openEdit(row.data)"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        class="btn btn-danger btn-sm"
+                                        @click="hapusData(row.data)"
+                                    >
+                                        Hapus
+                                    </button>
+                                </template>
+                            </Column>
+
+                            <template #footer>
+                                Total Data {{ dataPosisition?.length || 0 }}
+                            </template>
+                        </DataTable>
                     </div>
                 </div>
 
                 <modalTambahPosisi ref="modalTambahPosisi" />
+                <modalEditPosisi ref="modalEditPosisi" />
             </div>
         </div>
     </div>
@@ -60,13 +103,15 @@
 <script>
 import loadingData from "../../../../loading/loadingData.vue";
 import modalTambahPosisi from "./modal/modalTambahPosisi.vue";
+import modalEditPosisi from "./modal/modalEditPosisi.vue";
 
 export default {
-    components: { loadingData, modalTambahPosisi },
+    components: { loadingData, modalTambahPosisi, modalEditPosisi },
     data() {
         return {
             dataUser: window.userData,
             hakAkses: null,
+            dataPosisition: [],
         };
     },
     async mounted() {
@@ -75,6 +120,8 @@ export default {
             .getAttribute("content");
         axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
 
+        await this.posisition();
+
         if (this.dataUser.level_user !== "SUPER ADMIN") {
             await this.cekStatusAkses();
         }
@@ -82,6 +129,9 @@ export default {
     methods: {
         openModal() {
             this.$refs.modalTambahPosisi.openModal();
+        },
+        openEdit(item) {
+            this.$refs.modalEditPosisi.openEdit(item);
         },
         async cekStatusAkses() {
             try {
@@ -112,6 +162,30 @@ export default {
                 });
             }
         },
+        async posisition() {
+            try {
+                const data = await getAllPosisition();
+                this.dataPosisition = data || [];
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan this.divisi(): ${
+                        err.statusText || err
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
+        },
     },
 };
 </script>
+
+<style>
+.p-datatable .p-datatable-tbody > tr:hover {
+    background-color: yellow !important;
+}
+</style>

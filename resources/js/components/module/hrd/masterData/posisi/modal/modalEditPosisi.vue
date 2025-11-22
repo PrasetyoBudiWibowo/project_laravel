@@ -1,10 +1,10 @@
 <template>
     <div
         class="modal fade"
-        id="modalTambahPosisi"
+        id="modalEditPosisi"
         ref="modal"
         tabindex="-1"
-        aria-labelledby="modalTambahPosisiLabel"
+        aria-labelledby="modalEditPosisiLabel"
         aria-hidden="true"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -12,9 +12,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTambahPosisiLabel">
-                        Tambah Departement
-                    </h5>
+                    <h5 class="modal-title">Edit Posisi</h5>
                     <button
                         type="button"
                         class="btn-close"
@@ -23,14 +21,20 @@
                 </div>
 
                 <div class="modal-body">
+                    <input
+                        type="hidden"
+                        id="kd_position"
+                        class="form-control"
+                        v-model="editData.kd_position"
+                    />
                     <div class="mb-3">
-                        <label for="input_kd_divisi" class="form-label"
+                        <label for="edit_kd_divisi" class="form-label"
                             >Divisi</label
                         >
                         <select
-                            id="input_kd_divisi"
+                            id="edit_kd_divisi"
                             class="form-select"
-                            v-model="inputData.kd_divisi"
+                            v-model="editData.kd_divisi"
                         >
                             <option value="">-- Pilih Divisi --</option>
                             <option
@@ -44,18 +48,18 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="input_kd_departement" class="form-label"
+                        <label for="edit_kd_departement" class="form-label"
                             >Departement</label
                         >
                         <select
-                            id="input_kd_departement"
+                            id="edit_kd_departement"
                             class="form-select"
-                            v-model="inputData.kd_departement"
-                            :disabled="!inputData.kd_divisi"
+                            v-model="editData.kd_departement"
+                            :disabled="!editData.kd_divisi"
                         >
                             <option value="">-- Pilih Departement --</option>
                             <option
-                                v-for="departement in filteredDepartement"
+                                v-for="departement in filteredEditDepartement"
                                 :key="departement.kd_departement"
                                 :value="departement.kd_departement"
                             >
@@ -65,18 +69,14 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="nama_position" class="form-label"
-                            >Nama Posisi</label
-                        >
+                        <label class="form-label">Nama Posisi</label>
                         <input
                             type="text"
-                            autocomplete="off"
                             class="form-control"
-                            placeholder="Masukkan Nama Posisi"
-                            v-model="inputData.nama_position"
+                            v-model="editData.nama_position"
                             @input="
-                                inputData.nama_position =
-                                    inputData.nama_position.toUpperCase()
+                                editData.nama_position =
+                                    editData.nama_position.toUpperCase()
                             "
                         />
                     </div>
@@ -93,7 +93,7 @@
                     <button
                         type="button"
                         class="btn btn-primary"
-                        @click="btnSimpanPosisi"
+                        @click="btnUbahPosisi"
                     >
                         Simpan
                     </button>
@@ -110,11 +110,13 @@ import * as yup from "yup";
 export default {
     data() {
         return {
+            modalInstance: null,
             selectedDivisi: "",
             selectedDepartement: "",
             dataDivisi: [],
             dataDepartement: [],
-            inputData: {
+            editData: {
+                kd_position: "",
                 kd_divisi: "",
                 kd_departement: "",
                 nama_position: "",
@@ -127,56 +129,83 @@ export default {
             .getAttribute("content");
         axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
 
-        this.bsModal = new Modal(this.$refs.modal);
+        this.modalInstance = new Modal(this.$refs.modal);
 
         await this.divisi();
         await this.departement();
 
         this.$nextTick(() => {
             defaultSelect2(
-                "#input_kd_divisi",
+                "#edit_kd_divisi",
                 "-- PILIH DIVISI --",
-                "#modalTambahPosisi"
+                "#modalEditPosisi"
             );
 
             defaultSelect2(
-                "#input_kd_departement",
+                "#edit_kd_departement",
                 "-- PILIH DEPARTEMENT --",
-                "#modalTambahPosisi"
+                "#modalEditPosisi"
             );
 
-            $("#input_kd_divisi").on("change", (e) => {
-                this.inputData.kd_divisi = e.target.value;
+            $("#edit_kd_divisi").on("change", (e) => {
+                this.editData.kd_divisi = e.target.value;
+
                 this.selectedDivisi =
                     e.target.options[e.target.selectedIndex].text;
             });
 
-            $("#input_kd_departement").on("change", (e) => {
-                this.inputData.kd_departement = e.target.value;
-            });
-
-            $("#modalTambahPosisi").on("hidden.bs.modal", () => {
-                this.inputData.nama_position = "";
-                $("#input_kd_divisi").val("").trigger("change");
-                $("#input_kd_departement").val("").trigger("change");
+            $("#edit_kd_departement").on("change", (e) => {
+                this.editData.kd_departement = e.target.value;
             });
         });
     },
     computed: {
-        filteredDepartement() {
-            if (!this.inputData.kd_divisi) return [];
+        filteredEditDepartement() {
+            if (!this.editData.kd_divisi) return [];
+
+            const selectedDiv = this.dataDivisi.find(
+                (d) => d.kd_divisi === this.editData.kd_divisi
+            );
+
+            if (!selectedDiv) return [];
 
             return this.dataDepartement.filter(
-                (d) => d.divisi.nama_divisi === this.selectedDivisi
+                (dep) => dep.divisi.nama_divisi === selectedDiv.nama_divisi
             );
         },
     },
     methods: {
-        openModal() {
-            this.bsModal.show();
+        openEdit(data) {
+            const divisi = this.dataDivisi.find(
+                (it) => it.nama_divisi === data.departement.divisi.nama_divisi
+            );
+
+            const departement = this.dataDepartement.find(
+                (it) =>
+                    it.nama_departement === data.departement.nama_departement
+            );
+
+            this.editData = {
+                kd_position: data.kd_position,
+                kd_divisi: divisi?.kd_divisi ?? "",
+                kd_departement: departement?.kd_departement ?? "",
+                nama_position: data.nama_position,
+            };
+
+            this.modalInstance.show();
+
+            this.$nextTick(() => {
+                $("#edit_kd_divisi")
+                    .val(this.editData.kd_divisi)
+                    .trigger("change");
+
+                $("#edit_kd_departement")
+                    .val(this.editData.kd_departement)
+                    .trigger("change");
+            });
         },
         closeModal() {
-            this.bsModal.hide();
+            this.modalInstance.hide();
         },
         async divisi() {
             try {
@@ -214,10 +243,10 @@ export default {
                 });
             }
         },
-        btnSimpanPosisi() {
+        btnUbahPosisi() {
             Swal.fire({
                 title: "Konfirmasi",
-                text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
+                text: "Apakah Anda Yakin Ingin Mengubah Data ini?",
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonText: "Ya",
@@ -229,13 +258,13 @@ export default {
                 reverseButtons: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.simpanPosisi();
+                    this.ubahPosisi();
                 }
             });
         },
-        async simpanPosisi() {
+        async ubahPosisi() {
             let dataToSave = {
-                ...this.inputData,
+                ...this.editData,
                 user_input: window.encryptedUserId,
             };
 
@@ -279,7 +308,7 @@ export default {
                 });
 
                 const response = await axios.post(
-                    "/hrd/simpan-posisi",
+                    "/hrd/ubah-posisi",
                     dataToSave
                 );
                 const result = response.data;

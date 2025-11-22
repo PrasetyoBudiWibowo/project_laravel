@@ -59,8 +59,8 @@ class MenuController extends Controller
     {
         $sessionUser = session('user');
 
-        $log = AppLogger::getLogger('CEK-USER-SESSION-menuByUser');
-        $log->info("PROSES PENGECEKAN DATA");
+        // $log = AppLogger::getLogger('CEK-USER-SESSION-menuByUser');
+        // $log->info("PROSES PENGECEKAN DATA");
 
         $user = $this->userService->getUserByKdAsli($sessionUser['kd_asli_user']);
 
@@ -71,7 +71,7 @@ class MenuController extends Controller
             ]);
         }
 
-        $log->info("LEWAT CEK USER");
+        // $log->info("LEWAT CEK USER");
     }
 
     public function validasi_simpan_menu(Request $request)

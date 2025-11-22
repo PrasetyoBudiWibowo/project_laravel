@@ -6,6 +6,16 @@ import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/reset.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+import PrimeVue from 'primevue/config';
+import Lara from '@primevue/themes/lara'; // tema utama
+
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Dialog from 'primevue/dialog';
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
+
 import editUser from './components/user/editUser.vue';
 import register from './components/user/register.vue';
 import userRegister from './components/user/userRegister.vue';
@@ -43,5 +53,20 @@ app.component('master-departement', departement);
 app.component('master-posisi', posisi);
 
 app.use(Antd)
+app.use(PrimeVue, {
+    theme: {
+        preset: Lara, 
+        options: {
+            darkModeSelector: '.dark-mode'
+        }
+    }
+});
+
+app.use(ToastService);
+
+app.component('DataTable', DataTable);
+app.component('Column', Column);
+app.component('Dialog', Dialog);
+app.component('Toast', Toast);
 
 app.mount('#app');

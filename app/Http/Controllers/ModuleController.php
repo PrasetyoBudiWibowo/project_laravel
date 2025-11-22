@@ -73,8 +73,8 @@ class ModuleController extends Controller
     {
         $sessionUser = session('user');
 
-        $log = AppLogger::getLogger('CEK-USER-SESSION');
-        $log->info("PROSES PENGECEKAN DATA");
+        // $log = AppLogger::getLogger('CEK-USER-SESSION');
+        // $log->info("PROSES PENGECEKAN DATA");
 
         $user = $this->userService->getUserByKdAsli($sessionUser['kd_asli_user']);
 
@@ -85,7 +85,7 @@ class ModuleController extends Controller
             ]);
         }
 
-        $log->info("LEWAT CEK USER");
+        // $log->info("LEWAT CEK USER");
 
         $aksesModule = $this->moduleService->cekAksesModuleByUser($user);
 
@@ -96,7 +96,7 @@ class ModuleController extends Controller
             ]);
         }
 
-        $log->info("LEWAT CEK MODULE");
+        // $log->info("LEWAT CEK MODULE");
 
         return response()->json([
             'status' => 'success',

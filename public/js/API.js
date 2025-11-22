@@ -297,6 +297,32 @@ async function getAllDivisi() {
   }
 }
 
+async function getAllPosisition() {
+  try {
+    const response = await axios.get('/hrd/posisi', {
+      withCredentials: true,
+    });
+
+    if (response.data?.status === "success") {
+      return response.data.data || [];
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: response.data?.message || "Terjadi kesalahan pada API getAllDivisi.",
+      });
+      return [];
+    }
+  } catch (error) {
+        Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan API getAllDivisi: ${error.response?.data?.message || error.message}`,
+    });
+    return [];
+  }
+}
+
 async function getAllDepartement() {
   try {
     const response = await axios.get('/hrd/departement', {
@@ -376,4 +402,5 @@ window.getAllModuleWithMenu = getAllModuleWithMenu;
 window.getModuleByUser = getModuleByUser;
 window.getAllDivisi = getAllDivisi;
 window.getAllDepartement = getAllDepartement;
+window.getAllPosisition = getAllPosisition;
 window.validasiUserHalaman = validasiUserHalaman;
