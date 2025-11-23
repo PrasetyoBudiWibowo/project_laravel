@@ -151537,6 +151537,52 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       $("#filter_divisi").val("").trigger("change");
       $("#filter_departement").val("").trigger("change");
       this.filterDataPosisi = this.dataPosisition;
+    },
+    exportExcel: function exportExcel() {
+      var url = "/hrd/export-excel-posisition";
+      if (this.selectedDivisi && !this.selectedDepartement) {
+        url += "?divisi=".concat(encodeURIComponent(this.selectedDivisi));
+      } else if (this.selectedDivisi && this.selectedDepartement) {
+        url += "?divisi=".concat(encodeURIComponent(this.selectedDivisi), "&departement=").concat(encodeURIComponent(this.selectedDepartement));
+      }
+      Swal.fire({
+        title: "Mengunduh Data...",
+        html: "\n                        <div style=\"width: 100%; background: #eee; border-radius: 4px;\">\n                            <div id=\"download-progress\" \n                                style=\"width:0%; background:#3b82f6; height:10px; border-radius: 4px;\">\n                            </div>\n                        </div>\n                        <p id=\"download-percent\" style=\"margin-top: 8px; font-size: 14px;\">0%</p>\n                    ",
+        allowOutsideClick: false,
+        showConfirmButton: false
+      });
+      axios({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+        onDownloadProgress: function onDownloadProgress(progressEvent) {
+          if (progressEvent.lengthComputable) {
+            var percent = Math.round(progressEvent.loaded * 100 / progressEvent.total);
+            document.getElementById("download-progress").style.width = percent + "%";
+            document.getElementById("download-percent").innerHTML = percent + "%";
+          }
+        }
+      }).then(function (response) {
+        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        var fileLink = document.createElement("a");
+        fileLink.href = fileURL;
+        fileLink.setAttribute("download", "Master Position.xlsx");
+        document.body.appendChild(fileLink);
+        fileLink.click();
+        Swal.close();
+      })["catch"](function (error) {
+        var _error$response2;
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Terjadi kesalahan exportExcel : ".concat(((_error$response2 = error.response) === null || _error$response2 === void 0 || (_error$response2 = _error$response2.data) === null || _error$response2 === void 0 ? void 0 : _error$response2.message) || error.message),
+          confirmButtonText: "Tutup",
+          customClass: {
+            confirmButton: "btn btn-danger"
+          },
+          buttonsStyling: false
+        });
+      });
     }
   }
 });
@@ -156681,7 +156727,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     key: 1,
     "class": "btn btn-success",
     onClick: _cache[5] || (_cache[5] = function () {
-      return _ctx.exportExcel && _ctx.exportExcel.apply(_ctx, arguments);
+      return $options.exportExcel && $options.exportExcel.apply($options, arguments);
     })
   }, _cache[15] || (_cache[15] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fas fa-file-excel me-1"

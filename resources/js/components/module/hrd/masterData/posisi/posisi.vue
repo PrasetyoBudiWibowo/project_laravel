@@ -397,6 +397,77 @@ export default {
 
             this.filterDataPosisi = this.dataPosisition;
         },
+        exportExcel() {
+            let url = `/hrd/export-excel-posisition`;
+
+            if (this.selectedDivisi && !this.selectedDepartement) {
+                url += `?divisi=${encodeURIComponent(this.selectedDivisi)}`;
+            } else if (this.selectedDivisi && this.selectedDepartement) {
+                url += `?divisi=${encodeURIComponent(
+                    this.selectedDivisi
+                )}&departement=${encodeURIComponent(this.selectedDepartement)}`;
+            }
+
+            Swal.fire({
+                title: "Mengunduh Data...",
+                html: `
+                        <div style="width: 100%; background: #eee; border-radius: 4px;">
+                            <div id="download-progress" 
+                                style="width:0%; background:#3b82f6; height:10px; border-radius: 4px;">
+                            </div>
+                        </div>
+                        <p id="download-percent" style="margin-top: 8px; font-size: 14px;">0%</p>
+                    `,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+            });
+
+            axios({
+                url: url,
+                method: "GET",
+                responseType: "blob",
+                onDownloadProgress: (progressEvent) => {
+                    if (progressEvent.lengthComputable) {
+                        let percent = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+
+                        document.getElementById(
+                            "download-progress"
+                        ).style.width = percent + "%";
+
+                        document.getElementById("download-percent").innerHTML =
+                            percent + "%";
+                    }
+                },
+            })
+                .then((response) => {
+                    const fileURL = window.URL.createObjectURL(
+                        new Blob([response.data])
+                    );
+                    const fileLink = document.createElement("a");
+                    fileLink.href = fileURL;
+                    fileLink.setAttribute("download", "Master Position.xlsx");
+                    document.body.appendChild(fileLink);
+                    fileLink.click();
+
+                    Swal.close();
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: `Terjadi kesalahan exportExcel : ${
+                            error.response?.data?.message || error.message
+                        }`,
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                        buttonsStyling: false,
+                    });
+                });
+        },
     },
 };
 </script>

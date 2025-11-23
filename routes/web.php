@@ -116,6 +116,7 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
     Route::post('/simpan-posisi', 'validasi_simpan_posisi');
     Route::post('/ubah-posisi', 'validasi_ubah_posisi');
     Route::get('/posisi', 'allDataPosisition');
+    Route::get('/export-excel-posisition', 'export_excel_posisition');
 
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');

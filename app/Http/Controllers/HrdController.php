@@ -621,8 +621,6 @@ class HrdController extends Controller
 
             $data = $this->hrdService->allDepartement();
 
-            $data = $this->hrdService->allDepartement();
-
             if (!empty($divisi)) {
                 $data = $data->filter(function ($item) use ($divisi) {
                     return isset($item['divisi']['nama_divisi']) &&
@@ -682,6 +680,125 @@ class HrdController extends Controller
 
             $writer = new Xlsx($spreadsheet);
             $fileName = "departement.xlsx";
+
+            return response()->streamDownload(function () use ($writer) {
+                $writer->save('php://output');
+            }, $fileName, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'line' => $th->getLine(),
+                'file' => $th->getFile()
+            ], 500);
+        }
+    }
+
+    public function export_excel_posisition(Request $request)
+    {
+        try {
+            $divisi = $request->query('divisi');
+            $departement = $request->query('departement');
+            if ($divisi) {
+                $divisi = urldecode($divisi);
+            }
+
+            if ($departement) {
+                $departement = urldecode($departement);
+            }
+
+            $data = $this->hrdService->allPosisition();
+
+            if (!empty($divisi) && empty($departement)) {
+                $data = $data->filter(function ($item) use ($divisi) {
+                    return $item['departement']['divisi']['nama_divisi'] === $divisi;
+                })->values()->toArray();
+            } else if (!empty($divisi) && !empty($departement)) {
+                $data = $data->filter(function ($item) use ($divisi, $departement) {
+                    return $item['departement']['divisi']['nama_divisi'] === $divisi &&
+                        $item['departement']['nama_departement'] === $departement;
+                })->values()->toArray();
+            } else {
+                $data = $data->toArray();
+            }
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+            //  JUDUL DI ATAS TABEL
+            $title = "MASTER POSISI";
+            $sheet->setCellValue('A1', $title);
+
+            // Merge A1 sampai D1
+            $sheet->mergeCells('A1:D1');
+
+            // Style judul
+            $sheet->getStyle('A1')->applyFromArray([
+                'font' => [
+                    'bold' => true,
+                    'size' => 14,
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+            ]);
+
+            //  HEADER TABEL (mulai baris 3)
+            $sheet->setCellValue('A3', 'No');
+            $sheet->setCellValue('B3', 'Divisi');
+            $sheet->setCellValue('C3', 'Department');
+            $sheet->setCellValue('D3', 'Posisi');
+
+            $headerStyle = [
+                'font' => ['bold' => true],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => 'D9E1F2']
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['rgb' => '000000'],
+                    ],
+                ],
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            ];
+
+            $sheet->getStyle('A3:D3')->applyFromArray($headerStyle);
+
+            //  ISI DATA (mulai baris 4)
+            $row = 4;
+            $no = 1;
+
+            foreach ($data as $item) {
+                $sheet->setCellValue('A' . $row, $no++);
+                $sheet->setCellValue('B' . $row, $item['departement']['divisi']['nama_divisi']);
+                $sheet->setCellValue('C' . $row, $item['departement']['nama_departement']);
+                $sheet->setCellValue('D' . $row, $item['nama_position']);
+                $row++;
+            }
+
+            // Border untuk data
+            if ($row > 4) {
+                $sheet->getStyle("A4:D" . ($row - 1))->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000'],
+                        ],
+                    ],
+                ]);
+            }
+
+            // Auto width
+            foreach (range('A', 'D') as $col) {
+                $sheet->getColumnDimension($col)->setAutoSize(true);
+            }
+
+            $writer = new Xlsx($spreadsheet);
+            $fileName = "Master Posisi.xlsx";
 
             return response()->streamDownload(function () use ($writer) {
                 $writer->save('php://output');
