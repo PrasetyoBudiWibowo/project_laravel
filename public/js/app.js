@@ -151247,9 +151247,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _loading_loadingData_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../loading/loadingData.vue */ "./resources/js/components/loading/loadingData.vue");
-/* harmony import */ var _modal_modalTambahPosisi_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modal/modalTambahPosisi.vue */ "./resources/js/components/module/hrd/masterData/posisi/modal/modalTambahPosisi.vue");
-/* harmony import */ var _modal_modalEditPosisi_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modal/modalEditPosisi.vue */ "./resources/js/components/module/hrd/masterData/posisi/modal/modalEditPosisi.vue");
+/* harmony import */ var _primevue_core_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @primevue/core/api */ "./node_modules/@primevue/core/api/index.mjs");
+/* harmony import */ var primevue_iconfield__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! primevue/iconfield */ "./node_modules/primevue/iconfield/index.mjs");
+/* harmony import */ var primevue_inputicon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! primevue/inputicon */ "./node_modules/primevue/inputicon/index.mjs");
+/* harmony import */ var primevue_inputtext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! primevue/inputtext */ "./node_modules/primevue/inputtext/index.mjs");
+/* harmony import */ var _loading_loadingData_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../loading/loadingData.vue */ "./resources/js/components/loading/loadingData.vue");
+/* harmony import */ var _modal_modalTambahPosisi_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modal/modalTambahPosisi.vue */ "./resources/js/components/module/hrd/masterData/posisi/modal/modalTambahPosisi.vue");
+/* harmony import */ var _modal_modalEditPosisi_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modal/modalEditPosisi.vue */ "./resources/js/components/module/hrd/masterData/posisi/modal/modalEditPosisi.vue");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -151257,17 +151267,37 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 
 
+
+
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    loadingData: _loading_loadingData_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    modalTambahPosisi: _modal_modalTambahPosisi_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    modalEditPosisi: _modal_modalEditPosisi_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    loadingData: _loading_loadingData_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    modalTambahPosisi: _modal_modalTambahPosisi_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    modalEditPosisi: _modal_modalEditPosisi_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+    IconField: primevue_iconfield__WEBPACK_IMPORTED_MODULE_1__["default"],
+    InputIcon: primevue_inputicon__WEBPACK_IMPORTED_MODULE_2__["default"],
+    InputText: primevue_inputtext__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
       dataUser: window.userData,
       hakAkses: null,
-      dataPosisition: []
+      dataPosisition: [],
+      filterDataPosisi: [],
+      filterDataDivisi: [],
+      filterDataDepertement: [],
+      selectedDivisi: "",
+      selectedDepartement: "",
+      filteredData: null,
+      filters: {
+        global: {
+          value: null,
+          matchMode: _primevue_core_api__WEBPACK_IMPORTED_MODULE_0__.FilterMatchMode.CONTAINS
+        }
+      },
+      loadingMenu: true
     };
   },
   mounted: function mounted() {
@@ -151280,19 +151310,46 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
             axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
             _context.n = 1;
-            return _this.posisition();
+            return _this.divisi();
           case 1:
+            _context.n = 2;
+            return _this.departement();
+          case 2:
+            _context.n = 3;
+            return _this.posisition();
+          case 3:
             if (!(_this.dataUser.level_user !== "SUPER ADMIN")) {
-              _context.n = 2;
+              _context.n = 4;
               break;
             }
-            _context.n = 2;
+            _context.n = 4;
             return _this.cekStatusAkses();
-          case 2:
+          case 4:
+            _this.$nextTick(function () {
+              defaultSelect2("#filter_divisi", "-- PILIH DIVISI --");
+              defaultSelect2("#filter_departement", "-- PILIH DEPARTEMENT --");
+              $("#filter_divisi").on("change", function (e) {
+                _this.selectedDivisi = $(e.target).val();
+              });
+              $("#filter_departement").on("change", function (e) {
+                _this.selectedDepartement = $(e.target).val();
+              });
+            });
+            _this.loadingMenu = false;
+          case 5:
             return _context.a(2);
         }
       }, _callee);
     }))();
+  },
+  computed: {
+    filteredDepartement: function filteredDepartement() {
+      var _this2 = this;
+      if (!this.selectedDivisi) return [];
+      return this.filterDataDepertement.filter(function (d) {
+        return d.divisi.nama_divisi === _this2.selectedDivisi;
+      });
+    }
   },
   methods: {
     openModal: function openModal() {
@@ -151302,7 +151359,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       this.$refs.modalEditPosisi.openEdit(item);
     },
     cekStatusAkses: function cekStatusAkses() {
-      var _this2 = this;
+      var _this3 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
         var data, allowed, _error$response, _t;
         return _regenerator().w(function (_context2) {
@@ -151323,7 +151380,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               }
               return _context2.a(2);
             case 2:
-              _this2.hakAkses = allowed[0];
+              _this3.hakAkses = allowed[0];
               _context2.n = 4;
               break;
             case 3:
@@ -151346,7 +151403,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }))();
     },
     posisition: function posisition() {
-      var _this3 = this;
+      var _this4 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
         var data, _t2;
         return _regenerator().w(function (_context3) {
@@ -151357,7 +151414,20 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return getAllPosisition();
             case 1:
               data = _context3.v;
-              _this3.dataPosisition = data || [];
+              _this4.dataPosisition = data.map(function (it) {
+                var _it$departement$divis, _it$departement, _it$departement$nama_, _it$departement2;
+                return _objectSpread(_objectSpread({}, it), {}, {
+                  nama_divisi: (_it$departement$divis = it === null || it === void 0 || (_it$departement = it.departement) === null || _it$departement === void 0 || (_it$departement = _it$departement.divisi) === null || _it$departement === void 0 ? void 0 : _it$departement.nama_divisi) !== null && _it$departement$divis !== void 0 ? _it$departement$divis : "",
+                  nama_departement: (_it$departement$nama_ = it === null || it === void 0 || (_it$departement2 = it.departement) === null || _it$departement2 === void 0 ? void 0 : _it$departement2.nama_departement) !== null && _it$departement$nama_ !== void 0 ? _it$departement$nama_ : ""
+                });
+              });
+              _this4.filterDataPosisi = data.map(function (it) {
+                var _it$departement$divis2, _it$departement3, _it$departement$nama_2, _it$departement4;
+                return _objectSpread(_objectSpread({}, it), {}, {
+                  nama_divisi: (_it$departement$divis2 = it === null || it === void 0 || (_it$departement3 = it.departement) === null || _it$departement3 === void 0 || (_it$departement3 = _it$departement3.divisi) === null || _it$departement3 === void 0 ? void 0 : _it$departement3.nama_divisi) !== null && _it$departement$divis2 !== void 0 ? _it$departement$divis2 : "",
+                  nama_departement: (_it$departement$nama_2 = it === null || it === void 0 || (_it$departement4 = it.departement) === null || _it$departement4 === void 0 ? void 0 : _it$departement4.nama_departement) !== null && _it$departement$nama_2 !== void 0 ? _it$departement$nama_2 : ""
+                });
+              });
               _context3.n = 3;
               break;
             case 2:
@@ -151377,6 +151447,96 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
           }
         }, _callee3, null, [[0, 2]]);
       }))();
+    },
+    departement: function departement() {
+      var _this5 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
+        var data, _t3;
+        return _regenerator().w(function (_context4) {
+          while (1) switch (_context4.p = _context4.n) {
+            case 0:
+              _context4.p = 0;
+              _context4.n = 1;
+              return getAllDepartement();
+            case 1:
+              data = _context4.v;
+              _this5.filterDataDepertement = data || [];
+              _context4.n = 3;
+              break;
+            case 2:
+              _context4.p = 2;
+              _t3 = _context4.v;
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan this.departement(): ".concat(_t3.statusText || _t3),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                }
+              });
+            case 3:
+              return _context4.a(2);
+          }
+        }, _callee4, null, [[0, 2]]);
+      }))();
+    },
+    divisi: function divisi() {
+      var _this6 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
+        var data, _t4;
+        return _regenerator().w(function (_context5) {
+          while (1) switch (_context5.p = _context5.n) {
+            case 0:
+              _context5.p = 0;
+              _context5.n = 1;
+              return getAllDivisi();
+            case 1:
+              data = _context5.v;
+              _this6.filterDataDivisi = data || [];
+              _context5.n = 3;
+              break;
+            case 2:
+              _context5.p = 2;
+              _t4 = _context5.v;
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan this.departement(): ".concat(_t4.statusText || _t4),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                }
+              });
+            case 3:
+              return _context5.a(2);
+          }
+        }, _callee5, null, [[0, 2]]);
+      }))();
+    },
+    onFilter: function onFilter(e) {
+      this.filteredData = e.filteredValue;
+    },
+    handleCari: function handleCari() {
+      var _this7 = this;
+      var dataFiltered = this.dataPosisition;
+      if (this.selectedDivisi && !this.selectedDepartement) {
+        dataFiltered = dataFiltered.filter(function (it) {
+          return it.nama_divisi === _this7.selectedDivisi;
+        });
+      } else if (this.selectedDivisi && this.selectedDepartement) {
+        dataFiltered = dataFiltered.filter(function (it) {
+          return it.nama_divisi === _this7.selectedDivisi && it.nama_departement === _this7.selectedDepartement;
+        });
+      }
+      this.filterDataPosisi = dataFiltered;
+    },
+    resetFilter: function resetFilter() {
+      this.selectedDivisi = "";
+      this.selectedDepartement = "";
+      $("#filter_divisi").val("").trigger("change");
+      $("#filter_departement").val("").trigger("change");
+      this.filterDataPosisi = this.dataPosisition;
     }
   }
 });
@@ -156410,43 +156570,124 @@ var _hoisted_3 = {
   "class": "card-body"
 };
 var _hoisted_4 = {
-  "class": "d-flex justify-content mb-3 gap-2"
+  "class": "mb-2 row align-items-center"
 };
 var _hoisted_5 = {
+  "class": "col-sm-4"
+};
+var _hoisted_6 = ["value", "title"];
+var _hoisted_7 = {
+  "class": "mb-2 row align-items-center"
+};
+var _hoisted_8 = {
+  "class": "col-sm-4"
+};
+var _hoisted_9 = ["disabled"];
+var _hoisted_10 = ["value", "title"];
+var _hoisted_11 = {
+  "class": "mb-4 row align-items-center"
+};
+var _hoisted_12 = {
+  "class": "col-sm-6 d-flex gap-2"
+};
+var _hoisted_13 = {
+  "class": "d-flex justify-content mb-3 gap-2"
+};
+var _hoisted_14 = {
   "class": "row mt-2"
 };
-var _hoisted_6 = {
+var _hoisted_15 = {
   "class": "col-12"
 };
-var _hoisted_7 = ["onClick"];
-var _hoisted_8 = ["onClick"];
+var _hoisted_16 = {
+  "class": "flex justify-end"
+};
+var _hoisted_17 = ["onClick"];
+var _hoisted_18 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _$data$dataUser, _$data$hakAkses, _$data$dataUser2, _$data$hakAkses2;
+  var _component_InputIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("InputIcon");
+  var _component_InputText = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("InputText");
+  var _component_IconField = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("IconField");
   var _component_Column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Column");
   var _component_DataTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DataTable");
   var _component_modalTambahPosisi = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("modalTambahPosisi");
   var _component_modalEditPosisi = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("modalEditPosisi");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  var _component_loadingData = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("loadingData");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "card-header"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "MASTER POSISI")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [((_$data$dataUser = $data.dataUser) === null || _$data$dataUser === void 0 ? void 0 : _$data$dataUser.level_user) === 'SUPER ADMIN' || ((_$data$hakAkses = $data.hakAkses) === null || _$data$hakAkses === void 0 ? void 0 : _$data$hakAkses.bisa_insert) === 'YA' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "MASTER POSISI")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    "class": "col-sm-2 col-form-label"
+  }, "Divisi:", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    id: "filter_divisi",
+    "class": "form-select",
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      return $data.selectedDivisi = $event;
+    })
+  }, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: ""
+  }, "Semua Divisi", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.filterDataDivisi, function (div) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
+      key: div.kd_divisi,
+      value: div.nama_divisi,
+      title: div.nama_divisi
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(div.nama_divisi), 9 /* TEXT, PROPS */, _hoisted_6);
+  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedDivisi]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    "class": "col-sm-2 col-form-label"
+  }, "Departement:", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+    id: "filter_departement",
+    "class": "form-select",
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+      return $data.selectedDepartement = $event;
+    }),
+    disabled: !$data.selectedDivisi
+  }, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+    value: ""
+  }, "Semua Divisi", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.filteredDepartement, function (div) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
+      key: div.kd_departement,
+      value: div.nama_departement,
+      title: div.nama_departement
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(div.nama_departement), 9 /* TEXT, PROPS */, _hoisted_10);
+  }), 128 /* KEYED_FRAGMENT */))], 8 /* PROPS */, _hoisted_9), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedDepartement]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-success",
+    onClick: _cache[2] || (_cache[2] = function () {
+      return $options.handleCari && $options.handleCari.apply($options, arguments);
+    }),
+    style: {
+      "white-space": "nowrap"
+    }
+  }, _cache[12] || (_cache[12] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fa-solid fa-magnifying-glass me-1"
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Cari ")])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-danger",
+    onClick: _cache[3] || (_cache[3] = function () {
+      return $options.resetFilter && $options.resetFilter.apply($options, arguments);
+    }),
+    style: {
+      "white-space": "nowrap"
+    }
+  }, _cache[13] || (_cache[13] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fa fa-xmark me-1"
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Reset ")]))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [((_$data$dataUser = $data.dataUser) === null || _$data$dataUser === void 0 ? void 0 : _$data$dataUser.level_user) === 'SUPER ADMIN' || ((_$data$hakAkses = $data.hakAkses) === null || _$data$hakAkses === void 0 ? void 0 : _$data$hakAkses.bisa_insert) === 'YA' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
     "class": "btn btn-primary",
-    onClick: _cache[0] || (_cache[0] = function () {
+    onClick: _cache[4] || (_cache[4] = function () {
       return $options.openModal && $options.openModal.apply($options, arguments);
     })
-  }, _cache[2] || (_cache[2] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, _cache[14] || (_cache[14] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fas fa-plus me-1"
   }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Tambah ")]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), ((_$data$dataUser2 = $data.dataUser) === null || _$data$dataUser2 === void 0 ? void 0 : _$data$dataUser2.level_user) === 'SUPER ADMIN' || ((_$data$hakAkses2 = $data.hakAkses) === null || _$data$hakAkses2 === void 0 ? void 0 : _$data$hakAkses2.bisa_export) === 'YA' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 1,
     "class": "btn btn-success",
-    onClick: _cache[1] || (_cache[1] = function () {
+    onClick: _cache[5] || (_cache[5] = function () {
       return _ctx.exportExcel && _ctx.exportExcel.apply(_ctx, arguments);
     })
-  }, _cache[3] || (_cache[3] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, _cache[15] || (_cache[15] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "fas fa-file-excel me-1"
-  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Excel ")]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Excel ")]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
     id: "tabelPoisisi",
-    value: $data.dataPosisition,
+    value: $data.filterDataPosisi,
     stripedRows: "",
     paginator: true,
     scrollable: "",
@@ -156455,11 +156696,42 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     removableSort: "",
     rows: 5,
     rowsPerPageOptions: [5, 10, 20, 50, 100],
-    tableStyle: "min-width: 60rem"
+    tableStyle: "min-width: 60rem",
+    filters: $data.filters,
+    "onUpdate:filters": _cache[7] || (_cache[7] = function ($event) {
+      return $data.filters = $event;
+    }),
+    onFilter: $options.onFilter,
+    globalFilterFields: ['nama_divisi', 'nama_departement', 'nama_position']
   }, {
+    header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_IconField, null, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputIcon, {
+            "class": "text-sm"
+          }, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+              return _cache[16] || (_cache[16] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+                "class": "fa fa-search text-base"
+              }, null, -1 /* CACHED */)]);
+            }),
+            _: 1 /* STABLE */,
+            __: [16]
+          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputText, {
+            "class": "h-9 text-sm",
+            modelValue: $data.filters['global'].value,
+            "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+              return $data.filters['global'].value = $event;
+            }),
+            placeholder: "Cari"
+          }, null, 8 /* PROPS */, ["modelValue"])];
+        }),
+        _: 1 /* STABLE */
+      })])];
+    }),
     footer: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      var _$data$dataPosisition;
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Total Data " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(((_$data$dataPosisition = $data.dataPosisition) === null || _$data$dataPosisition === void 0 ? void 0 : _$data$dataPosisition.length) || 0), 1 /* TEXT */)];
+      var _$data$filteredData$l, _$data$filteredData;
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Total Data " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$data$filteredData$l = (_$data$filteredData = $data.filteredData) === null || _$data$filteredData === void 0 ? void 0 : _$data$filteredData.length) !== null && _$data$filteredData$l !== void 0 ? _$data$filteredData$l : $data.dataPosisition.length), 1 /* TEXT */)];
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
@@ -156470,14 +156742,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         _: 1 /* STABLE */
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
-        field: "departement.divisi.nama_divisi",
+        field: "nama_divisi",
         header: "Divisi",
         sortable: "",
         bodyClass: "text-capitalize"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
-        field: "departement.nama_departement",
+        field: "nama_departement",
         header: "Departement",
-        sortable: ""
+        sortable: "",
+        bodyClass: "text-capitalize"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
         field: "nama_position",
         header: "Posisi",
@@ -156491,22 +156764,25 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             onClick: function onClick($event) {
               return $options.openEdit(row.data);
             }
-          }, " Edit ", 8 /* PROPS */, _hoisted_7), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+          }, " Edit ", 8 /* PROPS */, _hoisted_17), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
             "class": "btn btn-danger btn-sm",
             onClick: function onClick($event) {
               return _ctx.hapusData(row.data);
             }
-          }, " Hapus ", 8 /* PROPS */, _hoisted_8)];
+          }, " Hapus ", 8 /* PROPS */, _hoisted_18)];
         }),
         _: 1 /* STABLE */
       })];
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["value"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_modalTambahPosisi, {
+  }, 8 /* PROPS */, ["value", "filters", "onFilter"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_modalTambahPosisi, {
     ref: "modalTambahPosisi"
   }, null, 512 /* NEED_PATCH */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_modalEditPosisi, {
     ref: "modalEditPosisi"
-  }, null, 512 /* NEED_PATCH */)])])]);
+  }, null, 512 /* NEED_PATCH */)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_loadingData, {
+    visible: $data.loadingMenu,
+    message: "Loading"
+  }, null, 8 /* PROPS */, ["visible"])], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),

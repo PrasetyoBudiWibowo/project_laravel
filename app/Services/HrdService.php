@@ -550,7 +550,7 @@ class HrdService
     public function ubahPosisi($data)
     {
         DB::beginTransaction();
-        $log = AppLogger::getLogger('UBAH-POSISI');
+        $log = AppLogger::getLogger('UBAH-MASTER-POSISI');
         try {
             $log->info("<================= MULAI PROSES UBAH DATA DI DATABASE MASTER POSISITION =================>");
 
