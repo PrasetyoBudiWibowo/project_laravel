@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import PrimeVue from 'primevue/config';
-import Lara from '@primevue/themes/lara'; // tema utama
+import Lara from '@primevue/themes/lara';
 
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -28,10 +28,11 @@ import aksesModule from './components/module/setting/aksesModule.vue';
 import menuSidebar from './components/module/setting/menuSidebar.vue';
 import hakAksesMenu from './components/module/setting/hakAksesMenu.vue';
 import dasboardHrd from './components/module/hrd/dasboardHrd.vue';
-import masterKaryawan from './components/module/hrd/masterData/masterKaryawan.vue';
+import masterKaryawan from './components/module/hrd/masterData/karyawan/masterKaryawan.vue';
 import masterDivisi from './components/module/hrd/masterData/masterDivisi.vue';
 import departement from './components/module/hrd/masterData/departement/departement.vue';
 import posisi from './components/module/hrd/masterData/posisi/posisi.vue';
+import masterJabatan from './components/module/hrd/masterData/jabatan/masterJabatan.vue';
 
 const app = createApp({});
 
@@ -51,6 +52,7 @@ app.component('master-karyawan', masterKaryawan);
 app.component('master-divisi', masterDivisi);
 app.component('master-departement', departement);
 app.component('master-posisi', posisi);
+app.component('master-jabatan', masterJabatan);
 
 app.use(Antd)
 app.use(PrimeVue, {

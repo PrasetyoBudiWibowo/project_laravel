@@ -7,6 +7,7 @@ use App\Models\Divisi;
 use App\Models\Departement;
 use App\Models\Posisi;
 use App\Models\Negara;
+use App\Models\MasterJabatan;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -315,6 +316,26 @@ class HrdService
         return $prefix . $newNumber;
     }
 
+    private function generateKdJabatan()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'JBT-' . $currentMonth . '-';
+
+        $kd_jabatan_terakhir = MasterJabatan::where('kd_jabatan', 'LIKE', $prefix . '%')
+            ->orderBy('kd_jabatan', 'DESC')
+            ->first();
+
+        if (!$kd_jabatan_terakhir) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $kd_jabatan_terakhir->kd_jabatan;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
     public function simpanDivisi($data)
     {
         DB::beginTransaction();
@@ -586,6 +607,66 @@ class HrdService
         } catch (\Throwable $th) {
             DB::rollBack();
             // return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            throw $th;
+        }
+    }
+
+    public function simpanJabatan($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('SIMPAN-JABATAN');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE MASTER JABATAN =================>");
+
+            if (empty($data['nama_jabatan']) || empty($data['user_input'])) {
+                throw new \Exception("Data yang dikirim tidak lengkap untuk simpanJabatan.");
+            }
+
+            $kdJabatan = $this->generateKdJabatan();
+            $log->info("<================= BERHASIL BUAT PK =================>");
+
+            $log->info("Data CONTROLLER: PK" . json_encode($kdJabatan));
+
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $jabatan = MasterJabatan::create([
+                'kd_jabatan' => $kdJabatan,
+                'nama_jabatan' => $data['nama_jabatan'],
+                'user_input' => $data['user_input'],
+                'tgl_input' => $tgl_input,
+                'bln_input' => $bln_input,
+                'thn_input' => $thn_input,
+                'waktu_input' => $waktu_input,
+                'alamat_device' => $ipDevice,
+                'type_device' => $deviceType,
+                'device' => $device,
+            ]);
+
+            if (!$jabatan) {
+                throw new \Exception("GAGAL ADA DATA YANG SALAH");
+            }
+
+            $log->info("BERHASIL SIMPAN DATA");
+
+            DB::commit();
+
+            $log->info("PROSES SELESAI");
+            return $jabatan;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => $th->getMessage(), 'line' => $th->getLine()], 500);
             throw $th;
         }
     }

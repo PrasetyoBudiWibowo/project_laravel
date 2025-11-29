@@ -118,6 +118,9 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
     Route::get('/posisi', 'allDataPosisition');
     Route::get('/export-excel-posisition', 'export_excel_posisition');
 
+    Route::get('/master-jabatan', 'master_jabatan')->name('master_jabatan');
+    Route::post('/simpan-jabatan', 'validasi_simpan_jabatan');
+
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');
 });

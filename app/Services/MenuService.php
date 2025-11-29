@@ -21,7 +21,7 @@ class MenuService
 
         $result = $menus->map(function ($menu) {
             return [
-                'kd_menu' => Crypt::encryptString($menu->kd_menu),
+                'kd_menu' => $menu->kd_menu,
                 'kd_module' => $menu->kd_module,
                 'nama_menu' => $menu->nama_menu,
                 'urutan' => $menu->urutan,
