@@ -358,7 +358,7 @@ export default {
                 Swal.fire({
                     icon: "error",
                     title: "Gagal",
-                    text: `Terjadi kesalahan this.departement(): ${
+                    text: `Terjadi kesalahan this.divisi(): ${
                         err.statusText || err
                     }`,
                     confirmButtonText: "Tutup",

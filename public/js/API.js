@@ -309,7 +309,7 @@ async function getAllPosisition() {
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: response.data?.message || "Terjadi kesalahan pada API getAllDivisi.",
+        text: response.data?.message || "Terjadi kesalahan pada API getAllPosisition.",
       });
       return [];
     }
@@ -317,7 +317,7 @@ async function getAllPosisition() {
         Swal.fire({
       icon: "error",
       title: "Gagal",
-      text: `Terjadi kesalahan API getAllDivisi: ${error.response?.data?.message || error.message}`,
+      text: `Terjadi kesalahan API getAllPosisition: ${error.response?.data?.message || error.message}`,
     });
     return [];
   }
@@ -335,7 +335,7 @@ async function getAllDepartement() {
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: response.data?.message || "Terjadi kesalahan pada API getAllDivisi.",
+        text: response.data?.message || "Terjadi kesalahan pada API getAllDepartement.",
       });
       return [];
     }
@@ -343,7 +343,33 @@ async function getAllDepartement() {
         Swal.fire({
       icon: "error",
       title: "Gagal",
-      text: `Terjadi kesalahan API getAllDivisi: ${error.response?.data?.message || error.message}`,
+      text: `Terjadi kesalahan API getAllDepartement: ${error.response?.data?.message || error.message}`,
+    });
+    return [];
+  }
+}
+
+async function getAllJabatan() {
+  try {
+    const response = await axios.get('/hrd/jabatan', {
+      withCredentials: true,
+    });
+
+    if (response.data?.status === "success") {
+      return response.data.data || [];
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: response.data?.message || "Terjadi kesalahan pada API getAllJabatan.",
+      });
+      return [];
+    }
+  } catch (error) {
+        Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan API getAllJabatan: ${error.response?.data?.message || error.message}`,
     });
     return [];
   }
@@ -403,4 +429,5 @@ window.getModuleByUser = getModuleByUser;
 window.getAllDivisi = getAllDivisi;
 window.getAllDepartement = getAllDepartement;
 window.getAllPosisition = getAllPosisition;
+window.getAllJabatan = getAllJabatan;
 window.validasiUserHalaman = validasiUserHalaman;

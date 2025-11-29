@@ -120,6 +120,7 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
 
     Route::get('/master-jabatan', 'master_jabatan')->name('master_jabatan');
     Route::post('/simpan-jabatan', 'validasi_simpan_jabatan');
+    Route::get('/jabatan', 'allDatajabatan');
 
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');

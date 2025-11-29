@@ -94,6 +94,21 @@ class HrdService
         return $data;
     }
 
+    public function allJabatan()
+    {
+        $data = MasterJabatan::orderBy('nama_jabatan', 'asc')->get();
+
+        $result = $data->map(function ($datas) {
+            return [
+                'kd_jabatan' => Crypt::encryptString($datas->kd_jabatan),
+                'nama_jabatan' => $datas->nama_jabatan,
+                'kd_jabatan_tampil' => $datas->kd_jabatan_tampil,
+            ];
+        });
+
+        return $result;
+    }
+
     public function allKaryawan()
     {
         $karyawan = Karyawan::with('Divisi')
@@ -625,7 +640,7 @@ class HrdService
             $kdJabatan = $this->generateKdJabatan();
             $log->info("<================= BERHASIL BUAT PK =================>");
 
-            $log->info("Data CONTROLLER: PK" . json_encode($kdJabatan));
+            // $log->info("Data CONTROLLER: PK" . json_encode($kdJabatan));
 
             $now = Carbon::now('Asia/Jakarta');
             $tgl_input = $now->toDateString();

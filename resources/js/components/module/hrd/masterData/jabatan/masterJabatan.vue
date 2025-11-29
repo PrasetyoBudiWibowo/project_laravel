@@ -33,15 +33,34 @@
             <div class="row mt-2">
                 <div class="col-12">
                     <DataTable
-                        id="tabelJabatan"
+                        :value="datajabatan"
                         stripedRows
                         :paginator="true"
+                        :rows="10"
                         showGridlines
+                        tableStyle="min-width: 60rem"
                     >
-                        <Column header="No"></Column>
-                        <Column header="Kode Jabatan"></Column>
-                        <Column header="Nama Jabatan"></Column>
-                        <Column header="Aksi"></Column>
+                        <Column header="No">
+                            <template #body="row">
+                                {{ row.index + 1 }}
+                            </template>
+                        </Column>
+                        <Column field="nama_jabatan" header="Kode Jabatan" />
+                        <Column
+                            field="nama_jabatan"
+                            header="Nama Jabatan"
+                            bodyClass="text-capitalize"
+                        />
+                        <Column header="Aksi">
+                            <template #body="row">
+                                <button class="btn btn-primary btn-sm me-2">
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm">
+                                    Hapus
+                                </button>
+                            </template>
+                        </Column>
                     </DataTable>
                 </div>
             </div>
@@ -63,6 +82,7 @@ export default {
         return {
             dataUser: window.userData,
             hakAkses: null,
+            datajabatan: [],
         };
     },
     async mounted() {
@@ -74,6 +94,8 @@ export default {
         if (this.dataUser.level_user !== "SUPER ADMIN") {
             await this.cekStatusAkses();
         }
+
+        await this.jabatan();
     },
     methods: {
         openModal() {
@@ -108,6 +130,31 @@ export default {
                 });
             }
         },
+        async jabatan() {
+            try {
+                const data = await getAllJabatan();
+                this.datajabatan = data || [];
+
+                console.log("dknkad", this.datajabatan);
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan getAllJabatan(): ${
+                        err.statusText || err
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
+        },
     },
 };
 </script>
+<style>
+.p-datatable .p-datatable-tbody > tr:hover {
+    background-color: yellow !important;
+}
+</style>

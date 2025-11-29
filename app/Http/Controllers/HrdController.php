@@ -56,6 +56,11 @@ class HrdController extends Controller
         return view('module.hrd.masterData.master_posisi');
     }
 
+    public function master_jabatan()
+    {
+        return view('module.hrd.masterData.master_jabatan');
+    }
+
     public function allDataDivisi()
     {
         $divisi = $this->hrdService->allDivisi();
@@ -106,6 +111,24 @@ class HrdController extends Controller
             'data' => $posisi
         ]);
     }
+
+    public function allDataJabatan()
+    {
+        $jabatan = $this->hrdService->allJabatan();
+
+        if (empty($jabatan)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $jabatan
+        ]);
+    }
+
 
     public function allDataKaryawan()
     {
@@ -593,6 +616,71 @@ class HrdController extends Controller
             $result = $this->hrdService->ubahPosisi($data);
 
             if (!$result->kd_position) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function validasi_simpan_jabatan(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-SIMPAN DATA POSISI KARYAWAN');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_simpan_jabatan"
+                ]);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_jabatan' => ['required', 'regex:/^[A-Z\s]+$/i'],
+            ], [
+                'nama_jabatan.required' => 'Nama Jabatan tidak boleh kosong',
+                'nama_jabatan.regex' => 'Nama Jabatan hanya boleh mengandung huruf dan spasi',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "USER YANG SEDANG INPUT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $data = [
+                'nama_jabatan' => $request->nama_jabatan,
+                'user_input' => $kdAsliUser,
+            ];
+
+            $result = $this->hrdService->simpanJabatan($data);
+
+            if (!$result->kd_jabatan) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Gagal Simpan'
