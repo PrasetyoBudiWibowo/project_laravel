@@ -10,12 +10,12 @@ class HistoryInputKaryawan extends Model
     use HasFactory;
 
     protected $table = 'history_input_master_karyawan';
-    protected $primaryKey = 'kd_hsr_input_karyawan';
+    protected $primaryKey = 'kd_history_input_master_karyawan';
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
-        'kd_hsr_input_karyawan',
+        'kd_history_input_master_karyawan',
         'jenis_input',
         'keterangan_input',
         'kd_karyawan',
@@ -30,4 +30,6 @@ class HistoryInputKaryawan extends Model
         'type_device',
         'device',
     ];
+
+    public $timestamps = false;
 }

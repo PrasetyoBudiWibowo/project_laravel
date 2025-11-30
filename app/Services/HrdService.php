@@ -8,6 +8,7 @@ use App\Models\Departement;
 use App\Models\Posisi;
 use App\Models\Negara;
 use App\Models\MasterJabatan;
+use App\Models\HistoryInputKaryawan;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
@@ -377,6 +378,64 @@ class HrdService
         return $prefix . $newNumber;
     }
 
+    private function generateKdHistoryInputkaryawan()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'HIMK-' . $currentMonth . '-';
+
+        $lastHistoryinput = HistoryInputKaryawan::where('kd_history_input_master_karyawan', 'LIKE', $prefix . '%')
+            ->orderBy('kd_history_input_master_karyawan', 'DESC')
+            ->first();
+
+        if (!$lastHistoryinput) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $lastHistoryinput->kd_history_input_master_karyawan;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
+    private function buatHistoryInputKaryawan($dataKaryawan)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('BUAT-HISTORY-INPUT-KARYAWAN');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA KE DATABASE HISTORY INPUT KARYAWAN =================>");
+
+            $kd_history_input_master_karyawan = $this->generateKdHistoryInputkaryawan();
+            $log->info("<================= BEHASIL BUAT PK generateKdHistoryInputkaryawan  =================>");
+
+            $historyInputMasterKaryawan = HistoryInputKaryawan::create([
+                'kd_history_input_master_karyawan' => $kd_history_input_master_karyawan,
+                'jenis_input' => "INPUT",
+                'keterangan_input' => "INPUT KARYAWAN BARU",
+                'kd_karyawan' => $dataKaryawan['kd_karyawan'],
+                'nama_karyawan' => $dataKaryawan['nama_karyawan'],
+                'user_input' => $dataKaryawan['user_input'],
+                'tgl_input' => $dataKaryawan['tgl_input'],
+                'bln_input' => $dataKaryawan['bln_input'],
+                'thn_input' => $dataKaryawan['thn_input'],
+                'waktu_input' => $dataKaryawan['waktu_input'],
+                'alamat_device' => $dataKaryawan['alamat_device'],
+                'type_device' => $dataKaryawan['type_device'],
+                'device' => $dataKaryawan['device'],
+            ]);
+
+            DB::commit();
+
+            return $historyInputMasterKaryawan;
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'line' => $th->getLine(),
+            ], 500);
+        }
+    }
+
     public function simpanDivisi($data)
     {
         DB::beginTransaction();
@@ -723,7 +782,7 @@ class HrdService
                 throw new \Exception("Data yang dikirim tidak lengkap untuk simpanJabatan.");
             }
 
-            $kdKaryawan = $this->generateKdKaryawan();
+            $kd_karyawan = $this->generateKdKaryawan();
             $log->info("<================= BERHASIL BUAT PK =================>");
 
             $now = Carbon::now('Asia/Jakarta');
@@ -741,7 +800,7 @@ class HrdService
             $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
 
             $karyawan = Karyawan::create([
-                'kd_karyawan' => $kdKaryawan,
+                'kd_karyawan' => $kd_karyawan,
                 'nama_karyawan' => $data['nama_karyawan'],
                 'nama_panggilan_karyawan' => $data['nama_panggilan_karyawan'] ?? null,
                 'kd_divisi' => $data['kd_divisi'],
@@ -760,6 +819,31 @@ class HrdService
 
             if (!$karyawan) {
                 throw new \Exception("GAGAL ADA DATA YANG SALAH");
+            }
+
+            $datakaryawan = [
+                'kd_karyawan' => $karyawan->kd_karyawan,
+                'nama_karyawan' => $karyawan->nama_karyawan,
+                'user_input' => $karyawan->user_input,
+                'tgl_input' => $karyawan->tgl_input,
+                'bln_input' => $karyawan->bln_input,
+                'thn_input' => $karyawan->thn_input,
+                'waktu_input' => $karyawan->waktu_input,
+                'alamat_device' => $karyawan->alamat_device,
+                'type_device' => $karyawan->type_device,
+                'device' => $karyawan->device,
+            ];
+
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE HISTORY INPUT MASTER KARYAWAN =================>");
+            $historyInputKaryawan = $this->buatHistoryInputKaryawan($datakaryawan);
+
+            if (!$historyInputKaryawan->kd_history_input_master_karyawan) {
+                $log->error("Validasi gagal untuk HISTORY INPUT MASTER KARYAWAN", [
+                    'invalid_input' => 'HISTORY INPUT MASTER KARYAWAN',
+                    'expected_format' => 'HISTORY INPUT MASTER KARYAWAN GAGAL DI BUAT'
+                ]);
+
+                throw new \Exception("HISTORY INPUT MASTER KARYAWAN GAGAL DI BUAT");
             }
 
             $log->info("BERHASIL SIMPAN DATA");

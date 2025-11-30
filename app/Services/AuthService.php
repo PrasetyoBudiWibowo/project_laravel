@@ -64,7 +64,7 @@ class AuthService
         $log = AppLogger::getLogger('BUAT-HISTORY-LOGIN');
         try {
             $log->info("<================= MULAI PROSES SIMPAN DATA KE DATABAS HistoryLoginUser =================>");
-            $log->info("Data dari controller: " . json_encode($data));
+            // $log->info("Data dari controller: " . json_encode($data));
 
             $kd_history_login = $this->buatKodeHistoryLogin();
             $log->info("berhasil buat code PK HistoryLoginUser");
