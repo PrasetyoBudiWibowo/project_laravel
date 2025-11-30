@@ -271,6 +271,12 @@ class HrdService
         return $posisi;
     }
 
+    public function cekJabatan($data)
+    {
+        $jabatan = MasterJabatan::find($data);
+        return $jabatan;
+    }
+
     private function generateKdDivisi()
     {
         $currentMonth = Carbon::now()->format('Ym');
@@ -345,6 +351,26 @@ class HrdService
         }
 
         $lastId = $kd_jabatan_terakhir->kd_jabatan;
+        $lastNumber = substr($lastId, -4);
+
+        $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
+        return $prefix . $newNumber;
+    }
+
+    private function generateKdKaryawan()
+    {
+        $currentMonth = Carbon::now()->format('Ym');
+        $prefix = 'KRY-' . $currentMonth . '-';
+
+        $lastKaryawan = Karyawan::where('kd_karyawan', 'LIKE', $prefix . '%')
+            ->orderBy('kd_karyawan', 'DESC')
+            ->first();
+
+        if (!$lastKaryawan) {
+            return $prefix . '0000';
+        }
+
+        $lastId = $lastKaryawan->kd_karyawan;
         $lastNumber = substr($lastId, -4);
 
         $newNumber = str_pad(intval($lastNumber) + 1, 4, '0', STR_PAD_LEFT);
@@ -683,6 +709,71 @@ class HrdService
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => $th->getMessage(), 'line' => $th->getLine()], 500);
             throw $th;
+        }
+    }
+
+    public function simpanKaryawan($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('SIMPAN-KARYAWAN');
+        try {
+            $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE MASTER KARYAWAN =================>");
+
+            if (empty($data['nama_karyawan']) || empty($data['kd_divisi']) || empty($data['kd_departement']) || empty($data['kd_position']) || empty($data['user_input'])) {
+                throw new \Exception("Data yang dikirim tidak lengkap untuk simpanJabatan.");
+            }
+
+            $kdKaryawan = $this->generateKdKaryawan();
+            $log->info("<================= BERHASIL BUAT PK =================>");
+
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_input = $now->toDateString();
+            $waktu_input = $now->format('H:i');
+            $bln_input = $now->format('m');
+            $thn_input = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            $karyawan = Karyawan::create([
+                'kd_karyawan' => $kdKaryawan,
+                'nama_karyawan' => $data['nama_karyawan'],
+                'nama_panggilan_karyawan' => $data['nama_panggilan_karyawan'] ?? null,
+                'kd_divisi' => $data['kd_divisi'],
+                'kd_departement' => $data['kd_departement'],
+                'kd_position' => $data['kd_position'],
+                'kd_jabatan' => $data['kd_jabatan'] ?? null,
+                'user_input' => $data['user_input'],
+                'tgl_input' => $tgl_input,
+                'bln_input' => $bln_input,
+                'thn_input' => $thn_input,
+                'waktu_input' => $waktu_input,
+                'alamat_device' => $ipDevice,
+                'type_device' => $deviceType,
+                'device' => $device
+            ]);
+
+            if (!$karyawan) {
+                throw new \Exception("GAGAL ADA DATA YANG SALAH");
+            }
+
+            $log->info("BERHASIL SIMPAN DATA");
+
+            DB::commit();
+
+            $log->info("PROSES SELESAI");
+            return $karyawan;
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'line' => $th->getLine(),
+            ], 500);
         }
     }
 }

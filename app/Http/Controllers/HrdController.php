@@ -31,6 +31,7 @@ class HrdController extends Controller
         $this->userService = $userService;
     }
 
+    // VIEW
     public function index()
     {
         return view('module.hrd.dasboard');
@@ -61,6 +62,7 @@ class HrdController extends Controller
         return view('module.hrd.masterData.master_jabatan');
     }
 
+    // GET DATA
     public function allDataDivisi()
     {
         $divisi = $this->hrdService->allDivisi();
@@ -129,7 +131,6 @@ class HrdController extends Controller
         ]);
     }
 
-
     public function allDataKaryawan()
     {
         $karyawan = $this->hrdService->allKaryawan();
@@ -147,6 +148,7 @@ class HrdController extends Controller
         ]);
     }
 
+    // VALIDASI SIMPAN DAN UBAH DATA
     public function validasi_simpan_divisi(Request $request)
     {
         try {
@@ -699,6 +701,122 @@ class HrdController extends Controller
         }
     }
 
+    public function validasi_simpan_karyawan(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-SIMPAN DATA KARYAWAN');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_simpan_karyawan"
+                ]);
+            }
+
+            $kdPosisi = Crypt::decryptString($request->kd_position);
+            $posisi = $this->hrdService->cekPosisi($kdPosisi);
+
+            if (!$posisi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "POSISI KARYAWAN TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $kdDivisi = Crypt::decryptString($request->kd_divisi);
+            $divisi = $this->hrdService->cekDivisi($kdDivisi);
+
+            if (!$divisi) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DIVISI TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $kdDepartement = Crypt::decryptString($request->kd_departement);
+            $departement = $this->hrdService->cekDepartement($kdDepartement);
+
+            if (!$departement) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "DEPARTEMENT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            if (!empty($request->kd_jabatan)) {
+                $kdJabatan = Crypt::decryptString($request->kd_jabatan);
+                $jabatan = $this->hrdService->cekJabatan($kdJabatan);
+
+                if (!$jabatan) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => "JABATAN TIDAK DITEMUKAN"
+                    ]);
+                }
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama_karyawan' => ['required', 'regex:/^[A-Z\s]+$/i'],
+            ], [
+                'nama_karyawan.required' => 'Nama Posisi tidak boleh kosong',
+                'nama_karyawan.regex' => 'Nama Posisi hanya boleh mengandung huruf dan spasi',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first()
+                ]);
+            }
+
+            $kdAsliUser = Crypt::decryptString($request->user_input);
+            $user = $this->userService->getUserByKdAsli($kdAsliUser);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "USER YANG SEDANG INPUT TIDAK DITEMUKAN"
+                ]);
+            }
+
+            $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+            $data = [
+                'nama_karyawan' => $request->nama_karyawan,
+                'nama_panggilan_karyawan' => $request->nama_panggilan_karyawan,
+                'kd_divisi' => $kdDivisi,
+                'kd_departement' => $kdDepartement,
+                'kd_position' => $kdPosisi,
+                'kd_jabatan' => $request->kd_jabatan ? $kdJabatan : null,
+                'user_input' => $kdAsliUser,
+            ];
+
+            $result = $this->hrdService->simpanKaryawan($data);
+
+            // $log->info("Data BALIK: " . $result);
+
+            if (!$result->kd_karyawan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal Simpan'
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Berhasil Simpan Data',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'line' => $th->getLine(),
+            ], 500);
+        }
+    }
+
+    // EXPORT KE EXCEL
     public function export_excel_departement(Request $request)
     {
         try {

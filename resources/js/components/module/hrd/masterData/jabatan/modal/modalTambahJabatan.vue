@@ -121,6 +121,8 @@ export default {
                 message: "Nama Jabatan Tidak Boleh Kosong",
             });
 
+            if (!validasiBanyakInputan(requireValue)) return;
+
             const schema = yup.object({
                 nama_jabatan: yup
                     .string()

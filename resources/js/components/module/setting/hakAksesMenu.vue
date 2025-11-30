@@ -536,8 +536,6 @@ export default {
                 user_input: window.encryptedUserId,
             };
 
-            console.log("kkkml", dataToSave);
-
             if (!dataToSave.kd_user) {
                 Swal.fire({
                     icon: "error",

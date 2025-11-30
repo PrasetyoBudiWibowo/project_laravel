@@ -149885,15 +149885,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 value: dataToSave.nama_departement,
                 message: "Departement Tidak Boleh Kosong"
               });
+              if (validasiBanyakInputan(requireValue)) {
+                _context3.n = 1;
+                break;
+              }
+              return _context3.a(2);
+            case 1:
               schema = yup__WEBPACK_IMPORTED_MODULE_1__.object({
                 nama_departement: yup__WEBPACK_IMPORTED_MODULE_1__.string().required("Nama Departement wajib diisi").matches(/^[A-Za-z\s]+$/, "Nama Departement Hanya Boleh huruf yang diperbolehkan")
               });
-              _context3.p = 1;
-              _context3.n = 2;
+              _context3.p = 2;
+              _context3.n = 3;
               return schema.validate(dataToSave, {
                 abortEarly: false
               });
-            case 2:
+            case 3:
               Swal.fire({
                 title: "Sedang Proses Simpan Data",
                 text: "Mohon tunggu.",
@@ -149902,9 +149908,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   Swal.showLoading();
                 }
               });
-              _context3.n = 3;
+              _context3.n = 4;
               return axios.post("/hrd/ubah-departement", dataToSave);
-            case 3:
+            case 4:
               response = _context3.v;
               result = response.data;
               Swal.close();
@@ -149930,10 +149936,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   }
                 });
               }
-              _context3.n = 5;
+              _context3.n = 6;
               break;
-            case 4:
-              _context3.p = 4;
+            case 5:
+              _context3.p = 5;
               _t2 = _context3.v;
               Swal.close();
               Swal.fire({
@@ -149946,10 +149952,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 },
                 buttonsStyling: false
               });
-            case 5:
+            case 6:
               return _context3.a(2);
           }
-        }, _callee3, null, [[1, 4]]);
+        }, _callee3, null, [[2, 5]]);
       }))();
     }
   }
@@ -150101,15 +150107,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 value: dataToSave.nama_departement,
                 message: "Departement Tidak Boleh Kosong"
               });
+              if (validasiBanyakInputan(requireValue)) {
+                _context3.n = 1;
+                break;
+              }
+              return _context3.a(2);
+            case 1:
               schema = yup__WEBPACK_IMPORTED_MODULE_1__.object({
                 nama_departement: yup__WEBPACK_IMPORTED_MODULE_1__.string().required("Nama Departement wajib diisi").matches(/^[A-Za-z\s]+$/, "Nama Departement Hanya Boleh huruf yang diperbolehkan")
               });
-              _context3.p = 1;
-              _context3.n = 2;
+              _context3.p = 2;
+              _context3.n = 3;
               return schema.validate(dataToSave, {
                 abortEarly: false
               });
-            case 2:
+            case 3:
               Swal.fire({
                 title: "Sedang Proses Simpan Data",
                 text: "Mohon tunggu.",
@@ -150118,9 +150130,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   Swal.showLoading();
                 }
               });
-              _context3.n = 3;
+              _context3.n = 4;
               return axios.post("/hrd/simpan-departement", dataToSave);
-            case 3:
+            case 4:
               response = _context3.v;
               result = response.data;
               Swal.close();
@@ -150146,10 +150158,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   }
                 });
               }
-              _context3.n = 5;
+              _context3.n = 6;
               break;
-            case 4:
-              _context3.p = 4;
+            case 5:
+              _context3.p = 5;
               _t2 = _context3.v;
               Swal.close();
               Swal.fire({
@@ -150162,10 +150174,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 },
                 buttonsStyling: false
               });
-            case 5:
+            case 6:
               return _context3.a(2);
           }
-        }, _callee3, null, [[1, 4]]);
+        }, _callee3, null, [[2, 5]]);
       }))();
     }
   }
@@ -150405,15 +150417,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 value: dataToSave.nama_jabatan,
                 message: "Nama Jabatan Tidak Boleh Kosong"
               });
+              if (validasiBanyakInputan(requireValue)) {
+                _context2.n = 1;
+                break;
+              }
+              return _context2.a(2);
+            case 1:
               schema = yup__WEBPACK_IMPORTED_MODULE_1__.object({
                 nama_jabatan: yup__WEBPACK_IMPORTED_MODULE_1__.string().required("Nama jabatan wajib diisi").matches(/^[A-Za-z\s]+$/, "Nama jabatan Hanya Boleh huruf yang diperbolehkan")
               });
-              _context2.p = 1;
-              _context2.n = 2;
+              _context2.p = 2;
+              _context2.n = 3;
               return schema.validate(dataToSave, {
                 abortEarly: false
               });
-            case 2:
+            case 3:
               Swal.fire({
                 title: "Sedang Proses Simpan Data",
                 text: "Mohon tunggu.",
@@ -150422,9 +150440,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   Swal.showLoading();
                 }
               });
-              _context2.n = 3;
+              _context2.n = 4;
               return axios.post("/hrd/simpan-jabatan", dataToSave);
-            case 3:
+            case 4:
               response = _context2.v;
               result = response.data;
               Swal.close();
@@ -150450,10 +150468,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   }
                 });
               }
-              _context2.n = 5;
+              _context2.n = 6;
               break;
-            case 4:
-              _context2.p = 4;
+            case 5:
+              _context2.p = 5;
               _t = _context2.v;
               Swal.close();
               Swal.fire({
@@ -150466,10 +150484,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 },
                 buttonsStyling: false
               });
-            case 5:
+            case 6:
               return _context2.a(2);
           }
-        }, _callee2, null, [[1, 4]]);
+        }, _callee2, null, [[2, 5]]);
       }))();
     }
   }
@@ -150600,6 +150618,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! yup */ "./node_modules/yup/index.esm.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
 function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
@@ -150635,6 +150659,26 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
             axios.defaults.headers.common["X-CSRF-TOKEN"] = token;
             _this.bsModal = new bootstrap__WEBPACK_IMPORTED_MODULE_0__.Modal(_this.$refs.modal);
+            _this.$nextTick(function () {
+              defaultSelect2("#input_kd_divisi", "-- PILIH DIVISI --", "#modalTambahKaryawan");
+              defaultSelect2("#input_kd_departement", "-- PILIH DEPARTEMENT --", "#modalTambahKaryawan");
+              defaultSelect2("#input_kd_posisition", "-- PILIH POSISI --", "#modalTambahKaryawan");
+              defaultSelect2("#input_kd_jabatan", "-- PILIH JABATAN --", "#modalTambahKaryawan");
+              $("#input_kd_divisi").on("change", function (e) {
+                _this.inputData.kd_divisi = e.target.value;
+                _this.selectedDivisi = e.target.options[e.target.selectedIndex].text;
+              });
+              $("#input_kd_departement").on("change", function (e) {
+                _this.inputData.kd_departement = e.target.value;
+                _this.selectedDepartement = e.target.options[e.target.selectedIndex].text;
+              });
+              $("#input_kd_posisition").on("change", function (e) {
+                _this.inputData.kd_position = e.target.value;
+              });
+              $("#input_kd_jabatan").on("change", function (e) {
+                _this.inputData.kd_jabatan = e.target.value;
+              });
+            });
             _context.n = 1;
             return _this.divisi();
           case 1:
@@ -150652,6 +150696,31 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }, _callee);
     }))();
   },
+  watch: {
+    "inputData.kd_divisi": function inputDataKd_divisi() {
+      this.inputData.kd_departement = "";
+      this.inputData.kd_position = "";
+    },
+    "inputData.kd_departement": function inputDataKd_departement() {
+      this.inputData.kd_position = "";
+    }
+  },
+  computed: {
+    filteredDepartement: function filteredDepartement() {
+      var _this2 = this;
+      if (!this.inputData.kd_divisi) return [];
+      return this.dataDepartement.filter(function (d) {
+        return d.divisi.nama_divisi === _this2.selectedDivisi;
+      });
+    },
+    filteredPosisition: function filteredPosisition() {
+      var _this3 = this;
+      if (!this.inputData.kd_departement) return [];
+      return this.dataPosisition.filter(function (it) {
+        return it.departement.nama_departement === _this3.selectedDepartement;
+      });
+    }
+  },
   methods: {
     openModal: function openModal() {
       this.bsModal.show();
@@ -150660,7 +150729,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       this.bsModal.hide();
     },
     divisi: function divisi() {
-      var _this2 = this;
+      var _this4 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
         var data, _error$response, _t;
         return _regenerator().w(function (_context2) {
@@ -150671,7 +150740,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return getAllDivisi();
             case 1:
               data = _context2.v;
-              _this2.dataDivisi = data || [];
+              _this4.dataDivisi = data || [];
               _context2.n = 3;
               break;
             case 2:
@@ -150693,7 +150762,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }))();
     },
     departement: function departement() {
-      var _this3 = this;
+      var _this5 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
         var data, _error$response2, _t2;
         return _regenerator().w(function (_context3) {
@@ -150704,7 +150773,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return getAllDepartement();
             case 1:
               data = _context3.v;
-              _this3.dataDepartement = data || [];
+              _this5.dataDepartement = data || [];
               _context3.n = 3;
               break;
             case 2:
@@ -150726,7 +150795,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }))();
     },
     posisition: function posisition() {
-      var _this4 = this;
+      var _this6 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
         var data, _t3;
         return _regenerator().w(function (_context4) {
@@ -150737,7 +150806,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return getAllPosisition();
             case 1:
               data = _context4.v;
-              _this4.dataPosisition = data || [];
+              _this6.dataPosisition = data || [];
               _context4.n = 3;
               break;
             case 2:
@@ -150759,7 +150828,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       }))();
     },
     jabatan: function jabatan() {
-      var _this5 = this;
+      var _this7 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
         var data, _t4;
         return _regenerator().w(function (_context5) {
@@ -150770,8 +150839,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return getAllJabatan();
             case 1:
               data = _context5.v;
-              _this5.datajabatan = data || [];
-              console.log("dknkad", _this5.datajabatan);
+              _this7.datajabatan = data || [];
               _context5.n = 3;
               break;
             case 2:
@@ -150790,6 +150858,126 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               return _context5.a(2);
           }
         }, _callee5, null, [[0, 2]]);
+      }))();
+    },
+    btnSimpanKaryawan: function btnSimpanKaryawan() {
+      var _this8 = this;
+      Swal.fire({
+        title: "Konfirmasi",
+        text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+        customClass: {
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger"
+        },
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this8.simpanKaryawan();
+        }
+      });
+    },
+    simpanKaryawan: function simpanKaryawan() {
+      var _this9 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
+        var dataToSave, requireValue, schema, response, result, _error$response3, _t5;
+        return _regenerator().w(function (_context6) {
+          while (1) switch (_context6.p = _context6.n) {
+            case 0:
+              dataToSave = _objectSpread(_objectSpread({}, _this9.inputData), {}, {
+                user_input: window.encryptedUserId
+              });
+              requireValue = [];
+              requireValue.push({
+                value: dataToSave.nama_karyawan,
+                message: "Nama karyawan Tidak Boleh Kosong"
+              });
+              requireValue.push({
+                value: dataToSave.kd_divisi,
+                message: "Divisi Tidak Boleh Kosong"
+              });
+              requireValue.push({
+                value: dataToSave.kd_departement,
+                message: "Departement Tidak Boleh Kosong"
+              });
+              requireValue.push({
+                value: dataToSave.kd_position,
+                message: "Posisi Tidak Boleh Kosong"
+              });
+              if (validasiBanyakInputan(requireValue)) {
+                _context6.n = 1;
+                break;
+              }
+              return _context6.a(2);
+            case 1:
+              schema = yup__WEBPACK_IMPORTED_MODULE_1__.object({
+                nama_karyawan: yup__WEBPACK_IMPORTED_MODULE_1__.string().required("Nama Karyawan wajib diisi").matches(/^[A-Za-z\s&]+$/, "Nama Karyawan Hanya Boleh huruf yang diperbolehkan")
+              });
+              _context6.p = 2;
+              _context6.n = 3;
+              return schema.validate(dataToSave, {
+                abortEarly: false
+              });
+            case 3:
+              Swal.fire({
+                title: "Sedang Proses Simpan Data",
+                text: "Mohon tunggu.",
+                allowOutsideClick: false,
+                didOpen: function didOpen() {
+                  Swal.showLoading();
+                }
+              });
+              _context6.n = 4;
+              return axios.post("/hrd/simpan-karyawan", dataToSave);
+            case 4:
+              response = _context6.v;
+              result = response.data;
+              Swal.close();
+              if (result.status === "success") {
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: result.message || "Data berhasil Disimpan!",
+                  customClass: {
+                    confirmButton: "btn btn-success"
+                  }
+                }).then(function () {
+                  window.location.reload();
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: result.message,
+                  confirmButtonText: "Tutup",
+                  customClass: {
+                    confirmButton: "btn btn-danger"
+                  }
+                });
+              }
+              _context6.n = 6;
+              break;
+            case 5:
+              _context6.p = 5;
+              _t5 = _context6.v;
+              Swal.close();
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan simpanDepartement : ".concat(((_error$response3 = _t5.response) === null || _error$response3 === void 0 || (_error$response3 = _error$response3.data) === null || _error$response3 === void 0 ? void 0 : _error$response3.message) || _t5.message),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+              });
+            case 6:
+              return _context6.a(2);
+          }
+        }, _callee6, null, [[2, 5]]);
       }))();
     }
   }
@@ -151415,15 +151603,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 value: dataToSave.nama_position,
                 message: "Posisi Tidak Boleh Kosong"
               });
+              if (validasiBanyakInputan(requireValue)) {
+                _context4.n = 1;
+                break;
+              }
+              return _context4.a(2);
+            case 1:
               schema = yup__WEBPACK_IMPORTED_MODULE_1__.object({
                 nama_position: yup__WEBPACK_IMPORTED_MODULE_1__.string().required("Nama Posisi wajib diisi").matches(/^[A-Za-z\s&]+$/, "Nama Posisi Hanya Boleh huruf yang diperbolehkan")
               });
-              _context4.p = 1;
-              _context4.n = 2;
+              _context4.p = 2;
+              _context4.n = 3;
               return schema.validate(dataToSave, {
                 abortEarly: false
               });
-            case 2:
+            case 3:
               Swal.fire({
                 title: "Sedang Proses Simpan Data",
                 text: "Mohon tunggu.",
@@ -151432,9 +151626,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   Swal.showLoading();
                 }
               });
-              _context4.n = 3;
+              _context4.n = 4;
               return axios.post("/hrd/ubah-posisi", dataToSave);
-            case 3:
+            case 4:
               response = _context4.v;
               result = response.data;
               Swal.close();
@@ -151460,10 +151654,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   }
                 });
               }
-              _context4.n = 5;
+              _context4.n = 6;
               break;
-            case 4:
-              _context4.p = 4;
+            case 5:
+              _context4.p = 5;
               _t3 = _context4.v;
               Swal.close();
               Swal.fire({
@@ -151476,10 +151670,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 },
                 buttonsStyling: false
               });
-            case 5:
+            case 6:
               return _context4.a(2);
           }
-        }, _callee4, null, [[1, 4]]);
+        }, _callee4, null, [[2, 5]]);
       }))();
     }
   }
@@ -151689,15 +151883,21 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 value: dataToSave.nama_position,
                 message: "Posisi Tidak Boleh Kosong"
               });
+              if (validasiBanyakInputan(requireValue)) {
+                _context4.n = 1;
+                break;
+              }
+              return _context4.a(2);
+            case 1:
               schema = yup__WEBPACK_IMPORTED_MODULE_1__.object({
                 nama_position: yup__WEBPACK_IMPORTED_MODULE_1__.string().required("Nama Posisi wajib diisi").matches(/^[A-Za-z\s&]+$/, "Nama Posisi Hanya Boleh huruf yang diperbolehkan")
               });
-              _context4.p = 1;
-              _context4.n = 2;
+              _context4.p = 2;
+              _context4.n = 3;
               return schema.validate(dataToSave, {
                 abortEarly: false
               });
-            case 2:
+            case 3:
               Swal.fire({
                 title: "Sedang Proses Simpan Data",
                 text: "Mohon tunggu.",
@@ -151706,9 +151906,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   Swal.showLoading();
                 }
               });
-              _context4.n = 3;
+              _context4.n = 4;
               return axios.post("/hrd/simpan-posisi", dataToSave);
-            case 3:
+            case 4:
               response = _context4.v;
               result = response.data;
               Swal.close();
@@ -151734,10 +151934,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   }
                 });
               }
-              _context4.n = 5;
+              _context4.n = 6;
               break;
-            case 4:
-              _context4.p = 4;
+            case 5:
+              _context4.p = 5;
               _t3 = _context4.v;
               Swal.close();
               Swal.fire({
@@ -151750,10 +151950,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 },
                 buttonsStyling: false
               });
-            case 5:
+            case 6:
               return _context4.a(2);
           }
-        }, _callee4, null, [[1, 4]]);
+        }, _callee4, null, [[2, 5]]);
       }))();
     }
   }
@@ -152787,7 +152987,6 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               dataToSave = _objectSpread(_objectSpread({}, _this8.inputData), {}, {
                 user_input: window.encryptedUserId
               });
-              console.log("kkkml", dataToSave);
               if (dataToSave.kd_user) {
                 _context5.n = 1;
                 break;
@@ -155032,17 +155231,23 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 value: dataToSave.nama_kecamatan,
                 message: "Kecamatan Tidak Boleh Kosong"
               });
+              if (validasiBanyakInputan(requireValue)) {
+                _context6.n = 1;
+                break;
+              }
+              return _context6.a(2);
+            case 1:
               schema = yup__WEBPACK_IMPORTED_MODULE_0__.object({
                 nama_kecamatan: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Nama Kecamatan wajib diisi").matches(/^[a-zA-Z0-9\s]+$/, "Nama Kecamatan Hanya Boleh huruf & angka yang diperbolehkan"),
                 kd_provinsi: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Provinsi harus dipilih"),
                 kd_kota_kabupaten: yup__WEBPACK_IMPORTED_MODULE_0__.string().required("Kota/Kabupaten harus dipilih")
               });
-              _context6.p = 1;
-              _context6.n = 2;
+              _context6.p = 2;
+              _context6.n = 3;
               return schema.validate(dataToSave, {
                 abortEarly: false
               });
-            case 2:
+            case 3:
               Swal.fire({
                 title: "Sedang Proses Simpan Data",
                 text: "Mohon tunggu.",
@@ -155051,9 +155256,9 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   Swal.showLoading();
                 }
               });
-              _context6.n = 3;
+              _context6.n = 4;
               return axios__WEBPACK_IMPORTED_MODULE_3___default().post("/wilayah/ubah-kecamatan", dataToSave);
-            case 3:
+            case 4:
               response = _context6.v;
               result = response.data;
               Swal.close();
@@ -155080,10 +155285,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                   }
                 });
               }
-              _context6.n = 5;
+              _context6.n = 6;
               break;
-            case 4:
-              _context6.p = 4;
+            case 5:
+              _context6.p = 5;
               _t5 = _context6.v;
               Swal.close();
               Swal.fire({
@@ -155096,10 +155301,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 },
                 buttonsStyling: false
               });
-            case 5:
+            case 6:
               return _context6.a(2);
           }
-        }, _callee6, null, [[1, 4]]);
+        }, _callee6, null, [[2, 5]]);
       }))();
     }
   }
@@ -156927,19 +157132,21 @@ var _hoisted_11 = ["value"];
 var _hoisted_12 = {
   "class": "col-6"
 };
-var _hoisted_13 = ["value"];
-var _hoisted_14 = {
+var _hoisted_13 = ["disabled"];
+var _hoisted_14 = ["value"];
+var _hoisted_15 = {
   "class": "row mb-3"
 };
-var _hoisted_15 = {
+var _hoisted_16 = {
   "class": "col-6"
 };
-var _hoisted_16 = ["value"];
-var _hoisted_17 = {
-  "class": "col-6"
-};
+var _hoisted_17 = ["disabled"];
 var _hoisted_18 = ["value"];
 var _hoisted_19 = {
+  "class": "col-6"
+};
+var _hoisted_20 = ["value"];
+var _hoisted_21 = {
   "class": "modal-footer"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -157004,15 +157211,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "form-select",
     "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
       return $data.inputData.kd_departement = $event;
-    })
+    }),
+    disabled: !$data.inputData.kd_divisi
   }, [_cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
     value: ""
-  }, " -- Pilih Departement -- ", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataDepartement, function (departement) {
+  }, " -- Pilih Departement -- ", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.filteredDepartement, function (departement) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: departement.kd_departement,
       value: departement.kd_departement
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(departement.nama_departement), 9 /* TEXT, PROPS */, _hoisted_13);
-  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.kd_departement]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(departement.nama_departement), 9 /* TEXT, PROPS */, _hoisted_14);
+  }), 128 /* KEYED_FRAGMENT */))], 8 /* PROPS */, _hoisted_13), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.kd_departement]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "input_kd_posisition",
     "class": "form-label"
   }, "Posisi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
@@ -157020,18 +157228,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "form-select",
     "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
       return $data.inputData.kd_position = $event;
-    })
+    }),
+    disabled: !$data.inputData.kd_departement
   }, [_cache[18] || (_cache[18] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
     value: ""
-  }, "-- Pilih Position --", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.dataPosisition, function (posisition) {
+  }, "-- Pilih Position --", -1 /* CACHED */)), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.filteredPosisition, function (posisition) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: posisition.kd_position,
       value: posisition.kd_position
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(posisition.nama_position), 9 /* TEXT, PROPS */, _hoisted_16);
-  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.kd_position]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(posisition.nama_position), 9 /* TEXT, PROPS */, _hoisted_18);
+  }), 128 /* KEYED_FRAGMENT */))], 8 /* PROPS */, _hoisted_17), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.kd_position]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [_cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "input_kd_jabatan",
     "class": "form-label"
-  }, "Posisi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
+  }, "Jabatan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
     id: "input_kd_jabatan",
     "class": "form-select",
     "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
@@ -157043,8 +157252,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       key: jabatan.kd_jabatan,
       value: jabatan.kd_jabatan
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(jabatan.nama_jabatan), 9 /* TEXT, PROPS */, _hoisted_18);
-  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.kd_jabatan]])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(jabatan.nama_jabatan), 9 /* TEXT, PROPS */, _hoisted_20);
+  }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.inputData.kd_jabatan]])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-secondary",
     onClick: _cache[9] || (_cache[9] = function () {
@@ -157054,7 +157263,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     type: "button",
     "class": "btn btn-primary",
     onClick: _cache[10] || (_cache[10] = function () {
-      return _ctx.btnSimpanPosisi && _ctx.btnSimpanPosisi.apply(_ctx, arguments);
+      return $options.btnSimpanKaryawan && $options.btnSimpanKaryawan.apply($options, arguments);
     })
   }, " Simpan ")])])])], 512 /* NEED_PATCH */);
 }

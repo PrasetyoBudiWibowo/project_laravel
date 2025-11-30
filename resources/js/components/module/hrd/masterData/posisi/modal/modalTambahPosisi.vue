@@ -256,6 +256,8 @@ export default {
                 message: "Posisi Tidak Boleh Kosong",
             });
 
+            if (!validasiBanyakInputan(requireValue)) return;
+
             const schema = yup.object({
                 nama_position: yup
                     .string()
