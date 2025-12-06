@@ -29,12 +29,90 @@
 
                 <div class="row mt-2">
                     <div class="col-12">
-                        <DataTable id="tabelKaryawan" stripedRows showGridlines>
-                            <Column header="No"></Column>
-                            <Column header="Foto"></Column>
-                            <Column header="Nama Karyawan"></Column>
-                            <Column header="Penempatan"></Column>
-                            <Column header="Aksi"></Column>
+                        <DataTable
+                            id="tabelKaryawan"
+                            :value="datakaryawan"
+                            stripedRows
+                            showGridlines
+                            tableStyle="min-width: 60rem"
+                        >
+                            <Column header="No">
+                                <template #body="slotProps">
+                                    {{ slotProps.index + 1 }}
+                                </template>
+                            </Column>
+
+                            <Column header="Foto">
+                                <template #body="slotProps">
+                                    <img
+                                        :src="getFoto(slotProps.data)"
+                                        alt="Foto"
+                                        style="
+                                            width: 90px;
+                                            height: 90px;
+                                            border-radius: 50%;
+                                            object-fit: cover;
+                                        "
+                                    />
+                                </template>
+                            </Column>
+
+                            <Column header="Nama Karyawan">
+                                <template #body="slotProps">
+                                    <div>
+                                        <strong>Nama Lengkap :</strong><br />
+                                        {{ slotProps.data.nama_karyawan }}<br />
+
+                                        <strong>Nama Panggilan :</strong><br />
+                                        {{
+                                            slotProps.data
+                                                .nama_panggilan_karyawan
+                                        }}
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column header="Penempatan">
+                                <template #body="slotProps">
+                                    <div>
+                                        <strong>Nama Divisi :</strong><br />
+                                        {{ slotProps.data.Divisi.nama_divisi
+                                        }}<br />
+
+                                        <strong>Nama Departement :</strong
+                                        ><br />
+                                        {{
+                                            slotProps.data.Departement
+                                                .nama_departement
+                                        }}<br />
+                                        <strong>Posisi :</strong><br />
+                                        {{ slotProps.data.Posisi.nama_position
+                                        }}<br />
+                                        <strong>Jabatan :</strong><br />
+                                        {{
+                                            slotProps.data.JabatanKaryawan
+                                                .nama_jabatan
+                                        }}
+                                    </div>
+                                </template>
+                            </Column>
+                            <Column header="Aksi">
+                                <template #body="slotProps">
+                                    <div class="d-grid aksi-grid">
+                                        <button class="btn btn-primary btn-sm">
+                                            <i class="fas fa-user"></i>
+                                        </button>
+                                        <button class="btn btn-success btn-sm">
+                                            <i class="fas fa-file-alt"></i>
+                                        </button>
+                                        <button class="btn btn-warning btn-sm">
+                                            <i class="fas fa-building"></i>
+                                        </button>
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </template>
+                            </Column>
                         </DataTable>
                     </div>
                 </div>
@@ -73,6 +151,8 @@ export default {
             await this.cekStatusAkses();
         }
 
+        await this.karyawan();
+
         this.loadingMenu = false;
     },
     methods: {
@@ -108,6 +188,40 @@ export default {
                 });
             }
         },
+        async karyawan() {
+            try {
+                const data = await getAllDataKaryawan();
+                this.datakaryawan = data || [];
+
+                console.log("dals", data);
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan this.karyawan(): ${
+                        err.statusText || err
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                });
+            }
+        },
+        getFoto(row) {
+            if (row.foto_karyawan) {
+                return `/assets/img/user/${row.img_user}.${row.format_img_user}`;
+            } else {
+                return `/assets/img/default/Default-Profile.png`;
+            }
+        },
     },
 };
 </script>
+
+<style>
+.aksi-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolom */
+    gap: 6px; /* Jarak antar tombol */
+}
+</style>

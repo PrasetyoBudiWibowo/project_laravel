@@ -105,6 +105,11 @@ class Karyawan extends Model
         return $this->belongsTo(Posisi::class, 'kd_position', 'kd_position');
     }
 
+    public function JabatanKaryawan()
+    {
+        return $this->belongsTo(MasterJabatan::class, 'kd_jabatan', 'kd_jabatan');
+    }
+
     public function ProvinsiLahir()
     {
         return $this->belongsTo(Provinsi::class, 'provinsi_lahir', 'kd_provinsi');
