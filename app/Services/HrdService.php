@@ -121,7 +121,7 @@ class HrdService
 
         $result = $karyawan->map(function ($data) {
             return [
-                'kd_karyawan' =>  Crypt::encryptString($data->kd_karyawan),
+                'kd_karyawan' => Crypt::encryptString($data->kd_karyawan),
                 'nama_karyawan' => $data->nama_karyawan,
                 'nama_panggilan_karyawan' => $data->nama_panggilan_karyawan,
                 'foto_karyawan' => $data->foto_karyawan,
@@ -148,6 +148,53 @@ class HrdService
 
         return $result;
     }
+
+    public function cekKaryawanByKd($kd_karyawan)
+    {
+        $karyawan = Karyawan::where('kd_karyawan', $kd_karyawan)
+            ->with(['Divisi', 'Departement', 'Posisi', 'JabatanKaryawan'])
+            ->first();
+
+        if (!$karyawan) {
+            return null;
+        }
+
+        return [
+            'kd_karyawan' => Crypt::encryptString($karyawan->kd_karyawan),
+            'nama_karyawan' => $karyawan->nama_karyawan,
+            'nama_panggilan_karyawan' => $karyawan->nama_panggilan_karyawan,
+            'foto_karyawan' => $karyawan->foto_karyawan,
+
+            'Divisi' => [
+                'kd_divisi' => $karyawan->Divisi
+                    ? Crypt::encryptString($karyawan->Divisi->kd_divisi)
+                    : null,
+                'nama_divisi' => $karyawan->Divisi->nama_divisi ?? null,
+            ],
+
+            'Departement' => [
+                'kd_departement' => $karyawan->Departement
+                    ? Crypt::encryptString($karyawan->Departement->kd_departement)
+                    : null,
+                'nama_departement' => $karyawan->Departement->nama_departement ?? null,
+            ],
+
+            'Posisi' => [
+                'kd_position' => $karyawan->Posisi
+                    ? Crypt::encryptString($karyawan->Posisi->kd_position)
+                    : null,
+                'nama_position' => $karyawan->Posisi->nama_position ?? null,
+            ],
+
+            'JabatanKaryawan' => [
+                'kd_jabatan' => $karyawan->JabatanKaryawan
+                    ? Crypt::encryptString($karyawan->JabatanKaryawan->kd_jabatan)
+                    : null,
+                'nama_jabatan' => $karyawan->JabatanKaryawan->nama_jabatan ?? null,
+            ],
+        ];
+    }
+
 
     public function cekKaryawanByPk($data)
     {

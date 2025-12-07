@@ -98,7 +98,14 @@
                             <Column header="Aksi">
                                 <template #body="slotProps">
                                     <div class="d-grid aksi-grid">
-                                        <button class="btn btn-primary btn-sm">
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                            @click="
+                                                editKaryawan(
+                                                    slotProps.data.kd_karyawan
+                                                )
+                                            "
+                                        >
                                             <i class="fas fa-user"></i>
                                         </button>
                                         <button class="btn btn-success btn-sm">
@@ -192,8 +199,6 @@ export default {
             try {
                 const data = await getAllDataKaryawan();
                 this.datakaryawan = data || [];
-
-                console.log("dals", data);
             } catch (err) {
                 Swal.fire({
                     icon: "error",
@@ -215,13 +220,16 @@ export default {
                 return `/assets/img/default/Default-Profile.png`;
             }
         },
+        editKaryawan(encryptedKd) {
+            window.location.href = `/hrd/karyawan/edit/${encryptedKd}`;
+        },
     },
 };
 </script>
 
 <style>
 .aksi-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 kolom */
-    gap: 6px; /* Jarak antar tombol */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
 }
 </style>

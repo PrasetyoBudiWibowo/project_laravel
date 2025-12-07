@@ -148,6 +148,49 @@ class HrdController extends Controller
         ]);
     }
 
+    public function edit_karyawan($encrypted)
+    {
+        try {
+            $kd_karyawan = Crypt::decryptString($encrypted);
+
+            $karyawan = $this->hrdService->cekKaryawanByPk($kd_karyawan);
+
+            if (!$karyawan) {
+                abort(404, 'not found');
+            }
+
+            return view('module.hrd.masterData.edit_master_karyawan', [
+                'encrypted' => $encrypted,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'ID Karyawan tidak valid.');
+        }
+    }
+
+    public function detail_karyawan($encrypted)
+    {
+        try {
+            $kd_karyawan = Crypt::decryptString($encrypted);
+
+            $karyawan = $this->hrdService->cekKaryawanByKd($kd_karyawan);
+
+            if (!$karyawan) {
+                return response()->json(['message' => 'karyawan not found'], 404);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $karyawan
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+
     // VALIDASI SIMPAN DAN UBAH DATA
     public function validasi_simpan_divisi(Request $request)
     {

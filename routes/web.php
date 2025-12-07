@@ -125,6 +125,9 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
     Route::get('/karyawan', 'allDataKaryawan');
     Route::get('/master-karyawan', 'master_karyawan')->name('master_karyawan');
     Route::post('/simpan-karyawan', 'validasi_simpan_karyawan');
+
+    Route::get('/karyawan/edit/{encrypted}', 'edit_karyawan')->name('edit_karyawan');
+    Route::get('/karyawan/detail/{encrypted}', 'detail_karyawan');
 });
 
 // -----------------------

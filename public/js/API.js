@@ -414,6 +414,38 @@ async function validasiUserHalaman(data) {
   }
 }
 
+async function karyawanByKode(encrypted) {
+  try {
+    const response = await axios.get(`/hrd/karyawan/detail/${encrypted}`);
+
+    if (response.data.status === "success") {
+      return response.data.data;
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: `Terjadi kesalahan pada server.`,
+        confirmButtonText: "Tutup",
+        customClass: {
+            confirmButton: "btn btn-danger",
+        },
+      });
+      return [];
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan ${error.message}.`,
+      confirmButtonText: "Tutup",
+      customClass: {
+          confirmButton: "btn btn-danger",
+      },
+    });
+    return [];
+  }
+}
+
 window.getLevelUser = getLevelUser;
 window.getDataUserRegister = getDataUserRegister;
 window.getAllDataKaryawan = getAllDataKaryawan;
@@ -431,3 +463,4 @@ window.getAllDepartement = getAllDepartement;
 window.getAllPosisition = getAllPosisition;
 window.getAllJabatan = getAllJabatan;
 window.validasiUserHalaman = validasiUserHalaman;
+window.karyawanByKode = karyawanByKode;

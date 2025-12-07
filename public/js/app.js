@@ -150495,6 +150495,100 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=script&lang=js":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=script&lang=js ***!
+  \*************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _modal_modalEditFotoKaryawan_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modal/modalEditFotoKaryawan.vue */ "./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue");
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    modalEditFotoKaryawan: _modal_modalEditFotoKaryawan_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      dataKaryawan: null,
+      show: {
+        showFoto: false,
+        showPribadi: false
+      }
+    };
+  },
+  props: {
+    encrypted: {
+      type: String,
+      required: true
+    }
+  },
+  mounted: function mounted() {
+    var _this = this;
+    return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      return _regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
+          case 0:
+            console.log("encrypted dari Laravel:", _this.encrypted);
+            _context.n = 1;
+            return _this.getKaryawan();
+          case 1:
+            return _context.a(2);
+        }
+      }, _callee);
+    }))();
+  },
+  methods: {
+    openFotoModal: function openFotoModal() {
+      this.$refs.modalEditFotoKaryawan.openFotoModal();
+    },
+    getKaryawan: function getKaryawan() {
+      var _this2 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
+        var data, _err$response, _t;
+        return _regenerator().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
+            case 0:
+              _context2.p = 0;
+              _context2.n = 1;
+              return karyawanByKode(_this2.encrypted);
+            case 1:
+              data = _context2.v;
+              _this2.dataKaryawan = data !== null && data !== void 0 ? data : null;
+              console.log("DATA KARYAWAN:", _this2.dataKaryawan);
+              _context2.n = 3;
+              break;
+            case 2:
+              _context2.p = 2;
+              _t = _context2.v;
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan saat mengambil data: ".concat((_t === null || _t === void 0 || (_err$response = _t.response) === null || _err$response === void 0 || (_err$response = _err$response.data) === null || _err$response === void 0 ? void 0 : _err$response.message) || _t.message || _t),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                }
+              });
+            case 3:
+              return _context2.a(2);
+          }
+        }, _callee2, null, [[0, 2]]);
+      }))();
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=script&lang=js":
 /*!***************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=script&lang=js ***!
@@ -150616,7 +150710,6 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             case 1:
               data = _context3.v;
               _this3.datakaryawan = data || [];
-              console.log("dals", data);
               _context3.n = 3;
               break;
             case 2:
@@ -150643,6 +150736,74 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       } else {
         return "/assets/img/default/Default-Profile.png";
       }
+    },
+    editKaryawan: function editKaryawan(encryptedKd) {
+      window.location.href = "/hrd/karyawan/edit/".concat(encryptedKd);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=script&lang=js":
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=script&lang=js ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
+ // pastikan bootstrap.bundle sudah dipakai
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      show: {
+        showFoto: false,
+        showPribadi: false
+      },
+      modalFoto: null,
+      fotoFile: null,
+      previewFoto: null
+    };
+  },
+  computed: {
+    currentFotoUrl: function currentFotoUrl() {
+      var _this$dataKaryawan;
+      return (_this$dataKaryawan = this.dataKaryawan) !== null && _this$dataKaryawan !== void 0 && _this$dataKaryawan.foto_karyawan ? "/img/karyawan/".concat(this.dataKaryawan.foto_karyawan, ".").concat(this.dataKaryawan.format_gambar) : "/img/default/Default-Profile.png";
+    }
+  },
+  mounted: function mounted() {
+    var _this = this;
+    this.modalFoto = new bootstrap__WEBPACK_IMPORTED_MODULE_0__.Modal(document.getElementById("modalEditFoto"));
+    this.$nextTick(function () {
+      $("#modalEditFoto").on("hidden.bs.modal", function () {
+        _this.fotoFile = null;
+        _this.previewFoto = null;
+        $("#input_foto_karyawan").val("");
+      });
+    });
+  },
+  methods: {
+    openFotoModal: function openFotoModal() {
+      this.previewFoto = null;
+      this.fotoFile = null;
+      this.modalFoto.show();
+    },
+    closeModal: function closeModal() {
+      this.modalFoto.hide();
+    },
+    handleFotoChange: function handleFotoChange(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      this.fotoFile = file;
+
+      // buat preview
+      this.previewFoto = URL.createObjectURL(file);
     }
   }
 });
@@ -157040,6 +157201,136 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=template&id=504af5d3":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=template&id=504af5d3 ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "p-4"
+};
+var _hoisted_2 = {
+  "class": "card mb-3"
+};
+var _hoisted_3 = {
+  "class": "card-body"
+};
+var _hoisted_4 = {
+  "class": "card mb-3"
+};
+var _hoisted_5 = {
+  key: 0,
+  "class": "p-3 border-bottom"
+};
+var _hoisted_6 = {
+  "class": "d-flex align-items-center gap-2"
+};
+var _hoisted_7 = ["src"];
+var _hoisted_8 = {
+  "class": "card mb-3"
+};
+var _hoisted_9 = {
+  key: 0,
+  "class": "p-3 border-bottom"
+};
+var _hoisted_10 = {
+  "class": "mb-2 row"
+};
+var _hoisted_11 = {
+  "class": "col-6"
+};
+var _hoisted_12 = {
+  "class": "col-6"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_modalEditFotoKaryawan = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("modalEditFotoKaryawan");
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "card-header"
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "EDIT KARYAWAN")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" =============================\r\n                    FOTO KARYAWAN\r\n                ================================= "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "card-header d-flex justify-content-between align-items-center",
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return $data.show.showFoto = !$data.show.showFoto;
+    }),
+    style: {
+      "cursor": "pointer"
+    }
+  }, [_cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Foto Karyawan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["fas fa-chevron-down", {
+      'rotate-icon': $data.show.showFoto
+    }])
+  }, null, 2 /* CLASS */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Transition, {
+    name: "slide"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      var _$data$dataKaryawan;
+      return [$data.show.showFoto ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+        id: "img_kry_preview",
+        src: (_$data$dataKaryawan = $data.dataKaryawan) !== null && _$data$dataKaryawan !== void 0 && _$data$dataKaryawan.foto_karyawan ? "/img/karyawan/".concat($data.dataKaryawan.foto_karyawan, ".").concat($data.dataKaryawan.format_gambar) : '/img/default/Default-Profile.png',
+        alt: "Profile Image",
+        "class": "img-thumbnail",
+        width: "200"
+      }, null, 8 /* PROPS */, _hoisted_7), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        "class": "btn btn-link p-0",
+        onClick: _cache[1] || (_cache[1] = function () {
+          return $options.openFotoModal && $options.openFotoModal.apply($options, arguments);
+        })
+      }, _cache[6] || (_cache[6] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+        "class": "fas fa-edit fs-4"
+      }, null, -1 /* CACHED */)]))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+    }),
+    _: 1 /* STABLE */
+  })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" =============================\r\n                    DATA PRIBADI\r\n                ================================= "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "card-header d-flex justify-content-between align-items-center",
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return $data.show.showPribadi = !$data.show.showPribadi;
+    }),
+    style: {
+      "cursor": "pointer"
+    }
+  }, [_cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Data Pribadi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["fas fa-chevron-down", {
+      'rotate-icon': $data.show.showPribadi
+    }])
+  }, null, 2 /* CLASS */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Transition, {
+    name: "slide"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [$data.show.showPribadi ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+        "class": "form-label"
+      }, "Nama Karyawan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+        type: "text",
+        "class": "form-control",
+        "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+          return $data.dataKaryawan.nama_karyawan = $event;
+        }),
+        disabled: ""
+      }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.dataKaryawan.nama_karyawan]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+        "class": "form-label"
+      }, "Nama Panggilan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+        type: "text",
+        "class": "form-control",
+        "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+          return $data.dataKaryawan.nama_panggilan_karyawan = $event;
+        }),
+        disabled: ""
+      }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.dataKaryawan.nama_panggilan_karyawan]])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+    }),
+    _: 1 /* STABLE */
+  })])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_modalEditFotoKaryawan, {
+    ref: "modalEditFotoKaryawan"
+  }, null, 512 /* NEED_PATCH */)]);
+}
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=template&id=b54c642a":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=template&id=b54c642a ***!
@@ -157076,13 +157367,17 @@ var _hoisted_7 = {
   "class": "col-12"
 };
 var _hoisted_8 = ["src"];
+var _hoisted_9 = {
+  "class": "d-grid aksi-grid"
+};
+var _hoisted_10 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _$data$dataUser, _$data$hakAkses, _$data$dataUser2, _$data$hakAkses2;
   var _component_Column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Column");
   var _component_DataTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DataTable");
   var _component_modalTambahKaryawan = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("modalTambahKaryawan");
   var _component_loadingData = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("loadingData");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[20] || (_cache[20] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[23] || (_cache[23] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "card-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "MASTER KARYAWAN")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [((_$data$dataUser = $data.dataUser) === null || _$data$dataUser === void 0 ? void 0 : _$data$dataUser.level_user) === 'SUPER ADMIN' || ((_$data$hakAkses = $data.hakAkses) === null || _$data$hakAkses === void 0 ? void 0 : _$data$hakAkses.bisa_insert) === 'YA' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
@@ -157143,25 +157438,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         header: "Aksi"
       }, {
         body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (slotProps) {
-          return _cache[19] || (_cache[19] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-            "class": "d-grid aksi-grid"
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-            "class": "btn btn-primary btn-sm"
-          }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+            "class": "btn btn-primary btn-sm",
+            onClick: function onClick($event) {
+              return $options.editKaryawan(slotProps.data.kd_karyawan);
+            }
+          }, _cache[19] || (_cache[19] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
             "class": "fas fa-user"
-          })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+          }, null, -1 /* CACHED */)]), 8 /* PROPS */, _hoisted_10), _cache[20] || (_cache[20] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
             "class": "btn btn-success btn-sm"
           }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
             "class": "fas fa-file-alt"
-          })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+          })], -1 /* CACHED */)), _cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
             "class": "btn btn-warning btn-sm"
           }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
             "class": "fas fa-building"
-          })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+          })], -1 /* CACHED */)), _cache[22] || (_cache[22] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
             "class": "btn btn-danger btn-sm"
           }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
             "class": "fas fa-trash"
-          })])], -1 /* CACHED */)]);
+          })], -1 /* CACHED */))])];
         }),
         _: 1 /* STABLE */
       })];
@@ -157173,6 +157469,84 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     visible: $data.loadingMenu,
     message: "Loading"
   }, null, 8 /* PROPS */, ["visible"])], 64 /* STABLE_FRAGMENT */);
+}
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=template&id=58cbd220":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=template&id=58cbd220 ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "modal fade",
+  id: "modalEditFoto",
+  tabindex: "-1",
+  "aria-labelledby": "modalEditFotoLabel",
+  "aria-hidden": "true",
+  "data-bs-backdrop": "static",
+  "data-bs-keyboard": "false"
+};
+var _hoisted_2 = {
+  "class": "modal-dialog"
+};
+var _hoisted_3 = {
+  "class": "modal-content"
+};
+var _hoisted_4 = {
+  "class": "modal-body"
+};
+var _hoisted_5 = {
+  "class": "text-center mb-3"
+};
+var _hoisted_6 = ["src"];
+var _hoisted_7 = {
+  "class": "modal-footer"
+};
+var _hoisted_8 = ["disabled"];
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    "class": "modal-header"
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
+    "class": "modal-title"
+  }, "Edit Foto Karyawan"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn-close",
+    "data-bs-dismiss": "modal"
+  })], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    src: $data.previewFoto || $options.currentFotoUrl,
+    alt: "Preview",
+    "class": "img-thumbnail",
+    width: "200"
+  }, null, 8 /* PROPS */, _hoisted_6)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    id: "input_foto_karyawan",
+    type: "file",
+    "class": "form-control",
+    accept: "image/*",
+    onChange: _cache[0] || (_cache[0] = function () {
+      return $options.handleFotoChange && $options.handleFotoChange.apply($options, arguments);
+    })
+  }, null, 32 /* NEED_HYDRATION */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn btn-secondary",
+    onClick: _cache[1] || (_cache[1] = function () {
+      return $options.closeModal && $options.closeModal.apply($options, arguments);
+    })
+  }, " Batal "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-primary",
+    onClick: _cache[2] || (_cache[2] = function () {
+      return _ctx.submitUpdateFoto && _ctx.submitUpdateFoto.apply(_ctx, arguments);
+    }),
+    disabled: !$data.fotoFile
+  }, " Simpan ", 8 /* PROPS */, _hoisted_8)])])])]);
 }
 
 /***/ }),
@@ -164653,6 +165027,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, "\n.p-datatable .p-datatable-tbody > tr
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.rotate-icon {\r\n    transform: rotate(180deg);\r\n    transition: 0.3s ease;\n}\n.slide-enter-active,\r\n.slide-leave-active {\r\n    transition: all 0.2s ease;\n}\n.slide-enter-from,\r\n.slide-leave-to {\r\n    opacity: 0;\r\n    transform: translateY(-5px);\n}\r\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=style&index=0&id=b54c642a&lang=css":
 /*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=style&index=0&id=b54c642a&lang=css ***!
@@ -164670,7 +165068,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.aksi-grid {\r\n    grid-template-columns: repeat(2, 1fr); /* 2 kolom */\r\n    gap: 6px; /* Jarak antar tombol */\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.aksi-grid {\r\n    grid-template-columns: repeat(2, 1fr);\r\n    gap: 6px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -210372,6 +210770,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_editKaryawan_vue_vue_type_style_index_0_id_504af5d3_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_editKaryawan_vue_vue_type_style_index_0_id_504af5d3_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_editKaryawan_vue_vue_type_style_index_0_id_504af5d3_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=style&index=0&id=b54c642a&lang=css":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=style&index=0&id=b54c642a&lang=css ***!
@@ -239575,11 +240003,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_module_setting_hakAksesMenu_vue__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/module/setting/hakAksesMenu.vue */ "./resources/js/components/module/setting/hakAksesMenu.vue");
 /* harmony import */ var _components_module_hrd_dasboardHrd_vue__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/module/hrd/dasboardHrd.vue */ "./resources/js/components/module/hrd/dasboardHrd.vue");
 /* harmony import */ var _components_module_hrd_masterData_karyawan_masterKaryawan_vue__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/module/hrd/masterData/karyawan/masterKaryawan.vue */ "./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue");
-/* harmony import */ var _components_module_hrd_masterData_masterDivisi_vue__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/module/hrd/masterData/masterDivisi.vue */ "./resources/js/components/module/hrd/masterData/masterDivisi.vue");
-/* harmony import */ var _components_module_hrd_masterData_departement_departement_vue__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/module/hrd/masterData/departement/departement.vue */ "./resources/js/components/module/hrd/masterData/departement/departement.vue");
-/* harmony import */ var _components_module_hrd_masterData_posisi_posisi_vue__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/module/hrd/masterData/posisi/posisi.vue */ "./resources/js/components/module/hrd/masterData/posisi/posisi.vue");
-/* harmony import */ var _components_module_hrd_masterData_jabatan_masterJabatan_vue__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/module/hrd/masterData/jabatan/masterJabatan.vue */ "./resources/js/components/module/hrd/masterData/jabatan/masterJabatan.vue");
+/* harmony import */ var _components_module_hrd_masterData_karyawan_editKaryawan_vue__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/module/hrd/masterData/karyawan/editKaryawan.vue */ "./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue");
+/* harmony import */ var _components_module_hrd_masterData_masterDivisi_vue__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/module/hrd/masterData/masterDivisi.vue */ "./resources/js/components/module/hrd/masterData/masterDivisi.vue");
+/* harmony import */ var _components_module_hrd_masterData_departement_departement_vue__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/module/hrd/masterData/departement/departement.vue */ "./resources/js/components/module/hrd/masterData/departement/departement.vue");
+/* harmony import */ var _components_module_hrd_masterData_posisi_posisi_vue__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/module/hrd/masterData/posisi/posisi.vue */ "./resources/js/components/module/hrd/masterData/posisi/posisi.vue");
+/* harmony import */ var _components_module_hrd_masterData_jabatan_masterJabatan_vue__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/module/hrd/masterData/jabatan/masterJabatan.vue */ "./resources/js/components/module/hrd/masterData/jabatan/masterJabatan.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
 
 
 
@@ -239624,10 +240054,11 @@ app.component('menu-sidebar', _components_module_setting_menuSidebar_vue__WEBPAC
 app.component('hak-akses-menu', _components_module_setting_hakAksesMenu_vue__WEBPACK_IMPORTED_MODULE_23__["default"]);
 app.component('dasboard-hrd', _components_module_hrd_dasboardHrd_vue__WEBPACK_IMPORTED_MODULE_24__["default"]);
 app.component('master-karyawan', _components_module_hrd_masterData_karyawan_masterKaryawan_vue__WEBPACK_IMPORTED_MODULE_25__["default"]);
-app.component('master-divisi', _components_module_hrd_masterData_masterDivisi_vue__WEBPACK_IMPORTED_MODULE_26__["default"]);
-app.component('master-departement', _components_module_hrd_masterData_departement_departement_vue__WEBPACK_IMPORTED_MODULE_27__["default"]);
-app.component('master-posisi', _components_module_hrd_masterData_posisi_posisi_vue__WEBPACK_IMPORTED_MODULE_28__["default"]);
-app.component('master-jabatan', _components_module_hrd_masterData_jabatan_masterJabatan_vue__WEBPACK_IMPORTED_MODULE_29__["default"]);
+app.component('edit-master-karyawan', _components_module_hrd_masterData_karyawan_editKaryawan_vue__WEBPACK_IMPORTED_MODULE_26__["default"]);
+app.component('master-divisi', _components_module_hrd_masterData_masterDivisi_vue__WEBPACK_IMPORTED_MODULE_27__["default"]);
+app.component('master-departement', _components_module_hrd_masterData_departement_departement_vue__WEBPACK_IMPORTED_MODULE_28__["default"]);
+app.component('master-posisi', _components_module_hrd_masterData_posisi_posisi_vue__WEBPACK_IMPORTED_MODULE_29__["default"]);
+app.component('master-jabatan', _components_module_hrd_masterData_jabatan_masterJabatan_vue__WEBPACK_IMPORTED_MODULE_30__["default"]);
 app.use(ant_design_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 app.use(primevue_config__WEBPACK_IMPORTED_MODULE_6__["default"], {
   theme: {
@@ -240202,6 +240633,83 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _editKaryawan_vue_vue_type_template_id_504af5d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./editKaryawan.vue?vue&type=template&id=504af5d3 */ "./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=template&id=504af5d3");
+/* harmony import */ var _editKaryawan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./editKaryawan.vue?vue&type=script&lang=js */ "./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=script&lang=js");
+/* harmony import */ var _editKaryawan_vue_vue_type_style_index_0_id_504af5d3_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css */ "./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css");
+/* harmony import */ var D_Latihan_project_laravel_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+
+
+const __exports__ = /*#__PURE__*/(0,D_Latihan_project_laravel_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_editKaryawan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_editKaryawan_vue_vue_type_template_id_504af5d3__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue"]])
+/* hot reload */
+if (false) // removed by dead control flow
+{}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=script&lang=js":
+/*!*********************************************************************************************************!*\
+  !*** ./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=script&lang=js ***!
+  \*********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_editKaryawan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_editKaryawan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./editKaryawan.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
+/***/ "./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css":
+/*!*****************************************************************************************************************************!*\
+  !*** ./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css ***!
+  \*****************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_editKaryawan_vue_vue_type_style_index_0_id_504af5d3_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/style-loader/dist/cjs.js!../../../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=style&index=0&id=504af5d3&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=template&id=504af5d3":
+/*!***************************************************************************************************************!*\
+  !*** ./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=template&id=504af5d3 ***!
+  \***************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_editKaryawan_vue_vue_type_template_id_504af5d3__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_editKaryawan_vue_vue_type_template_id_504af5d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./editKaryawan.vue?vue&type=template&id=504af5d3 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/editKaryawan.vue?vue&type=template&id=504af5d3");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue":
 /*!***********************************************************************************!*\
   !*** ./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue ***!
@@ -240275,6 +240783,67 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_masterKaryawan_vue_vue_type_template_id_b54c642a__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_masterKaryawan_vue_vue_type_template_id_b54c642a__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./masterKaryawan.vue?vue&type=template&id=b54c642a */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/masterKaryawan.vue?vue&type=template&id=b54c642a");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _modalEditFotoKaryawan_vue_vue_type_template_id_58cbd220__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modalEditFotoKaryawan.vue?vue&type=template&id=58cbd220 */ "./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=template&id=58cbd220");
+/* harmony import */ var _modalEditFotoKaryawan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modalEditFotoKaryawan.vue?vue&type=script&lang=js */ "./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=script&lang=js");
+/* harmony import */ var D_Latihan_project_laravel_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+
+
+
+
+;
+const __exports__ = /*#__PURE__*/(0,D_Latihan_project_laravel_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_modalEditFotoKaryawan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_modalEditFotoKaryawan_vue_vue_type_template_id_58cbd220__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue"]])
+/* hot reload */
+if (false) // removed by dead control flow
+{}
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__exports__);
+
+/***/ }),
+
+/***/ "./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=script&lang=js":
+/*!************************************************************************************************************************!*\
+  !*** ./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=script&lang=js ***!
+  \************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_modalEditFotoKaryawan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_modalEditFotoKaryawan_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./modalEditFotoKaryawan.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=script&lang=js");
+ 
+
+/***/ }),
+
+/***/ "./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=template&id=58cbd220":
+/*!******************************************************************************************************************************!*\
+  !*** ./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=template&id=58cbd220 ***!
+  \******************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_modalEditFotoKaryawan_vue_vue_type_template_id_58cbd220__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_modalEditFotoKaryawan_vue_vue_type_template_id_58cbd220__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!../../../../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./modalEditFotoKaryawan.vue?vue&type=template&id=58cbd220 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/components/module/hrd/masterData/karyawan/modal/modalEditFotoKaryawan.vue?vue&type=template&id=58cbd220");
 
 
 /***/ }),
