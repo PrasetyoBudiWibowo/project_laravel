@@ -315,7 +315,7 @@ export default {
                 Swal.fire({
                     icon: "error",
                     title: "Gagal",
-                    text: `Terjadi kesalahan simpanDepartement : ${
+                    text: `Terjadi kesalahan simpanPosisi : ${
                         error.response?.data?.message || error.message
                     }`,
                     confirmButtonText: "Tutup",

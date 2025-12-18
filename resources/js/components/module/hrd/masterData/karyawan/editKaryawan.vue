@@ -30,8 +30,8 @@
                                     id="img_kry_preview"
                                     :src="
                                         dataKaryawan?.foto_karyawan
-                                            ? `/img/karyawan/${dataKaryawan.foto_karyawan}.${dataKaryawan.format_gambar}`
-                                            : '/img/default/Default-Profile.png'
+                                            ? `/assets/img/karyawan/${dataKaryawan.foto_karyawan}.${dataKaryawan.format_gambar}`
+                                            : '/assets/img/default/Default-Profile.png'
                                     "
                                     alt="Profile Image"
                                     class="img-thumbnail"
@@ -96,6 +96,13 @@
                         </div>
                     </transition>
                 </div>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="btn btn-secondary" @click="goBack">
+                        <i class="fas fa-arrow-left me-1"></i>
+                        Kembali
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -126,20 +133,23 @@ export default {
         },
     },
     async mounted() {
-        console.log("encrypted dari Laravel:", this.encrypted);
         await this.getKaryawan();
     },
     methods: {
         openFotoModal() {
-            this.$refs.modalEditFotoKaryawan.openFotoModal();
+            this.$refs.modalEditFotoKaryawan.openFotoModal(
+                this.encrypted,
+                this.dataKaryawan
+            );
+        },
+        goBack() {
+            window.location.href = "/hrd/master-karyawan";
         },
         async getKaryawan() {
             try {
                 const data = await karyawanByKode(this.encrypted);
 
                 this.dataKaryawan = data ?? null;
-
-                console.log("DATA KARYAWAN:", this.dataKaryawan);
             } catch (err) {
                 Swal.fire({
                     icon: "error",

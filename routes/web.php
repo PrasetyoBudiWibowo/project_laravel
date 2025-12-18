@@ -128,6 +128,8 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
 
     Route::get('/karyawan/edit/{encrypted}', 'edit_karyawan')->name('edit_karyawan');
     Route::get('/karyawan/detail/{encrypted}', 'detail_karyawan');
+
+    Route::post('/ubah-karyawan', 'validasi_ubah_karyawan');
 });
 
 // -----------------------

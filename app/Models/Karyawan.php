@@ -72,6 +72,8 @@ class Karyawan extends Model
         'tgl_ubah',
         'bln_ubah',
         'thn_ubah',
+        'waktu_ubah',
+        'alamat_device_ubah',
         'type_device_ubah',
         'device_ubah',
         'daftar_sales',

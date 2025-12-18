@@ -190,7 +190,6 @@ class HrdController extends Controller
         }
     }
 
-
     // VALIDASI SIMPAN DAN UBAH DATA
     public function validasi_simpan_divisi(Request $request)
     {
@@ -850,6 +849,109 @@ class HrdController extends Controller
                 'status' => 'success',
                 'message' => 'Berhasil Simpan Data',
             ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'line' => $th->getLine(),
+            ], 500);
+        }
+    }
+
+    public function validasi_ubah_karyawan(Request $request)
+    {
+        try {
+            $log = AppLogger::getLogger('MULAI-PROSES-UBAH DATA KARYAWAN');
+            $log->info("PROSES PENGECEKAN DATA");
+
+            if (!$request->isMethod('post')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Metode request tidak valid di validasi_ubah_karyawan"
+                ]);
+            }
+
+            if (!$request->filled('type')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'TIPE TIDAK DITEMUKAN'
+                ], 422);
+            }
+
+            $kd_karyawan = Crypt::decryptString($request->kd_karyawan);
+            $karyawan = $this->hrdService->cekKaryawanByPk($kd_karyawan);
+
+            if (!$karyawan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "KARYAWAN TIDAK DI TEMUKAN "
+                ]);
+            }
+
+            if ($request->type === 'FOTO') {
+                $log->info("PROSES UPLOAD FOTO");
+
+                $request->validate([
+                    'foto_karyawan' => 'required|image|mimes:jpg,jpeg,png|max:51200',
+                ], [
+                    'foto_karyawan.required' => 'File foto wajib diunggah',
+                    'foto_karyawan.mimes' => 'Format hanya jpg, jpeg, png',
+                    'foto_karyawan.max' => 'Ukuran maksimal 50MB',
+                ]);
+
+                $file = $request->file('foto_karyawan');
+                $extension = $file->getClientOriginalExtension();
+
+                $newCode = $this->hrdService->generateFotoKaryawan($kd_karyawan);
+                $fileName = $newCode . '.' . $extension;
+
+                $uploadPath = public_path('assets/img/karyawan');
+
+                if (!$file->move($uploadPath, $fileName)) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Gagal menyimpan gambar ke server'
+                    ], 500);
+                }
+
+                $user_ubah = Crypt::decryptString($request->user_ubah);
+                $user = $this->userService->getUserByKdAsli($user_ubah);
+
+                if (!$user) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'USER YANG MENGUBAH TIDAK DITEMUKAN'
+                    ]);
+                }
+
+                $log->info("BERHSIL LEWAT PROSES CEK DATA");
+
+                $data = [
+                    'type' => 'FOTO',
+                    'kd_karyawan' => $kd_karyawan,
+                    'foto_karyawan' => $newCode,
+                    'format_gambar' => $extension,
+                    'user_ubah' => $user_ubah,
+                    'keterangan_input' => $request->input('keterangan_input'),
+                ];
+
+                $result = $this->hrdService->ubahKaryawan($data);
+
+                $log->info("Data BALIK: " . $result);
+
+                if (!$result->kd_karyawan) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Gagal Simpan'
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Berhasil Simpan Data',
+                ]);
+            } else if ($request->type === 'DATA PRIBADI') {
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',

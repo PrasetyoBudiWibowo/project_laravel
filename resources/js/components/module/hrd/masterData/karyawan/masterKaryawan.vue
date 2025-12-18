@@ -215,7 +215,7 @@ export default {
         },
         getFoto(row) {
             if (row.foto_karyawan) {
-                return `/assets/img/user/${row.img_user}.${row.format_img_user}`;
+                return `/assets/img/karyawan/${row.foto_karyawan}.${row.format_gambar}`;
             } else {
                 return `/assets/img/default/Default-Profile.png`;
             }

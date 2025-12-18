@@ -150537,7 +150537,6 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       return _regenerator().w(function (_context) {
         while (1) switch (_context.n) {
           case 0:
-            console.log("encrypted dari Laravel:", _this.encrypted);
             _context.n = 1;
             return _this.getKaryawan();
           case 1:
@@ -150548,7 +150547,10 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
   },
   methods: {
     openFotoModal: function openFotoModal() {
-      this.$refs.modalEditFotoKaryawan.openFotoModal();
+      this.$refs.modalEditFotoKaryawan.openFotoModal(this.encrypted, this.dataKaryawan);
+    },
+    goBack: function goBack() {
+      window.location.href = "/hrd/master-karyawan";
     },
     getKaryawan: function getKaryawan() {
       var _this2 = this;
@@ -150563,7 +150565,6 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             case 1:
               data = _context2.v;
               _this2.dataKaryawan = data !== null && data !== void 0 ? data : null;
-              console.log("DATA KARYAWAN:", _this2.dataKaryawan);
               _context2.n = 3;
               break;
             case 2:
@@ -150732,7 +150733,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     },
     getFoto: function getFoto(row) {
       if (row.foto_karyawan) {
-        return "/assets/img/user/".concat(row.img_user, ".").concat(row.format_img_user);
+        return "/assets/img/karyawan/".concat(row.foto_karyawan, ".").concat(row.format_gambar);
       } else {
         return "/assets/img/default/Default-Profile.png";
       }
@@ -150757,7 +150758,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
- // pastikan bootstrap.bundle sudah dipakai
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -150768,13 +150772,27 @@ __webpack_require__.r(__webpack_exports__);
       },
       modalFoto: null,
       fotoFile: null,
-      previewFoto: null
+      previewFoto: null,
+      datakaryawan: {
+        foto_karyawan: null,
+        format_gambar: null
+      },
+      keterangan_input: "",
+      formatGambar: ["image/jpeg", "image/png", "image/jpg"],
+      maxSize: 50 * 1024 * 1024
     };
+  },
+  watch: {
+    keterangan_input: function keterangan_input(val) {
+      if (val) {
+        this.keterangan_input = val.toUpperCase();
+      }
+    }
   },
   computed: {
     currentFotoUrl: function currentFotoUrl() {
       var _this$dataKaryawan;
-      return (_this$dataKaryawan = this.dataKaryawan) !== null && _this$dataKaryawan !== void 0 && _this$dataKaryawan.foto_karyawan ? "/img/karyawan/".concat(this.dataKaryawan.foto_karyawan, ".").concat(this.dataKaryawan.format_gambar) : "/img/default/Default-Profile.png";
+      return (_this$dataKaryawan = this.dataKaryawan) !== null && _this$dataKaryawan !== void 0 && _this$dataKaryawan.foto_karyawan ? "/assets/img/karyawan/".concat(this.dataKaryawan.foto_karyawan, ".").concat(this.dataKaryawan.format_gambar) : "/assets/img/default/Default-Profile.png";
     }
   },
   mounted: function mounted() {
@@ -150782,16 +150800,24 @@ __webpack_require__.r(__webpack_exports__);
     this.modalFoto = new bootstrap__WEBPACK_IMPORTED_MODULE_0__.Modal(document.getElementById("modalEditFoto"));
     this.$nextTick(function () {
       $("#modalEditFoto").on("hidden.bs.modal", function () {
-        _this.fotoFile = null;
-        _this.previewFoto = null;
-        $("#input_foto_karyawan").val("");
+        _this.resetFormInput();
       });
     });
   },
   methods: {
-    openFotoModal: function openFotoModal() {
-      this.previewFoto = null;
+    openFotoModal: function openFotoModal(encrypted, data) {
+      var _data$foto_karyawan, _data$format_gambar;
+      if ((data === null || data === void 0 ? void 0 : data.foto_karyawan) !== null && (data === null || data === void 0 ? void 0 : data.format_gambar) !== null) {
+        this.previewFoto = "/assets/img/karyawan/".concat(data === null || data === void 0 ? void 0 : data.foto_karyawan, ".").concat(data === null || data === void 0 ? void 0 : data.format_gambar);
+      } else {
+        this.previewFoto = null;
+      }
       this.fotoFile = null;
+      this.datakaryawan = {
+        foto_karyawan: (_data$foto_karyawan = data === null || data === void 0 ? void 0 : data.foto_karyawan) !== null && _data$foto_karyawan !== void 0 ? _data$foto_karyawan : null,
+        format_gambar: (_data$format_gambar = data === null || data === void 0 ? void 0 : data.format_gambar) !== null && _data$format_gambar !== void 0 ? _data$format_gambar : null
+      };
+      this.encrypted = encrypted;
       this.modalFoto.show();
     },
     closeModal: function closeModal() {
@@ -150800,10 +150826,151 @@ __webpack_require__.r(__webpack_exports__);
     handleFotoChange: function handleFotoChange(e) {
       var file = e.target.files[0];
       if (!file) return;
+      if (!this.formatGambar.includes(file.type)) {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Format file harus JPG, JPEG, atau PNG",
+          confirmButtonText: "Tutup",
+          customClass: {
+            confirmButton: "btn btn-danger"
+          }
+        });
+        this.resetFormInput();
+        return;
+      }
+      if (file.size > this.maxSize) {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Ukuran gambar maksimal 50 MB",
+          confirmButtonText: "Tutup",
+          customClass: {
+            confirmButton: "btn btn-danger"
+          }
+        });
+        this.resetFormInput();
+        return;
+      }
+      if (this.previewFoto) {
+        URL.revokeObjectURL(this.previewFoto);
+        this.previewFoto = null;
+      }
       this.fotoFile = file;
-
-      // buat preview
       this.previewFoto = URL.createObjectURL(file);
+    },
+    resetFormInput: function resetFormInput() {
+      if (this.previewFoto) {
+        URL.revokeObjectURL(this.previewFoto);
+      }
+      this.fotoFile = null;
+      this.previewFoto = null;
+      this.keterangan_input = "";
+      var input = document.getElementById("input_foto_karyawan");
+      if (input) input.value = "";
+    },
+    btnSimpanFotoKaryawan: function btnSimpanFotoKaryawan() {
+      var _this2 = this;
+      Swal.fire({
+        title: "Konfirmasi",
+        text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Ya",
+        cancelButtonText: "Batal",
+        customClass: {
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger"
+        },
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this2.simpanFotoKaryawan();
+        }
+      });
+    },
+    simpanFotoKaryawan: function simpanFotoKaryawan() {
+      var _this3 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+        var formData, response, result, _error$response, _t;
+        return _regenerator().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              formData = new FormData();
+              formData.append("type", "FOTO");
+              formData.append("foto_karyawan", _this3.fotoFile);
+              formData.append("kd_karyawan", _this3.encrypted);
+              formData.append("user_ubah", window.encryptedUserId);
+              formData.append("keterangan_input", _this3.keterangan_input);
+
+              // for (const [key, value] of formData.entries()) {
+              //     console.log(key, value);
+              // }
+              _context.p = 1;
+              Swal.fire({
+                title: "Sedang Proses Simpan Data",
+                text: "Mohon tunggu.",
+                allowOutsideClick: false,
+                didOpen: function didOpen() {
+                  Swal.showLoading();
+                }
+              });
+              _context.n = 2;
+              return axios.post("/hrd/ubah-karyawan", formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data"
+                }
+              });
+            case 2:
+              response = _context.v;
+              result = response.data;
+              if (result.status === "success") {
+                Swal.close();
+                Swal.fire({
+                  icon: "success",
+                  title: "Berhasil",
+                  text: result.message || "Data berhasil Disimpan!",
+                  confirmButtonText: "Tutup",
+                  customClass: {
+                    confirmButton: "btn btn-success"
+                  },
+                  buttonsStyling: false
+                }).then(function () {
+                  window.location.href = result.redirect;
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Gagal",
+                  text: result.message,
+                  confirmButtonText: "Tutup",
+                  customClass: {
+                    confirmButton: "btn btn-danger"
+                  },
+                  buttonsStyling: false
+                });
+              }
+              _context.n = 4;
+              break;
+            case 3:
+              _context.p = 3;
+              _t = _context.v;
+              Swal.close();
+              Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Terjadi kesalahan simpanFotoKaryawan : ".concat(((_error$response = _t.response) === null || _error$response === void 0 || (_error$response = _error$response.data) === null || _error$response === void 0 ? void 0 : _error$response.message) || _t.message),
+                confirmButtonText: "Tutup",
+                customClass: {
+                  confirmButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+              });
+            case 4:
+              return _context.a(2);
+          }
+        }, _callee, null, [[1, 3]]);
+      }))();
     }
   }
 });
@@ -152148,7 +152315,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               Swal.fire({
                 icon: "error",
                 title: "Gagal",
-                text: "Terjadi kesalahan simpanDepartement : ".concat(((_error$response3 = _t3.response) === null || _error$response3 === void 0 || (_error$response3 = _error$response3.data) === null || _error$response3 === void 0 ? void 0 : _error$response3.message) || _t3.message),
+                text: "Terjadi kesalahan simpanPosisi : ".concat(((_error$response3 = _t3.response) === null || _error$response3 === void 0 || (_error$response3 = _error$response3.data) === null || _error$response3 === void 0 ? void 0 : _error$response3.message) || _t3.message),
                 confirmButtonText: "Tutup",
                 customClass: {
                   confirmButton: "btn btn-danger"
@@ -157250,9 +157417,12 @@ var _hoisted_11 = {
 var _hoisted_12 = {
   "class": "col-6"
 };
+var _hoisted_13 = {
+  "class": "d-flex justify-content-end mt-3"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_modalEditFotoKaryawan = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("modalEditFotoKaryawan");
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "card-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "EDIT KARYAWAN")], -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" =============================\r\n                    FOTO KARYAWAN\r\n                ================================= "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "card-header d-flex justify-content-between align-items-center",
@@ -157262,7 +157432,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     style: {
       "cursor": "pointer"
     }
-  }, [_cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Foto Karyawan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Foto Karyawan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["fas fa-chevron-down", {
       'rotate-icon': $data.show.showFoto
     }])
@@ -157273,7 +157443,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       var _$data$dataKaryawan;
       return [$data.show.showFoto ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
         id: "img_kry_preview",
-        src: (_$data$dataKaryawan = $data.dataKaryawan) !== null && _$data$dataKaryawan !== void 0 && _$data$dataKaryawan.foto_karyawan ? "/img/karyawan/".concat($data.dataKaryawan.foto_karyawan, ".").concat($data.dataKaryawan.format_gambar) : '/img/default/Default-Profile.png',
+        src: (_$data$dataKaryawan = $data.dataKaryawan) !== null && _$data$dataKaryawan !== void 0 && _$data$dataKaryawan.foto_karyawan ? "/assets/img/karyawan/".concat($data.dataKaryawan.foto_karyawan, ".").concat($data.dataKaryawan.format_gambar) : '/assets/img/default/Default-Profile.png',
         alt: "Profile Image",
         "class": "img-thumbnail",
         width: "200"
@@ -157282,7 +157452,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: _cache[1] || (_cache[1] = function () {
           return $options.openFotoModal && $options.openFotoModal.apply($options, arguments);
         })
-      }, _cache[6] || (_cache[6] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+      }, _cache[7] || (_cache[7] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
         "class": "fas fa-edit fs-4"
       }, null, -1 /* CACHED */)]))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
@@ -157295,7 +157465,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     style: {
       "cursor": "pointer"
     }
-  }, [_cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Data Pribadi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  }, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Data Pribadi", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["fas fa-chevron-down", {
       'rotate-icon': $data.show.showPribadi
     }])
@@ -157303,7 +157473,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     name: "slide"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [$data.show.showPribadi ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+      return [$data.show.showPribadi ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
         "class": "form-label"
       }, "Nama Karyawan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         type: "text",
@@ -157312,7 +157482,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return $data.dataKaryawan.nama_karyawan = $event;
         }),
         disabled: ""
-      }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.dataKaryawan.nama_karyawan]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+      }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.dataKaryawan.nama_karyawan]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
         "class": "form-label"
       }, "Nama Panggilan", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
         type: "text",
@@ -157324,7 +157494,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.dataKaryawan.nama_panggilan_karyawan]])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
     _: 1 /* STABLE */
-  })])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_modalEditFotoKaryawan, {
+  })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-secondary",
+    onClick: _cache[5] || (_cache[5] = function () {
+      return $options.goBack && $options.goBack.apply($options, arguments);
+    })
+  }, _cache[11] || (_cache[11] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-arrow-left me-1"
+  }, null, -1 /* CACHED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Kembali ")]))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_modalEditFotoKaryawan, {
     ref: "modalEditFotoKaryawan"
   }, null, 512 /* NEED_PATCH */)]);
 }
@@ -157509,11 +157686,15 @@ var _hoisted_5 = {
 };
 var _hoisted_6 = ["src"];
 var _hoisted_7 = {
+  "class": "mb-3 mt-2"
+};
+var _hoisted_8 = ["value"];
+var _hoisted_9 = {
   "class": "modal-footer"
 };
-var _hoisted_8 = ["disabled"];
+var _hoisted_10 = ["disabled"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "modal-header"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
     "class": "modal-title"
@@ -157534,19 +157715,29 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onChange: _cache[0] || (_cache[0] = function () {
       return $options.handleFotoChange && $options.handleFotoChange.apply($options, arguments);
     })
-  }, null, 32 /* NEED_HYDRATION */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, null, 32 /* NEED_HYDRATION */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+    "class": "form-label fw-semibold"
+  }, " Catatan (opsional) ", -1 /* CACHED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
+    "class": "form-control",
+    rows: "3",
+    placeholder: "ALASAN DI UBAH...",
+    value: $data.keterangan_input,
+    onInput: _cache[1] || (_cache[1] = function ($event) {
+      return $data.keterangan_input = $event.target.value.toUpperCase();
+    })
+  }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_8)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     "class": "btn btn-secondary",
-    onClick: _cache[1] || (_cache[1] = function () {
+    onClick: _cache[2] || (_cache[2] = function () {
       return $options.closeModal && $options.closeModal.apply($options, arguments);
     })
   }, " Batal "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-primary",
-    onClick: _cache[2] || (_cache[2] = function () {
-      return _ctx.submitUpdateFoto && _ctx.submitUpdateFoto.apply(_ctx, arguments);
+    onClick: _cache[3] || (_cache[3] = function () {
+      return $options.btnSimpanFotoKaryawan && $options.btnSimpanFotoKaryawan.apply($options, arguments);
     }),
     disabled: !$data.fotoFile
-  }, " Simpan ", 8 /* PROPS */, _hoisted_8)])])])]);
+  }, " Simpan ", 8 /* PROPS */, _hoisted_10)])])])]);
 }
 
 /***/ }),

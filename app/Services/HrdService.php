@@ -125,6 +125,7 @@ class HrdService
                 'nama_karyawan' => $data->nama_karyawan,
                 'nama_panggilan_karyawan' => $data->nama_panggilan_karyawan,
                 'foto_karyawan' => $data->foto_karyawan,
+                'format_gambar' => $data->format_gambar,
                 'Divisi' => [
                     'kd_divisi' => Crypt::encryptString($data->Divisi->kd_divisi) ?? null,
                     'nama_divisi' => $data->Divisi->nama_divisi ?? null,
@@ -164,6 +165,7 @@ class HrdService
             'nama_karyawan' => $karyawan->nama_karyawan,
             'nama_panggilan_karyawan' => $karyawan->nama_panggilan_karyawan,
             'foto_karyawan' => $karyawan->foto_karyawan,
+            'format_gambar' => $karyawan->format_gambar,
 
             'Divisi' => [
                 'kd_divisi' => $karyawan->Divisi
@@ -346,6 +348,36 @@ class HrdService
         return $prefix . $newNumber;
     }
 
+    public function generateFotoKaryawan(string $kd_karyawan)
+    {
+        $formatDate = Carbon::now()->format('Ym');
+        $prefix = 'IMGKRY-' . $formatDate . '-';
+
+        $oldImg = Karyawan::where('kd_karyawan', $kd_karyawan)
+            ->value('foto_karyawan');
+
+        if (!empty($oldImg)) {
+            $oldFilePath = public_path('assets/img/karyawan/' . $oldImg);
+            if (file_exists($oldFilePath)) {
+                unlink($oldFilePath);
+            }
+        }
+
+        $lastImage = Karyawan::where('foto_karyawan', 'LIKE', $prefix . '%')
+            ->max('foto_karyawan');
+
+        if ($lastImage) {
+            $lastNumber = (int) substr($lastImage, 11, 4);
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+
+        return $prefix
+            . str_pad($newNumber, 4, '0', STR_PAD_LEFT)
+            . '-' . $kd_karyawan;
+    }
+
     private function buatHistoryInputKaryawan($dataKaryawan)
     {
         DB::beginTransaction();
@@ -356,10 +388,15 @@ class HrdService
             $kd_history_input_master_karyawan = $this->generateKdHistoryInputkaryawan();
             $log->info("<================= BEHASIL BUAT PK generateKdHistoryInputkaryawan  =================>");
 
+            $jenis_input = $dataKaryawan['type_history'] === "INPUT" ? "INPUT"
+                : ($dataKaryawan['type_history'] === "EDIT-FOTO" ? "EDIT" : null);
+
+            $keterangan_input = $dataKaryawan['type_history'] === "INPUT" ? "INPUT KARYAWAN BARU" : $dataKaryawan['keterangan_input'];
+
             $historyInputMasterKaryawan = HistoryInputKaryawan::create([
                 'kd_history_input_master_karyawan' => $kd_history_input_master_karyawan,
-                'jenis_input' => "INPUT",
-                'keterangan_input' => "INPUT KARYAWAN BARU",
+                'jenis_input' => $jenis_input,
+                'keterangan_input' => $keterangan_input,
                 'kd_karyawan' => $dataKaryawan['kd_karyawan'],
                 'nama_karyawan' => $dataKaryawan['nama_karyawan'],
                 'user_input' => $dataKaryawan['user_input'],
@@ -371,6 +408,7 @@ class HrdService
                 'type_device' => $dataKaryawan['type_device'],
                 'device' => $dataKaryawan['device'],
             ]);
+
 
             DB::commit();
 
@@ -727,7 +765,7 @@ class HrdService
             $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE MASTER KARYAWAN =================>");
 
             if (empty($data['nama_karyawan']) || empty($data['kd_divisi']) || empty($data['kd_departement']) || empty($data['kd_position']) || empty($data['user_input'])) {
-                throw new \Exception("Data yang dikirim tidak lengkap untuk simpanJabatan.");
+                throw new \Exception("Data yang dikirim tidak lengkap untuk simpanKaryawan.");
             }
 
             $kd_karyawan = $this->generateKdKaryawan();
@@ -770,6 +808,7 @@ class HrdService
             }
 
             $datakaryawan = [
+                'type_history' => "INPUT",
                 'kd_karyawan' => $karyawan->kd_karyawan,
                 'nama_karyawan' => $karyawan->nama_karyawan,
                 'user_input' => $karyawan->user_input,
@@ -799,6 +838,100 @@ class HrdService
             DB::commit();
 
             $log->info("PROSES SELESAI");
+            return $karyawan;
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage(),
+                'line' => $th->getLine(),
+            ], 500);
+        }
+    }
+
+    public function ubahKaryawan($data)
+    {
+        DB::beginTransaction();
+        $log = AppLogger::getLogger('UBAH-KARYAWAN');
+        try {
+            $log->info("<================= MULAI PROSES UBAH DATA DI DATABASE MASTER KARYAWAN =================>");
+
+            if (empty($data['type']) || empty($data['kd_karyawan']) || empty($data['foto_karyawan']) || empty($data['user_ubah'])) {
+                throw new \Exception("Data yang dikirim tidak lengkap untuk simpanKaryawan.");
+            }
+
+            $karyawan = Karyawan::find($data['kd_karyawan']);
+
+            if (!$karyawan) {
+                throw new \Exception("Karyawan tidak ditemukan.");
+            }
+
+            $now = Carbon::now('Asia/Jakarta');
+            $tgl_ubah = $now->toDateString();
+            $waktu_ubah = $now->format('H:i:s');
+            $bln_ubah = $now->format('m');
+            $thn_ubah = $now->year;
+
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $deviceInfo = DeviceHelper::detectDevice($userAgent);
+            $deviceType = $deviceInfo['deviceType'];
+            $device = $deviceInfo['browser'];
+
+            $ipDetector = GeoDetector::getDeviceLocation();
+            $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
+
+            if ($data['type'] === "FOTO") {
+                $karyawan->update([
+                    'foto_karyawan' => $data['foto_karyawan'],
+                    'format_gambar' => $data['format_gambar'],
+                    'user_ubah' => $data['user_ubah'],
+                    'tgl_ubah' => $tgl_ubah,
+                    'bln_ubah' => $bln_ubah,
+                    'thn_ubah' => $thn_ubah,
+                    'waktu_ubah' => $waktu_ubah,
+                    'alamat_device_ubah' => $ipDevice,
+                    'type_device_ubah' => $deviceType,
+                    'device_ubah' => $device
+                ]);
+
+                if (!$karyawan) {
+                    throw new \Exception("GAGAL ADA DATA YANG SALAH");
+                }
+
+                $log->info("KARYAWAN: ADA" . json_encode($karyawan));
+
+                $datakaryawan = [
+                    'type_history' => "EDIT-FOTO",
+                    'kd_karyawan' => $karyawan->kd_karyawan,
+                    'nama_karyawan' => $karyawan->nama_karyawan,
+                    'user_input' => $karyawan->user_ubah,
+                    'tgl_input' => $karyawan->tgl_ubah,
+                    'bln_input' => $karyawan->bln_ubah,
+                    'thn_input' => $karyawan->thn_ubah,
+                    'waktu_input' => $karyawan->waktu_ubah,
+                    'alamat_device' => $karyawan->alamat_device_ubah,
+                    'type_device' => $karyawan->type_device_ubah,
+                    'device' => $karyawan->device_ubah,
+                    'keterangan_input' => $data['keterangan_input'],
+                ];
+
+                $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE HISTORY INPUT MASTER KARYAWAN =================>");
+                $historyInputKaryawan = $this->buatHistoryInputKaryawan($datakaryawan);
+
+                if (!$historyInputKaryawan || !$historyInputKaryawan->kd_history_input_master_karyawan) {
+                    $log->error("Validasi gagal untuk HISTORY INPUT MASTER KARYAWAN", [
+                        'invalid_input' => 'HISTORY INPUT MASTER KARYAWAN',
+                        'expected_format' => 'HISTORY INPUT MASTER KARYAWAN GAGAL DI BUAT'
+                    ]);
+
+                    throw new \Exception("HISTORY INPUT MASTER KARYAWAN GAGAL DI BUAT");
+                }
+            }
+
+            $log->info("BERHASIL UBAH DATA");
+
+            DB::commit();
+
+            $log->info("PROSES UBAH POSISI SELESAI");
             return $karyawan;
         } catch (\Throwable $th) {
             return response()->json([
