@@ -898,6 +898,8 @@ class HrdController extends Controller
             $kd_karyawan = Crypt::decryptString($request->kd_karyawan);
             $karyawan = $this->hrdService->cekKaryawanByPk($kd_karyawan);
 
+            $log->info("DAPET KD KARYAWAN");
+
             if (!$karyawan) {
                 return response()->json([
                     'status' => 'error',
@@ -954,7 +956,7 @@ class HrdController extends Controller
 
                 $result = $this->hrdService->ubahKaryawan($data);
 
-                $log->info("Data BALIK: " . $result);
+                // $log->info("Data BALIK: " . $result);
 
                 if (!$result->kd_karyawan) {
                     return response()->json([
@@ -967,11 +969,108 @@ class HrdController extends Controller
                     'status' => 'success',
                     'message' => 'Berhasil Simpan Data',
                 ]);
-            } else if ($request->type === 'DATA PRIBADI') {
+            } else if ($request->type === "DATA PRIBADI") {
+                $log->info("MASUK CEK DATA PERSONAL KARYAWAN");
+
+                $validator = Validator::make($request->all(), [
+                    'nama_karyawan' => ['required', 'regex:/^[A-Z\s&]+$/i'],
+                    'nama_panggilan_karyawan' => ['regex:/^[A-Z\s&]+$/i'],
+                    'no_telp1' => ['required'],
+                    'no_ktp' => ['required'],
+                    'tgl_lahir' => ['required'],
+                    'gender' => ['required'],
+                ], [
+                    'nama_karyawan.required' => 'Nama Karyawan tidak boleh kosong',
+                    'no_telp1.required' => 'No telp / Hp 1 tidak boleh kosong',
+                    'gender.required' => 'Jenis Kelamin tidak boleh kosong',
+                    'no_ktp.required' => 'NIK tidak boleh kosong',
+                    'tgl_lahir.required' => 'Tanggal Lahir tidak boleh kosong',
+                    'nama_karyawan.regex' => 'Nama Karyawan hanya boleh mengandung huruf dan spasi',
+                    'nama_panggilan_karyawan.regex' => 'Nama Panggilan Karyawan hanya boleh mengandung huruf dan spasi',
+                ]);
+
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => $validator->errors()->first()
+                    ]);
+                }
+
+                $log->info("LANJUT 1");
+
+                $kd_agama = Crypt::decryptString($request->kd_agama);
+                $agama = $this->hrdService->religionCek($kd_agama);
+
+                if (!$agama) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => "agama TIDAK DI TEMUKAN "
+                    ]);
+                }
+
+                $log->info("LANJUT 2");
+
+                $user_ubah = Crypt::decryptString($request->user_ubah);
+                $user = $this->userService->getUserByKdAsli($user_ubah);
+
+                if (!$user) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'USER YANG MENGUBAH TIDAK DITEMUKAN'
+                    ]);
+                }
+
+                $log->info("LANJUT 3");
+
+                $data = [
+                    'type' => 'DATA PRIBADI',
+                    'nama_karyawan' => $request->nama_karyawan,
+                    'nama_panggilan_karyawan' => $request->nama_panggilan_karyawan,
+                    'gender' => $request->gender,
+                    'kd_agama' => $kd_agama,
+                    'tgl_lahir' => $request->tgl_lahir,
+                    'bln_lahir' => $request->bln_lahir,
+                    'thn_lahir' => $request->thn_lahir,
+                    'no_ktp' => $request->no_ktp,
+                    'npwp' => $request->npwp,
+                    'kd_provinsi_lahir' => $request->kd_provinsi_lahir,
+                    'kd_kota_kab_lahir' => $request->kd_kota_kab_lahir,
+                    'kd_kecamatan_lahir' => $request->kd_kecamatan_lahir,
+                    'alamat_lahir' => $request->alamat_lahir,
+                    'kd_provinsi_tinggal' => $request->kd_provinsi_tinggal,
+                    'kd_kota_kab_tinggal' => $request->kd_kota_kab_tinggal,
+                    'kd_kecamatan_tinggal' => $request->kd_kecamatan_tinggal,
+                    'alamat_tinggal' => $request->alamat_tinggal,
+                    'tinggi_karyawan' => $request->tinggi_karyawan,
+                    'berat_karyawan' => $request->berat_karyawan,
+                    'no_telp1' => $request->no_telp1,
+                    'no_telp2' => $request->no_telp2,
+                    'no_telp3' => $request->no_telp3,
+                    'kd_karyawan' => $kd_karyawan,
+                    'user_ubah' => $user_ubah,
+                    'keterangan_input' => $request->keterangan_input,
+                ];
+
+                $result = $this->hrdService->ubahKaryawan($data);
+
+                // $log->info("Data BALIK: " . $result);
+
+                if (!$result->kd_karyawan) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Gagal Simpan'
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Berhasil Simpan Data',
+                ]);
             }
         } catch (\Throwable $th) {
             return response()->json([
-                'status' => 'error',
+                'status' => 'error validasi_ubah_karyawan',
                 'message' => $th->getMessage(),
                 'line' => $th->getLine(),
             ], 500);

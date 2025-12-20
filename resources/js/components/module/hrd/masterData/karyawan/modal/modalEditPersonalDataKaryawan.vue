@@ -1,9 +1,9 @@
 <template>
     <div
         class="modal fade"
-        id="modalEditPersonalKayawan"
+        id="modalEditPersonalKaryawan"
         tabindex="-1"
-        aria-labelledby="modalEditPersonalKayawanLabel"
+        aria-labelledby="modalEditPersonalKaryawanLabel"
         aria-hidden="true"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -21,7 +21,7 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <!-- Nama Panggilan -->
+                        <!-- Nama Karyawan -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nama Karyawan</label>
                             <input
@@ -31,6 +31,7 @@
                             />
                         </div>
 
+                        <!-- Nama Panggilan -->
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nama Panggilan</label>
                             <input
@@ -42,6 +43,7 @@
                             />
                         </div>
 
+                        <!-- Email Pribadi -->
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Email Pribadi</label>
                             <input
@@ -67,12 +69,28 @@
 
                         <!-- Tanggal Lahir -->
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Tanggal Lahir</label>
-                            <input
-                                type="date"
-                                class="form-control"
-                                v-model="dataPersonalKaryawan.tgl_lahir"
-                            />
+                            <label class="form-label fw-semibold"
+                                >Tanggal Lahir</label
+                            >
+
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </span>
+                                <input
+                                    type="date"
+                                    class="form-control"
+                                    v-model="dataPersonalKaryawan.tgl_lahir"
+                                    :max="today"
+                                />
+                            </div>
+
+                            <small
+                                class="text-muted"
+                                v-if="dataPersonalKaryawan.tgl_lahir"
+                            >
+                                {{ hariLahir }} • {{ umur }} Tahun
+                            </small>
                         </div>
 
                         <div class="col-md-4 mb-3">
@@ -122,6 +140,42 @@
                             />
                         </div>
 
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">No. Telepon / HP 1</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                v-model="dataPersonalKaryawan.no_telp1"
+                                placeholder="08xxxxxxxxxx"
+                                @input="onInputNoTelp($event, 'no_telp1')"
+                                maxlength="15"
+                            />
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">No. Telepon / HP 2</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                v-model="dataPersonalKaryawan.no_telp2"
+                                placeholder="08xxxxxxxxxx"
+                                @input="onInputNoTelp($event, 'no_telp2')"
+                                maxlength="15"
+                            />
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">No. Telepon / HP 3</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                v-model="dataPersonalKaryawan.no_telp3"
+                                placeholder="08xxxxxxxxxx"
+                                @input="onInputNoTelp($event, 'no_telp3')"
+                                maxlength="15"
+                            />
+                        </div>
+
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Tinggi Badan</label>
                             <input
@@ -141,14 +195,19 @@
                         </div>
 
                         <!-- TEMPAT LAHIR -->
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-10 mb-3">
                             <label class="form-label">Tempat Lahir</label>
-                            <select
-                                id="select_lokasi_lahir"
-                                class="form-select"
-                                style="width: 100%"
-                            ></select>
-
+                            <AutoComplete
+                                v-model="selectedLokasiLahir"
+                                :suggestions="filteredLokasi"
+                                optionLabel="text"
+                                dropdown
+                                placeholder="Ketik provinsi / kota / kecamatan"
+                                @complete="searchLokasi"
+                                appendTo="self"
+                                forceSelection
+                                class="w-100"
+                            />
                             <small class="text-muted">
                                 Ketik provinsi, kota/kabupaten, atau kecamatan
                             </small>
@@ -156,7 +215,7 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">
-                                Alamat Lahir (opsional)
+                                Alamat
                             </label>
                             <textarea
                                 class="form-control"
@@ -184,15 +243,23 @@
                                 <span class="slider"></span>
                             </label>
                         </div>
+
                         <!-- TEMPAT TINGGAL -->
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-10 mb-3">
                             <label class="form-label">Tempat Tinggal</label>
-                            <select
-                                id="select_lokasi_tinggal"
-                                class="form-select"
+
+                            <AutoComplete
+                                v-model="selectedLokasiTinggal"
+                                :suggestions="filteredLokasiTinggal"
+                                optionLabel="text"
+                                dropdown
+                                placeholder="Ketik provinsi / kota / kecamatan"
+                                @complete="searchLokasiTinggal"
+                                appendTo="self"
+                                forceSelection
+                                class="w-100"
                                 :disabled="isAlamatTinggalSama"
-                                style="width: 100%"
-                            ></select>
+                            />
 
                             <small class="text-muted">
                                 Ketik provinsi, kota/kabupaten, atau kecamatan
@@ -215,6 +282,22 @@
                                 "
                             ></textarea>
                         </div>
+
+                        <div class="col-md-12 mb-3 mt-2">
+                            <label class="form-label fw-semibold">
+                                Catatan (opsional)
+                            </label>
+                            <textarea
+                                class="form-control"
+                                rows="3"
+                                placeholder="ALASAN DI UBAH..."
+                                :value="dataPersonalKaryawan.keterangan_input"
+                                @input="
+                                    dataPersonalKaryawan.keterangan_input =
+                                        $event.target.value.toUpperCase()
+                                "
+                            ></textarea>
+                        </div>
                     </div>
                 </div>
 
@@ -227,7 +310,12 @@
                         Batal
                     </button>
 
-                    <button class="btn btn-primary">Simpan</button>
+                    <button
+                        class="btn btn-primary"
+                        @click="btnSimpanDataPersonalKaryawan"
+                    >
+                        Simpan
+                    </button>
                 </div>
             </div>
         </div>
@@ -236,16 +324,32 @@
 
 <script>
 import { Modal } from "bootstrap";
+import AutoComplete from "primevue/autocomplete";
+import * as yup from "yup";
+import dayjs from "dayjs";
+import "dayjs/locale/id";
+dayjs.locale("id");
 
 export default {
+    components: {
+        AutoComplete,
+    },
     data() {
         return {
             modalDataPersonal: null,
             isAlamatTinggalSama: false,
-            errorKtp: "",
+
+            selectedLokasiLahir: null,
+            filteredLokasi: [],
+
+            selectedLokasiTinggal: null,
+            filteredLokasiTinggal: [],
+
+            lokasiOptions: [],
+            backupLokasiTinggal: null,
 
             dataPersonalKaryawan: {
-                namakd_negara_karyawan: "",
+                nama_karyawan: "",
                 nama_panggilan_karyawan: "",
                 gender: "",
                 kd_agama: "",
@@ -266,22 +370,75 @@ export default {
 
                 tinggi_karyawan: "",
                 berat_karyawan: "",
+                no_telp1: "",
+                no_telp2: "",
+                no_telp3: "",
+
+                keterangan_input: "",
             },
 
             dataKecamatan: [],
             dataReligion: [],
         };
     },
+    watch: {
+        selectedLokasiLahir(val) {
+            if (!val) {
+                this.dataPersonalKaryawan.kd_provinsi_lahir = "";
+                this.dataPersonalKaryawan.kd_kota_kab_lahir = "";
+                this.dataPersonalKaryawan.kd_kecamatan_lahir = "";
+                return;
+            }
+
+            this.dataPersonalKaryawan.kd_provinsi_lahir = val.kd_provinsi;
+            this.dataPersonalKaryawan.kd_kota_kab_lahir = val.kd_kota_kab;
+            this.dataPersonalKaryawan.kd_kecamatan_lahir = val.kd_kecamatan;
+
+            if (this.isAlamatTinggalSama) {
+                this.copyLahirToTinggal();
+            }
+        },
+        selectedLokasiTinggal(val) {
+            if (!val) return;
+
+            this.dataPersonalKaryawan.kd_provinsi_tinggal = val.kd_provinsi;
+            this.dataPersonalKaryawan.kd_kota_kab_tinggal = val.kd_kota_kab;
+            this.dataPersonalKaryawan.kd_kecamatan_tinggal = val.kd_kecamatan;
+        },
+    },
+    computed: {
+        today() {
+            return dayjs().format("YYYY-MM-DD");
+        },
+        umur() {
+            if (!this.dataPersonalKaryawan.tgl_lahir) return "";
+            return dayjs().diff(
+                dayjs(this.dataPersonalKaryawan.tgl_lahir),
+                "year"
+            );
+        },
+        hariLahir() {
+            if (!this.dataPersonalKaryawan.tgl_lahir) return "";
+            return dayjs(this.dataPersonalKaryawan.tgl_lahir).format("dddd");
+        },
+    },
     async mounted() {
         await this.kecamatan();
         await this.religion();
 
-        this.initSelectLokasi();
-        this.initSelectLokasiTinggal();
+        this.prepareLokasi();
 
         this.modalDataPersonal = new Modal(
-            document.getElementById("modalEditPersonalKayawan")
+            document.getElementById("modalEditPersonalKaryawan")
         );
+
+        document
+            .getElementById("modalEditPersonalKaryawan")
+            .addEventListener("shown.bs.modal", () => {
+                this.$nextTick(() => {
+                    this.prepareLokasi();
+                });
+            });
     },
     methods: {
         openModalPersonalData(encrypted, data) {
@@ -291,9 +448,9 @@ export default {
             };
 
             this.$nextTick(() => {
-                this.setAgamaIfExist();
                 this.setLokasiIfExist();
                 this.setLokasiTinggalIfExist();
+                this.setAgamaIfExist();
             });
 
             this.modalDataPersonal.show();
@@ -304,73 +461,44 @@ export default {
         onInputNpwp(e) {
             this.dataPersonalKaryawan.npwp = formatNpwp(e.target.value);
         },
-        initSelectLokasi() {
-            const options = this.dataKecamatan.map((kec) => ({
-                id: kec.kd_kecamatan,
-                text: `${kec.kota_kabupaten.provinsi.nama_provinsi} / ${kec.kota_kabupaten.nama_kota_kabupaten} / ${kec.nama_kecamatan}`,
+        onInputNoTelp(event, field) {
+            let val = event.target.value;
 
-                // FLATTEN DATA
+            // hanya angka
+            val = val.replace(/[^0-9]/g, "");
+
+            if (val.startsWith("62")) {
+                val = "0" + val.slice(2);
+            }
+
+            if (val.length > 13) {
+                val = val.slice(0, 13);
+            }
+
+            this.dataPersonalKaryawan[field] = val;
+        },
+        prepareLokasi() {
+            this.lokasiOptions = this.dataKecamatan.map((kec) => ({
+                id: kec.kd_kecamatan,
+                text: `${kec.kota_kabupaten.provinsi.nama_provinsi}-${kec.kota_kabupaten.nama_kota_kabupaten}-${kec.nama_kecamatan}`,
                 kd_kecamatan: kec.kd_kecamatan,
                 kd_kota_kab: kec.kd_kota_kabupaten,
                 kd_provinsi: kec.kota_kabupaten.kd_provinsi,
             }));
-
-            const $select = $("#select_lokasi_lahir");
-
-            $select.empty().select2({
-                data: options,
-                placeholder: "-- Ketik provinsi / kota / kecamatan --",
-                dropdownParent: $("#modalEditPersonalKayawan"),
-                width: "100%",
-                allowClear: true,
-            });
-
-            $select.val(null).trigger("change");
-
-            $select.off("change").on("change", () => {
-                const selected = $select.select2("data")[0];
-                if (!selected) return;
-
-                this.dataPersonalKaryawan.kd_kecamatan_lahir =
-                    selected.kd_kecamatan;
-
-                this.dataPersonalKaryawan.kd_kota_kab_lahir =
-                    selected.kd_kota_kab;
-
-                this.dataPersonalKaryawan.kd_provinsi_lahir =
-                    selected.kd_provinsi;
-            });
         },
-        initSelectLokasiTinggal() {
-            const options = this.dataKecamatan.map((kec) => ({
-                id: kec.kd_kecamatan,
-                text: `${kec.kota_kabupaten.provinsi.nama_provinsi} / ${kec.kota_kabupaten.nama_kota_kabupaten} / ${kec.nama_kecamatan}`,
-                data: kec,
-            }));
+        searchLokasi(event) {
+            const query = event.query.toLowerCase();
 
-            const $select = $("#select_lokasi_tinggal");
+            this.filteredLokasi = this.lokasiOptions.filter((item) =>
+                item.text.toLowerCase().includes(query)
+            );
+        },
+        searchLokasiTinggal(event) {
+            const query = event.query.toLowerCase();
 
-            $select.empty().select2({
-                data: options,
-                placeholder: "-- Ketik provinsi / kota / kecamatan --",
-                dropdownParent: $("#modalEditPersonalKayawan"),
-                width: "100%",
-                allowClear: true,
-            });
-
-            $select.val(null).trigger("change");
-
-            $select.off("change").on("change", () => {
-                const selected = $select.select2("data")[0];
-                if (!selected) return;
-
-                this.dataPersonalKaryawan.kd_kecamatan_tinggal =
-                    selected.data.kd_kecamatan;
-                this.dataPersonalKaryawan.kd_kota_kab_tinggal =
-                    selected.data.kd_kota_kabupaten;
-                this.dataPersonalKaryawan.kd_provinsi_tinggal =
-                    selected.data.kota_kabupaten.kd_provinsi;
-            });
+            this.filteredLokasiTinggal = this.lokasiOptions.filter((item) =>
+                item.text.toLowerCase().includes(query)
+            );
         },
         setLokasiIfExist() {
             if (
@@ -378,33 +506,26 @@ export default {
                 !this.dataPersonalKaryawan.kd_kota_kab_lahir ||
                 !this.dataPersonalKaryawan.kd_kecamatan_lahir
             ) {
-                $("#select_lokasi_lahir").val(null).trigger("change");
+                this.selectedLokasiLahir = null;
                 return;
             }
 
-            const selected = this.dataKecamatan.find(
-                (kec) =>
-                    kec.kd_kecamatan ===
+            const found = this.lokasiOptions.find(
+                (x) =>
+                    x.kd_kecamatan ===
                         this.dataPersonalKaryawan.kd_kecamatan_lahir &&
-                    kec.kd_kota_kabupaten ===
+                    x.kd_kota_kab ===
                         this.dataPersonalKaryawan.kd_kota_kab_lahir &&
-                    kec.kota_kabupaten.kd_provinsi ===
+                    x.kd_provinsi ===
                         this.dataPersonalKaryawan.kd_provinsi_lahir
             );
 
-            if (!selected) {
-                $("#select_lokasi_lahir").val(null).trigger("change");
+            if (!found) {
+                this.selectedLokasiLahir = null;
                 return;
             }
 
-            const option = new Option(
-                `${selected.kota_kabupaten.provinsi.nama_provinsi} / ${selected.kota_kabupaten.nama_kota_kabupaten} / ${selected.nama_kecamatan}`,
-                selected.kd_kecamatan,
-                true,
-                true
-            );
-
-            $("#select_lokasi_lahir").append(option).trigger("change");
+            this.selectedLokasiLahir = found;
         },
         setLokasiTinggalIfExist() {
             if (
@@ -412,30 +533,23 @@ export default {
                 !this.dataPersonalKaryawan.kd_kota_kab_tinggal ||
                 !this.dataPersonalKaryawan.kd_kecamatan_tinggal
             ) {
-                $("#select_lokasi_tinggal").val(null).trigger("change");
+                this.selectedLokasiTinggal = null;
                 return;
             }
 
-            const selected = this.dataKecamatan.find(
-                (kec) =>
-                    kec.kd_kecamatan ===
+            console.log("lodaoj", this.lokasiOptions);
+
+            const found = this.lokasiOptions.find(
+                (x) =>
+                    x.kd_kecamatan ===
                         this.dataPersonalKaryawan.kd_kecamatan_tinggal &&
-                    kec.kd_kota_kabupaten ===
+                    x.kd_kota_kab ===
                         this.dataPersonalKaryawan.kd_kota_kab_tinggal &&
-                    kec.kota_kabupaten.kd_provinsi ===
+                    x.kd_provinsi ===
                         this.dataPersonalKaryawan.kd_provinsi_tinggal
             );
 
-            if (!selected) return;
-
-            const option = new Option(
-                `${selected.kota_kabupaten.provinsi.nama_provinsi} / ${selected.kota_kabupaten.nama_kota_kabupaten} / ${selected.nama_kecamatan}`,
-                selected.kd_kecamatan,
-                true,
-                true
-            );
-
-            $("#select_lokasi_tinggal").append(option).trigger("change");
+            this.selectedLokasiTinggal = found ?? null;
         },
         setAgamaIfExist() {
             if (!this.dataPersonalKaryawan.nama_agama) return;
@@ -446,36 +560,52 @@ export default {
                     this.dataPersonalKaryawan.nama_agama.toLowerCase()
             );
 
-            console.log("found", found);
-
             if (found) {
                 this.dataPersonalKaryawan.kd_agama = found.kd_agama;
             }
         },
         onToggleAlamatTinggal() {
             if (this.isAlamatTinggalSama) {
-                console.log("dmalm", this.dataPersonalKaryawan);
+                // backup dulu
+                this.backupLokasiTinggal = this.selectedLokasiTinggal
+                    ? { ...this.selectedLokasiTinggal }
+                    : null;
 
-                this.dataPersonalKaryawan.kd_provinsi_tinggal =
-                    this.dataPersonalKaryawan.kd_provinsi_lahir;
-                this.dataPersonalKaryawan.kd_kota_kab_tinggal =
-                    this.dataPersonalKaryawan.kd_kota_kab_lahir;
-                this.dataPersonalKaryawan.kd_kecamatan_tinggal =
-                    this.dataPersonalKaryawan.kd_kecamatan_lahir;
+                if (this.selectedLokasiLahir) {
+                    const src = this.selectedLokasiLahir;
 
-                this.dataPersonalKaryawan.alamat_tinggal =
-                    this.dataPersonalKaryawan.alamat_lahir;
+                    this.selectedLokasiTinggal = { ...src };
 
-                this.$nextTick(() => {
-                    this.setLokasiTinggalIfExist();
-                });
+                    this.dataPersonalKaryawan.kd_provinsi_tinggal =
+                        src.kd_provinsi;
+                    this.dataPersonalKaryawan.kd_kota_kab_tinggal =
+                        src.kd_kota_kab;
+                    this.dataPersonalKaryawan.kd_kecamatan_tinggal =
+                        src.kd_kecamatan;
+
+                    this.dataPersonalKaryawan.alamat_tinggal =
+                        this.dataPersonalKaryawan.alamat_lahir;
+                } else {
+                    this.selectedLokasiTinggal = null;
+                }
             } else {
-                this.dataPersonalKaryawan.kd_provinsi_tinggal = "";
-                this.dataPersonalKaryawan.kd_kota_kab_tinggal = "";
-                this.dataPersonalKaryawan.kd_kecamatan_tinggal = "";
-                this.dataPersonalKaryawan.alamat_tinggal = "";
+                this.selectedLokasiTinggal = this.backupLokasiTinggal;
 
-                $("#select_lokasi_tinggal").val(null).trigger("change");
+                if (this.backupLokasiTinggal) {
+                    const src = this.backupLokasiTinggal;
+
+                    this.dataPersonalKaryawan.kd_provinsi_tinggal =
+                        src.kd_provinsi;
+                    this.dataPersonalKaryawan.kd_kota_kab_tinggal =
+                        src.kd_kota_kab;
+                    this.dataPersonalKaryawan.kd_kecamatan_tinggal =
+                        src.kd_kecamatan;
+                } else {
+                    this.dataPersonalKaryawan.kd_provinsi_tinggal = "";
+                    this.dataPersonalKaryawan.kd_kota_kab_tinggal = "";
+                    this.dataPersonalKaryawan.kd_kecamatan_tinggal = "";
+                    this.dataPersonalKaryawan.alamat_tinggal = "";
+                }
             }
         },
         onInputKtp(e) {
@@ -488,16 +618,11 @@ export default {
             }
 
             this.dataPersonalKaryawan.no_ktp = value;
-            this.errorKtp = "";
         },
         async kecamatan() {
             try {
                 const data = await getAllDataKecamatan();
                 this.dataKecamatan = data || [];
-
-                this.$nextTick(() => {
-                    this.setLokasiIfExist();
-                });
             } catch (err) {
                 Swal.fire({
                     icon: "error",
@@ -527,6 +652,142 @@ export default {
                     customClass: {
                         confirmButton: "btn btn-danger",
                     },
+                });
+            }
+        },
+        btnSimpanDataPersonalKaryawan() {
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda Yakin Ingin Menyimpan Data ini?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batal",
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger",
+                },
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.simpanDataPersonalKaryawan();
+                }
+            });
+        },
+        async simpanDataPersonalKaryawan() {
+            let dataToSave = {
+                type: "DATA PRIBADI",
+                ...this.dataPersonalKaryawan,
+                bln_lahir: dayjs(this.dataPersonalKaryawan.tgl_lahir).format(
+                    "MM"
+                ),
+                thn_lahir: dayjs(this.dataPersonalKaryawan.tgl_lahir).format(
+                    "YYYY"
+                ),
+                user_ubah: window.encryptedUserId,
+            };
+
+            console.log("datatosave", dataToSave);
+
+            let requireValue = [];
+
+            requireValue.push({
+                value: dataToSave.nama_karyawan,
+                message: "Nama karyawan Tidak Boleh Kosong",
+            });
+
+            requireValue.push({
+                value: dataToSave.gender,
+                message: "Jenis Kelamin Tidak Boleh Kosong",
+            });
+
+            requireValue.push({
+                value: dataToSave.kd_agama,
+                message: "Agama Tidak Boleh Kosong",
+            });
+
+            requireValue.push({
+                value: dataToSave.no_ktp,
+                message: "No KTP Tidak Boleh Kosong",
+            });
+
+            requireValue.push({
+                value: dataToSave.tgl_lahir,
+                message: "Tanggal Lahir Tidak Boleh Kosong",
+            });
+
+            requireValue.push({
+                value: dataToSave.no_telp1,
+                message: "No Telp / Hp 1 Tidak Boleh Kosong",
+            });
+
+            if (!validasiBanyakInputan(requireValue)) return;
+
+            const schema = yup.object({
+                nama_karyawan: yup
+                    .string()
+                    .required("Nama Karyawan wajib diisi")
+                    .matches(
+                        /^[A-Za-z\s&]+$/,
+                        "Nama Karyawan Hanya Boleh huruf yang diperbolehkan"
+                    ),
+            });
+
+            try {
+                await schema.validate(dataToSave, { abortEarly: false });
+
+                Swal.fire({
+                    title: "Sedang Proses Simpan Data",
+                    text: "Mohon tunggu.",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+
+                const response = await axios.post(
+                    "/hrd/ubah-karyawan",
+                    dataToSave
+                );
+                const result = response.data;
+
+                Swal.close();
+
+                if (result.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: result.message || "Data berhasil Ubah Data!",
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                        },
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: result.message,
+                        confirmButtonText: "Tutup",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                        },
+                    });
+                }
+            } catch (error) {
+                Swal.close();
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: `Terjadi kesalahan simpanDataPersonalKaryawan : ${
+                        error.response?.data?.message || error.message
+                    }`,
+                    confirmButtonText: "Tutup",
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                    },
+                    buttonsStyling: false,
                 });
             }
         },
@@ -574,5 +835,9 @@ export default {
 
 .switch-modern input:checked + .slider::before {
     transform: translateX(24px);
+}
+
+.p-autocomplete-panel {
+    z-index: 2000 !important;
 }
 </style>

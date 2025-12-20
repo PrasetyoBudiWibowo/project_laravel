@@ -148,7 +148,7 @@ class HrdService
                 'no_ktp' => $data->no_ktp,
                 'npwp' => $data->npwp,
                 'Agama' => [
-                    'kd_agama' => Crypt::encryptString($data->Agama->kd_agama) ?? null,
+                    'kd_agama' => optional($data->Agama)->kd_agama ? Crypt::encryptString(optional($data->Agama)->kd_agama) : null,
                     'nama_agama' => $data->Agama->nama_agama ?? null,
                 ],
                 'Divisi' => [
@@ -195,7 +195,20 @@ class HrdService
             'emai_pribadi' => $karyawan->emai_pribadi,
             'tgl_lahir' => $karyawan->tgl_lahir,
             'no_ktp' => $karyawan->no_ktp,
+            'tgl_lahir' => $karyawan->tgl_lahir,
+            'no_ktp' => $karyawan->no_ktp,
             'npwp' => $karyawan->npwp,
+            'kd_provinsi_lahir' => $karyawan->kd_provinsi_lahir,
+            'kd_kota_kab_lahir' => $karyawan->kd_kota_kab_lahir,
+            'kd_kecamatan_lahir' => $karyawan->kd_kecamatan_lahir,
+            'alamat_lahir' => $karyawan->alamat_lahir,
+            'kd_provinsi_tinggal' => $karyawan->kd_provinsi_tinggal,
+            'kd_kota_kab_tinggal' => $karyawan->kd_kota_kab_tinggal,
+            'kd_kecamatan_tinggal' => $karyawan->kd_kecamatan_tinggal,
+            'alamat_tinggal' => $karyawan->alamat_tinggal,
+            'no_telp1' => $karyawan->no_telp1,
+            'no_telp2' => $karyawan->no_telp2,
+            'no_telp3' => $karyawan->no_telp3,
 
             'Agama' => [
                 'kd_agama' => $karyawan->Agama ? Crypt::encryptString($karyawan->Agama->kd_agama) : null,
@@ -260,6 +273,12 @@ class HrdService
     {
         $jabatan = MasterJabatan::find($data);
         return $jabatan;
+    }
+
+    public function religionCek($data)
+    {
+        $agama = agama::find($data);
+        return $agama;
     }
 
     private function generateKdDivisi()
@@ -422,8 +441,15 @@ class HrdService
             $kd_history_input_master_karyawan = $this->generateKdHistoryInputkaryawan();
             $log->info("<================= BEHASIL BUAT PK generateKdHistoryInputkaryawan  =================>");
 
-            $jenis_input = $dataKaryawan['type_history'] === "INPUT" ? "INPUT"
-                : ($dataKaryawan['type_history'] === "EDIT-FOTO" ? "EDIT" : null);
+            $jenis_input =
+                $dataKaryawan['type_history'] === "INPUT"
+                ? "INPUT"
+                : (
+                    $dataKaryawan['type_history'] === "EDIT-FOTO" ||
+                    $dataKaryawan['type_history'] === "DATA PRIBADI"
+                    ? "EDIT"
+                    : null
+                );
 
             $keterangan_input = $dataKaryawan['type_history'] === "INPUT" ? "INPUT KARYAWAN BARU" : $dataKaryawan['keterangan_input'];
 
@@ -889,10 +915,6 @@ class HrdService
         try {
             $log->info("<================= MULAI PROSES UBAH DATA DI DATABASE MASTER KARYAWAN =================>");
 
-            if (empty($data['type']) || empty($data['kd_karyawan']) || empty($data['foto_karyawan']) || empty($data['user_ubah'])) {
-                throw new \Exception("Data yang dikirim tidak lengkap untuk simpanKaryawan.");
-            }
-
             $karyawan = Karyawan::find($data['kd_karyawan']);
 
             if (!$karyawan) {
@@ -914,6 +936,10 @@ class HrdService
             $ipDevice = isset($ipDetector['ip']) ? $ipDetector['ip'] : 'Unknown IP';
 
             if ($data['type'] === "FOTO") {
+                if (empty($data['type']) || empty($data['kd_karyawan']) || empty($data['foto_karyawan']) || empty($data['user_ubah'])) {
+                    throw new \Exception("Data yang dikirim tidak lengkap untuk simpanKaryawan.");
+                }
+
                 $karyawan->update([
                     'foto_karyawan' => $data['foto_karyawan'],
                     'format_gambar' => $data['format_gambar'],
@@ -931,10 +957,78 @@ class HrdService
                     throw new \Exception("GAGAL ADA DATA YANG SALAH");
                 }
 
-                $log->info("KARYAWAN: ADA" . json_encode($karyawan));
+                // $log->info("KARYAWAN: ADA" . json_encode($karyawan));
 
                 $datakaryawan = [
                     'type_history' => "EDIT-FOTO",
+                    'kd_karyawan' => $karyawan->kd_karyawan,
+                    'nama_karyawan' => $karyawan->nama_karyawan,
+                    'user_input' => $karyawan->user_ubah,
+                    'tgl_input' => $karyawan->tgl_ubah,
+                    'bln_input' => $karyawan->bln_ubah,
+                    'thn_input' => $karyawan->thn_ubah,
+                    'waktu_input' => $karyawan->waktu_ubah,
+                    'alamat_device' => $karyawan->alamat_device_ubah,
+                    'type_device' => $karyawan->type_device_ubah,
+                    'device' => $karyawan->device_ubah,
+                    'keterangan_input' => $data['keterangan_input'],
+                ];
+
+                $log->info("<================= MULAI PROSES SIMPAN DATA DI DATABASE HISTORY INPUT MASTER KARYAWAN =================>");
+                $historyInputKaryawan = $this->buatHistoryInputKaryawan($datakaryawan);
+
+                if (!$historyInputKaryawan || !$historyInputKaryawan->kd_history_input_master_karyawan) {
+                    $log->error("Validasi gagal untuk HISTORY INPUT MASTER KARYAWAN", [
+                        'invalid_input' => 'HISTORY INPUT MASTER KARYAWAN',
+                        'expected_format' => 'HISTORY INPUT MASTER KARYAWAN GAGAL DI BUAT'
+                    ]);
+
+                    throw new \Exception("HISTORY INPUT MASTER KARYAWAN GAGAL DI BUAT");
+                }
+            } else if ($data['type'] === "DATA PRIBADI") {
+                if (empty($data['type']) || empty($data['kd_karyawan']) || empty($data['user_ubah'])) {
+                    throw new \Exception("Data yang dikirim tidak lengkap untuk simpanKaryawan.");
+                }
+
+                $karyawan->update([
+                    'nama_karyawan' => $data['nama_karyawan'],
+                    'nama_panggilan_karyawan' => $data['nama_panggilan_karyawan'],
+                    'gender' => $data['gender'],
+                    'kd_agama' => $data['kd_agama'],
+                    'tgl_lahir' => $data['tgl_lahir'],
+                    'bln_lahir' => $data['bln_lahir'],
+                    'thn_lahir' => $data['thn_lahir'],
+                    'no_ktp' => $data['no_ktp'],
+                    'npwp' => $data['npwp'],
+                    'kd_provinsi_lahir' => $data['kd_provinsi_lahir'],
+                    'kd_kota_kab_lahir' => $data['kd_kota_kab_lahir'],
+                    'kd_kecamatan_lahir' => $data['kd_kecamatan_lahir'],
+                    'alamat_lahir' => $data['alamat_lahir'],
+                    'kd_provinsi_tinggal' => $data['kd_provinsi_tinggal'],
+                    'kd_kota_kab_tinggal' => $data['kd_kota_kab_tinggal'],
+                    'kd_kecamatan_tinggal' => $data['kd_kecamatan_tinggal'],
+                    'alamat_tinggal' => $data['alamat_tinggal'],
+                    'tinggi_karyawan' => $data['tinggi_karyawan'],
+                    'berat_karyawan' => $data['berat_karyawan'],
+                    'no_telp1' => $data['no_telp1'],
+                    'no_telp2' => $data['no_telp2'],
+                    'no_telp3' => $data['no_telp3'],
+                    'user_ubah' => $data['user_ubah'],
+                    'tgl_ubah' => $tgl_ubah,
+                    'bln_ubah' => $bln_ubah,
+                    'thn_ubah' => $thn_ubah,
+                    'waktu_ubah' => $waktu_ubah,
+                    'alamat_device_ubah' => $ipDevice,
+                    'type_device_ubah' => $deviceType,
+                    'device_ubah' => $device
+                ]);
+
+                if (!$karyawan) {
+                    throw new \Exception("GAGAL ADA DATA YANG SALAH");
+                }
+
+                $datakaryawan = [
+                    'type_history' => "DATA PRIBADI",
                     'kd_karyawan' => $karyawan->kd_karyawan,
                     'nama_karyawan' => $karyawan->nama_karyawan,
                     'user_input' => $karyawan->user_ubah,
