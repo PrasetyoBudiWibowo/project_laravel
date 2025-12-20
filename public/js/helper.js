@@ -355,6 +355,23 @@ function generateUrl(text) {
     return url;
 }
 
+function  formatNpwp(value) {
+    if (!value) return "";
+
+    // Ambil hanya angka
+    let angka = value.replace(/\D/g, "").slice(0, 15);
+
+    let result = "";
+    if (angka.length > 2) result += angka.slice(0, 2) + ".";
+    if (angka.length > 5) result += angka.slice(2, 5) + ".";
+    if (angka.length > 8) result += angka.slice(5, 8) + ".";
+    if (angka.length > 9) result += angka.slice(8, 9) + "-";
+    if (angka.length > 12) result += angka.slice(9, 12) + ".";
+    result += angka.slice(12);
+
+    return result;
+}
+
 window.formatNumberIDR = formatNumberIDR;
 window.makeUppercase = makeUppercase;
 window.parseRp = parseRp;
@@ -373,3 +390,4 @@ window.getSemuaBulan = getSemuaBulan;
 window.getTahun = getTahun;
 window.formatNumber = formatNumber;
 window.generateUrl = generateUrl;
+window.formatNpwp = formatNpwp;

@@ -130,6 +130,8 @@ Route::middleware(['auth'])->prefix('hrd')->controller(HrdController::class)->gr
     Route::get('/karyawan/detail/{encrypted}', 'detail_karyawan');
 
     Route::post('/ubah-karyawan', 'validasi_ubah_karyawan');
+
+    Route::get('/religion', 'allDataReligion');
 });
 
 // -----------------------

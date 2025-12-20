@@ -297,6 +297,33 @@ async function getAllDivisi() {
   }
 }
 
+async function getAllReligion() {
+  try {
+    const response = await axios.get('/hrd/religion', {
+      withCredentials: true,
+    });
+
+    if (response.data?.status === "success") {
+      return response.data.data || [];
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: response.data?.message || "Terjadi kesalahan pada API getAllReligion.",
+      });
+      return [];
+    }
+  } catch (error) {
+        Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: `Terjadi kesalahan API getAllReligion: ${error.response?.data?.message || error.message}`,
+    });
+    return [];
+  }
+}
+
+
 async function getAllPosisition() {
   try {
     const response = await axios.get('/hrd/posisi', {
@@ -459,6 +486,7 @@ window.getAllMenu = getAllMenu;
 window.getAllModuleWithMenu = getAllModuleWithMenu;
 window.getModuleByUser = getModuleByUser;
 window.getAllDivisi = getAllDivisi;
+window.getAllReligion = getAllReligion;
 window.getAllDepartement = getAllDepartement;
 window.getAllPosisition = getAllPosisition;
 window.getAllJabatan = getAllJabatan;

@@ -93,6 +93,17 @@
                                     />
                                 </div>
                             </div>
+
+                            <div class="mb-2 row">
+                                <div class="col-2">
+                                    <button
+                                        class="btn btn-primary btn-sm"
+                                        @click="openModalPersonalData"
+                                    >
+                                        Ubah Data
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </transition>
                 </div>
@@ -107,18 +118,26 @@
         </div>
 
         <modalEditFotoKaryawan ref="modalEditFotoKaryawan" />
+        <modalEditPersonalDataKaryawan ref="modalEditPersonalDataKaryawan" />
     </div>
+
+    <loadingData :visible="loadingMenu" message="Loading" />
 </template>
 
 <script>
 import modalEditFotoKaryawan from "./modal/modalEditFotoKaryawan.vue";
+import modalEditPersonalDataKaryawan from "./modal/modalEditPersonalDataKaryawan.vue";
+import loadingData from "../../../../loading/loadingData.vue";
 
 export default {
     components: {
         modalEditFotoKaryawan,
+        modalEditPersonalDataKaryawan,
+        loadingData,
     },
     data() {
         return {
+            loadingMenu: true,
             dataKaryawan: null,
             show: {
                 showFoto: false,
@@ -134,10 +153,18 @@ export default {
     },
     async mounted() {
         await this.getKaryawan();
+
+        this.loadingMenu = false;
     },
     methods: {
         openFotoModal() {
             this.$refs.modalEditFotoKaryawan.openFotoModal(
+                this.encrypted,
+                this.dataKaryawan
+            );
+        },
+        openModalPersonalData() {
+            this.$refs.modalEditPersonalDataKaryawan.openModalPersonalData(
                 this.encrypted,
                 this.dataKaryawan
             );

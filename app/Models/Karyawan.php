@@ -23,8 +23,8 @@ class Karyawan extends Model
         'bln_lahir',
         'thn_lahir',
         'email_pribadi',
+        'kd_agama',
         'kd_negara',
-        'agama',
         'no_ktp',
         'npwp',
         'tgl_awal_kontrak',
@@ -40,14 +40,13 @@ class Karyawan extends Model
         'format_gambar',
         'gaji_angka',
         'gaji_terbilang',
-        'tempat_lahir',
-        'provinsi_lahir',
-        'kota_kab_lahir',
-        'kecamatan_lahir',
+        'kd_provinsi_lahir',
+        'kd_kota_kab_lahir',
+        'kd_kecamatan_lahir',
         'alamat_lahir',
-        'provinsi_tinggal',
-        'kota_kab_tinggal',
-        'kecamatan_tinggal',
+        'kd_provinsi_tinggal',
+        'kd_kota_kab_tinggal',
+        'kd_kecamatan_tinggal',
         'alamat_tinggal',
         'tinggi_karyawan',
         'berat_karyawan',
@@ -114,36 +113,41 @@ class Karyawan extends Model
 
     public function ProvinsiLahir()
     {
-        return $this->belongsTo(Provinsi::class, 'provinsi_lahir', 'kd_provinsi');
+        return $this->belongsTo(Provinsi::class, 'kd_provinsi_lahir', 'kd_provinsi');
     }
 
     public function ProvinsiTinggal()
     {
-        return $this->belongsTo(Provinsi::class, 'provinsi_tinggal', 'kd_provinsi');
+        return $this->belongsTo(Provinsi::class, 'kd_provinsi_tinggal', 'kd_provinsi');
     }
 
     public function KotaKabLahir()
     {
-        return $this->belongsTo(KotaKabupaten::class, 'kota_kab_lahir', 'kd_kota_kabupaten');
+        return $this->belongsTo(KotaKabupaten::class, 'kd_kota_kab_lahir', 'kd_kota_kabupaten');
     }
 
     public function KotaKabTinggal()
     {
-        return $this->belongsTo(KotaKabupaten::class, 'kota_kab_tinggal', 'kd_kota_kabupaten');
+        return $this->belongsTo(KotaKabupaten::class, 'kd_kota_kab_tinggal', 'kd_kota_kabupaten');
     }
 
     public function KecamatanLahir()
     {
-        return $this->belongsTo(Kecamatan::class, 'kecamatan_lahir', 'kd_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'kd_kecamatan_lahir', 'kd_kecamatan');
     }
 
     public function KecamatanTinggal()
     {
-        return $this->belongsTo(Kecamatan::class, 'kecamatan_tinggal', 'kd_kecamatan');
+        return $this->belongsTo(Kecamatan::class, 'kd_kecamatan_tinggal', 'kd_kecamatan');
     }
 
     public function Negara()
     {
         return $this->belongsTo(Negara::class, 'kd_negara', 'kd_negara');
+    }
+
+    public function Agama()
+    {
+        return $this->belongsTo(agama::class, 'kd_agama', 'kd_agama');
     }
 }

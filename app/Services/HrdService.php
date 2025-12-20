@@ -7,6 +7,7 @@ use App\Models\Divisi;
 use App\Models\Departement;
 use App\Models\Posisi;
 use App\Models\Negara;
+use App\Models\agama;
 use App\Models\MasterJabatan;
 use App\Models\HistoryInputKaryawan;
 
@@ -95,6 +96,20 @@ class HrdService
         return $data;
     }
 
+    public function allReligion()
+    {
+        $data = agama::all();
+
+        $result = $data->map(function ($item) {
+            return [
+                'kd_agama' => Crypt::encryptString($item->kd_agama),
+                'nama_agama' => $item->nama_agama,
+            ];
+        });
+
+        return $result;
+    }
+
     public function allJabatan()
     {
         $data = MasterJabatan::orderBy('nama_jabatan', 'asc')->get();
@@ -117,6 +132,7 @@ class HrdService
             ->with('Departement')
             ->with('Posisi')
             ->with('JabatanKaryawan')
+            ->with('Agama')
             ->get();
 
         $result = $karyawan->map(function ($data) {
@@ -126,6 +142,15 @@ class HrdService
                 'nama_panggilan_karyawan' => $data->nama_panggilan_karyawan,
                 'foto_karyawan' => $data->foto_karyawan,
                 'format_gambar' => $data->format_gambar,
+                'gender' => $data->gender,
+                'emai_pribadi' => $data->emai_pribadi,
+                'tgl_lahir' => $data->tgl_lahir,
+                'no_ktp' => $data->no_ktp,
+                'npwp' => $data->npwp,
+                'Agama' => [
+                    'kd_agama' => Crypt::encryptString($data->Agama->kd_agama) ?? null,
+                    'nama_agama' => $data->Agama->nama_agama ?? null,
+                ],
                 'Divisi' => [
                     'kd_divisi' => Crypt::encryptString($data->Divisi->kd_divisi) ?? null,
                     'nama_divisi' => $data->Divisi->nama_divisi ?? null,
@@ -153,7 +178,7 @@ class HrdService
     public function cekKaryawanByKd($kd_karyawan)
     {
         $karyawan = Karyawan::where('kd_karyawan', $kd_karyawan)
-            ->with(['Divisi', 'Departement', 'Posisi', 'JabatanKaryawan'])
+            ->with(['Divisi', 'Departement', 'Posisi', 'JabatanKaryawan', 'Agama'])
             ->first();
 
         if (!$karyawan) {
@@ -166,7 +191,16 @@ class HrdService
             'nama_panggilan_karyawan' => $karyawan->nama_panggilan_karyawan,
             'foto_karyawan' => $karyawan->foto_karyawan,
             'format_gambar' => $karyawan->format_gambar,
+            'gender' => $karyawan->gender,
+            'emai_pribadi' => $karyawan->emai_pribadi,
+            'tgl_lahir' => $karyawan->tgl_lahir,
+            'no_ktp' => $karyawan->no_ktp,
+            'npwp' => $karyawan->npwp,
 
+            'Agama' => [
+                'kd_agama' => $karyawan->Agama ? Crypt::encryptString($karyawan->Agama->kd_agama) : null,
+                'nama_agama' => $karyawan->Agama->nama_agama ?? null,
+            ],
             'Divisi' => [
                 'kd_divisi' => $karyawan->Divisi
                     ? Crypt::encryptString($karyawan->Divisi->kd_divisi)

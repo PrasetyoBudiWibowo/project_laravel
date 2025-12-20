@@ -148,6 +148,23 @@ class HrdController extends Controller
         ]);
     }
 
+    public function allDataReligion()
+    {
+        $religion = $this->hrdService->allReligion();
+
+        if (empty($religion)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tidak ada data.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $religion
+        ]);
+    }
+
     public function edit_karyawan($encrypted)
     {
         try {
